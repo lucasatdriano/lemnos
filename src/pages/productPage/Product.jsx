@@ -6,7 +6,7 @@ import iconAddCart from '../../assets/icons/iconAddCart.svg';
 import AuthService from '../../services/AuthService';
 import { toast } from 'react-toastify';
 import { getProdutoById } from '../../services/ProdutoService';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 import {
     adicionarFavorito,
@@ -68,7 +68,7 @@ export default function Product() {
                 );
 
                 if (!favorites) {
-                    navigate('/login');
+                    navigate('/auth');
                 }
                 setIsFavorite(isFavorited);
             }
@@ -95,7 +95,7 @@ export default function Product() {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos ao carrinho.'
             );
-            navigate('/login');
+            navigate('/auth');
         }
     };
 
@@ -115,7 +115,7 @@ export default function Product() {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos aos favoritos.'
             );
-            navigate('/login');
+            navigate('/auth');
         }
     };
 
@@ -132,7 +132,7 @@ export default function Product() {
             toast.warning(
                 'Você precisa estar logado para remover produtos dos favoritos.'
             );
-            navigate('/login');
+            navigate('/auth');
         }
     };
 
@@ -148,7 +148,7 @@ export default function Product() {
             }
         } else {
             toast.warning('Você precisa estar logado para avaliar produtos.');
-            navigate('/login');
+            navigate('/auth');
         }
     };
 
@@ -162,23 +162,44 @@ export default function Product() {
                     <Loading />
                 </div>
             ) : (
-                <section className="containerMain">
+                <section className="containerProductMain">
+                    <div className="breadcrumb">
+                        <Link to="/" className="breadcrumbLink">
+                            Home
+                        </Link>
+                        <span className="separator">/</span>
+                        <Link
+                            to={`/productFilter/${product.categoria}`}
+                            className="breadcrumbLink"
+                        >
+                            {product.categoria}
+                        </Link>
+                        <span className="separator">/</span>
+                        <Link
+                            to={`/productFilter/${product.subCategoria}`}
+                            className="breadcrumbLink"
+                        >
+                            {product.subCategoria}
+                        </Link>
+                        <span className="separator">/</span>
+                        <Link
+                            to={`/productFilter/${product.fabricante}`}
+                            className="breadcrumbLink"
+                        >
+                            {product.fabricante}
+                        </Link>
+                        <span className="separator">/</span>
+                        <span className="breadcrumbCurrent">
+                            {product.nome}
+                        </span>
+                    </div>
                     <section className="productMain">
                         <div className="containerImages">
-                            <img
-                                src={mainImage}
-                                alt={product.nome}
-                                className="imageMain"
-                            />
-                            {hasDiscount && (
-                                <p className="offerDescont">
-                                    {product.desconto}%
-                                </p>
-                            )}
                             <div className="optionsImages">
                                 <img
                                     src={product.imagemPrincipal}
                                     alt={product.nome}
+                                    className={`optionImage ${mainImage === product.imagemPrincipal ? 'selected' : ''}`}
                                     onClick={() =>
                                         handleImageClick(
                                             product.imagemPrincipal
@@ -191,12 +212,23 @@ export default function Product() {
                                             key={index}
                                             src={image}
                                             alt={`img${index}`}
+                                            className={`optionImage ${mainImage === image ? 'selected' : ''}`}
                                             onClick={() =>
                                                 handleImageClick(image)
                                             }
                                         />
                                     ))}
                             </div>
+                            <img
+                                src={mainImage}
+                                alt={product.nome}
+                                className="imageMain"
+                            />
+                            {hasDiscount && (
+                                <p className="offerDescont">
+                                    {product.desconto}%
+                                </p>
+                            )}
                         </div>
                         <div className="containerInfos">
                             <div className="sectionIcons">
@@ -251,7 +283,11 @@ export default function Product() {
                             <h3 className="productName">{product.nome}</h3>
                             {hasDiscount && (
                                 <p className="priceOrigin">
-                                    {BRL.format(product.valorTotal)}
+                                    De{' '}
+                                    <span>
+                                        {BRL.format(product.valorTotal)}
+                                    </span>{' '}
+                                    por:
                                 </p>
                             )}
                             <p className="productPrice">
@@ -273,12 +309,12 @@ export default function Product() {
                                 className="addCart"
                                 onClick={handleAddToCart}
                             >
-                                Adicionar ao Carrinho
                                 <img
                                     src={iconAddCart}
                                     alt="icon add Cart"
                                     className="iconAdd"
                                 />
+                                Adicionar ao Carrinho
                             </button>
                         </div>
                     </section>
@@ -290,35 +326,35 @@ export default function Product() {
                         <div className="containerSpecifications">
                             <p className="specification">
                                 <strong>Nome:</strong>
-                                <span>{product.nome}</span>
+                                {product.nome}
                             </p>
                             <p className="specification">
                                 <strong>Marca:</strong>
-                                <span>{product.fabricante}</span>
+                                {product.fabricante}
                             </p>
                             <p className="specification">
                                 <strong>Categoria:</strong>
-                                <span>{product.categoria}</span>
+                                {product.categoria}
                             </p>
                             <p className="specification">
                                 <strong>SubCategoria:</strong>
-                                <span>{product.subCategoria}</span>
+                                {product.subCategoria}
                             </p>
                             <p className="specification">
                                 <strong>Comprimento:</strong>
-                                <span>{product.comprimento}cm</span>
+                                {product.comprimento} cm
                             </p>
                             <p className="specification">
                                 <strong>Altura:</strong>
-                                <span>{product.altura}cm</span>
+                                {product.altura} cm
                             </p>
                             <p className="specification">
                                 <strong>Largura:</strong>
-                                <span>{product.largura}cm</span>
+                                {product.largura} cm
                             </p>
                             <p className="specification">
                                 <strong>Peso:</strong>
-                                <span>{product.peso}kg</span>
+                                {product.peso} kg
                             </p>
                         </div>
                     </section>
@@ -326,7 +362,11 @@ export default function Product() {
             )}
             <section className="offers">
                 <h2>Produtos Similares</h2>
-                <OfferList />
+                <OfferList
+                    categoria={product.categoria}
+                    subCategoria={product.subCategoria}
+                    limit={10}
+                />
             </section>
         </main>
     );

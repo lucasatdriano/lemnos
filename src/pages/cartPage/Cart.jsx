@@ -553,7 +553,7 @@ export default function Cart() {
             </section>
             <section className="offers">
                 <h2>Continue Comprando</h2>
-                <OfferList />
+                <OfferList onlyOnSale />
             </section>
         </main>
     );

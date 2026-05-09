@@ -72,12 +72,12 @@ export default function MenuDep({ toggleTheme, showMenuFav }) {
 
             <div
                 onClick={handleCloseMenu}
-                className={`modal ${isActive ? 'active' : 'inactive'}`}
+                className={`modal ${isActive ? 'active' : ''}`}
             ></div>
 
             <nav
                 ref={dropDownRef}
-                className={`menu ${isActive ? 'active' : 'inactive'}`}
+                className={`menu ${isActive ? 'active' : ''}`}
             >
                 <Link to="/" className="link" onClick={handleCloseMenu}>
                     <img src={LogoVertical} alt="Logo" className="logoMenu" />
@@ -192,7 +192,7 @@ export default function MenuDep({ toggleTheme, showMenuFav }) {
                             Favoritos
                         </Link>
                         <Link
-                            to="/login"
+                            to="/auth"
                             className="link"
                             onClick={handleCloseMenu}
                         >

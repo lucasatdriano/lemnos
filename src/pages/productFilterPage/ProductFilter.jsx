@@ -2,13 +2,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { IoList } from 'react-icons/io5';
 import { HiSquares2X2 } from 'react-icons/hi2';
-import { listarProdutosFiltrados } from '../../services/ProdutoService';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Card from '../../components/card/Card';
 import Loading from '../../components/loading/Loading';
 import DoubleInputRange from '../../components/inputs/doubleInput/DoubleInput';
 import AuthService from '../../services/AuthService';
 import './productFilter.scss';
+import { listarProdutosFiltrados } from '../../services/UsuarioProdutoService';
 
 const brands = [
     'Acer',
@@ -406,8 +406,6 @@ export default function ProductFilter() {
             </section>
 
             <section className="filtered-data-container">
-                <hr className="hrFilter" />
-
                 {loading && page === 0 ? (
                     <Loading />
                 ) : (

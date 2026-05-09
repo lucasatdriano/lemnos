@@ -11,7 +11,7 @@ import monitor from '../../assets/deps/imgMonitor.svg';
 import computador from '../../assets/deps/imgPcGamer.svg';
 import portatil from '../../assets/deps/imgNotebookPortatil.svg';
 import perifericos from '../../assets/deps/imgPerifericos.svg';
-import { listarProdutosFiltrados } from '../../services/ProdutoService';
+import { listarProdutosFiltrados } from '../../services/UsuarioProdutoService';
 
 export default function Home() {
     const [produtos, setProdutos] = useState([]);
@@ -26,7 +26,7 @@ export default function Home() {
                 maiorPreco: 50000,
             };
 
-            const data = await listarProdutosFiltrados(filtro, 3, 24);
+            const data = await listarProdutosFiltrados(filtro, 3, 20);
             setProdutos(data);
         }
         fetchProdutos();
@@ -110,7 +110,7 @@ export default function Home() {
 
                 <h2>Ofertas</h2>
                 <section className="offers">
-                    <OfferList />
+                    <OfferList onlyOnSale />
                 </section>
 
                 <section className="mainProds">

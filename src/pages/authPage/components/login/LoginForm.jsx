@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import './loginForm.scss';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,10 +10,11 @@ import {
     auth,
     googleProvider,
 } from '../../../../services/configurations/FirebaseConfig';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { login, loginFirebase } from '../../../../services/LoginService';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../../../../services/AuthService';
+import PasswordToggle from '../../../../components/inputs/passwordToggle/PasswordToggle';
+import InputError from '../../../../components/inputs/inputError/InputError';
 
 export default function LoginForm({ onLogin, onCadastroClick }) {
     const navigate = useNavigate();
@@ -65,9 +65,12 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
     const handleGoogleLogin = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
-            const googleToken = result.user.accessToken;
+            const googleToken = await result.user.getIdToken();
+
             const loginSuccess = await loginFirebase(googleToken);
 
+            console.log(await result.user.getIdToken());
+            console.log(result.user);
             if (AuthService.isLoggedIn() && loginSuccess) {
                 onLogin();
                 toast.success('Usuário logado');
@@ -86,27 +89,30 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
     };
 
     return (
-        <section className="login-form-container">
-            <div className="loginCredencial">
+        <section className="loginForm">
+            <div className="loginFormGoogleSection">
                 <h2>Entre com sua Conta do Google</h2>
-                <div className="btnCredencials">
-                    <button onClick={handleGoogleLogin}>
-                        <FcGoogle className="iconGoogle" />
+                <div className="loginFormGoogleActions">
+                    <button
+                        onClick={handleGoogleLogin}
+                        className="loginGoogleButton"
+                    >
+                        <FcGoogle className="loginGoogleIcon" />
                         Entrar com Google
                     </button>
                 </div>
             </div>
 
-            <div className="containerSeparate">
+            <div className="loginFormDivider">
                 <hr />
                 <h3>OU</h3>
                 <hr />
             </div>
 
-            <form onSubmit={handleLogin} className="login">
+            <form onSubmit={handleLogin} className="loginFormContent">
                 <h2>Digite seu Email e sua Senha</h2>
-                <div className="inputsLogin">
-                    <div className="groupInput">
+                <div className="loginFormFields">
+                    <div className="loginFormField">
                         <CustomInput
                             type="text"
                             label="Email:"
@@ -116,12 +122,10 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
                             value={form.email}
                             onChange={handleChange}
                         />
-                        {errors.email && (
-                            <span className="invalid">{errors.email}</span>
-                        )}
+                        <InputError error={errors.email} />
                     </div>
 
-                    <div className="groupInput">
+                    <div className="loginFormField">
                         <CustomInput
                             type={showPassword ? 'text' : 'password'}
                             label="Senha:"
@@ -131,24 +135,15 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
                             value={form.password}
                             onChange={handleChange}
                         />
-                        {showPassword ? (
-                            <FaRegEyeSlash
-                                className="iconPwd"
-                                onClick={togglePasswordVisibility}
-                            />
-                        ) : (
-                            <FaRegEye
-                                className="iconPwd"
-                                onClick={togglePasswordVisibility}
-                            />
-                        )}
-                        {errors.password && (
-                            <span className="invalid">{errors.password}</span>
-                        )}
+                        <PasswordToggle
+                            visible={showPassword}
+                            onToggle={togglePasswordVisibility}
+                        />
+                        <InputError error={errors.password} />
                     </div>
                 </div>
 
-                <div className="btnLoginForm">
+                <div className="loginFormActions">
                     <button type="submit">Entrar</button>
                     <button type="button" onClick={handleCadastroClick}>
                         Cadastre-se

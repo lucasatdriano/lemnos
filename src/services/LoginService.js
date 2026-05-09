@@ -29,7 +29,7 @@ export async function login(usuario, navigate) {
         setTimeout(
             () => {
                 AuthService.logout();
-                navigate('/login');
+                navigate('/auth');
             },
             45 * 60 * 1000
         );
@@ -41,7 +41,7 @@ export async function login(usuario, navigate) {
     }
 }
 
-export async function  loginFirebase(token) {
+export async function loginFirebase(token) {
     try {
         const response = await axios({
             baseURL: baseUri,

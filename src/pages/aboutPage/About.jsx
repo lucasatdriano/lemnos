@@ -4,8 +4,6 @@ import './about.scss';
 import LogoHorizontalLight from '../../assets/imgLemnos/logoHorizontal.svg';
 import LogoHorizontalDark from '../../assets/imgLemnos/logoHorizontalClaro.svg';
 import TechFesto from '../../assets/imgLemnos/imgMascote.svg';
-import { cadastrarProduto } from '../../services/ProdutoService';
-import { cadastrarFornecedor } from '../../services/FornecedorService';
 
 export default function About() {
     useEffect(() => {
@@ -42,45 +40,10 @@ export default function About() {
             reset: false,
         });
     }, []);
-    
-    // const handleProdutos = () => {
-    //     processarProdutos();
-    // }
-
-    // const handleFornecedores = () => {
-    //     processarFornecedores();
-    // }
-
-    // async function processarFornecedores() {
-    //   for (const fornecedor of fornecedores) {
-    //     const resultado = await cadastrarFornecedor(fornecedor, 'fornecedor');
-    //     if (resultado) {
-    //       console.log('Fornecedor cadastrado com sucesso:', resultado);
-    //     } else {
-    //       console.log('Falha ao cadastrar Fornecedor:');
-    //     }
-    //   }
-    // }
-
-    // async function processarProdutos() {
-    //   for (const produto of produtos) {
-    //     try {
-    //       const resultado = await cadastrarProduto(produto);
-    //       if (resultado) {
-    //         console.log('Produto cadastrado com sucesso:', resultado);
-    //       } else {
-    //         console.log('Falha ao cadastrar produto:', produto.nome, resultado.error);
-    //       }
-    //     } catch (error) {
-    //       console.error('Erro ao cadastrar produto:', produto.nome, error);
-    //       throw error;
-    //     }
-    //   }
-    // }
 
     return (
         <main>
-            <section className="contentAbout">
+            <section className="aboutContent">
                 <div className="title">
                     <hr />
                     <h2>Sobre</h2>
@@ -88,25 +51,36 @@ export default function About() {
                 </div>
 
                 <div className="content">
-                    {/* <button onClick={handleProdutos}>Cadastrar produtos</button>
-                    <button onClick={handleFornecedores}>Cadastrar Fornecedores</button> */}
-                    <p className="text">
-                        Desde sua fundação em 2023, a Lemnos lidera o mercado
-                        tecnológico com a sua inovação, oferecendo uma ampla
-                        gama de produtos de ponta.
-                        <br />
-                        <br />
-                        Comprometida em tornar a tecnologia mais acessível, a
-                        empresa garante produtos de alta qualidade e uma
-                        experiência de compra excepcional, com uma equipe
-                        especializada que busca constantemente expandir seus
-                        serviços e produtos.
-                        <br />
-                        <br />
-                        Bem-vindo à Lemnos, onde a paixão pela tecnologia e a
-                        busca pela excelência definem o futuro da inovação
-                        tecnológica.
-                    </p>
+                    <div className="textContainer">
+                        <p className="text">
+                            Desde sua fundação em 2023, a Lemnos vem se
+                            consolidando como uma referência no mercado
+                            tecnológico, guiada por uma visão inovadora e pelo
+                            compromisso constante com a evolução. Mais do que
+                            oferecer produtos, buscamos criar experiências que
+                            acompanhem o ritmo acelerado das transformações
+                            digitais, sempre atentos às necessidades de um
+                            público cada vez mais conectado e exigente.
+                        </p>
+                        <p className="text">
+                            Ao longo dessa trajetória, ampliamos continuamente
+                            nosso portfólio com soluções modernas e acessíveis,
+                            priorizando qualidade, confiabilidade e desempenho.
+                            Nossa equipe, formada por profissionais apaixonados
+                            por tecnologia, trabalha diariamente para garantir
+                            não apenas uma compra, mas uma jornada completa —
+                            desde a escolha do produto até o suporte pós-venda.
+                        </p>
+                        <p className="text">
+                            Na Lemnos, acreditamos que a tecnologia deve ser um
+                            elo entre pessoas, ideias e oportunidades. Por isso,
+                            cada detalhe da nossa plataforma é pensado para
+                            facilitar o acesso ao que há de mais avançado no
+                            mercado, transformando desafios em soluções práticas
+                            e contribuindo diretamente para o crescimento
+                            pessoal e profissional dos nossos clientes.
+                        </p>
+                    </div>
                     <img
                         className="logoDark"
                         src={LogoHorizontalLight}
@@ -120,41 +94,48 @@ export default function About() {
                 </div>
             </section>
 
-            <section className="contentValues">
+            <section className="valuesContent">
                 <div className="content">
                     <div className="item">
                         <h3>Missão</h3>
                         <p>
-                            Na Lemnos, buscamos democratizar o acesso à
-                            tecnologia através de produtos inovadores a preços
-                            acessíveis. Nosso compromisso é oferecer produtos de
-                            alta qualidade que conectem e capacitem nossos
-                            clientes em todas as áreas de suas vidas.
+                            Na Lemnos, nossa missão é tornar a tecnologia cada
+                            vez mais acessível, conectando pessoas a soluções
+                            inovadoras que realmente fazem diferença no dia a
+                            dia. Buscamos democratizar o acesso a produtos de
+                            qualidade, mantendo um equilíbrio entre preço justo,
+                            desempenho e confiabilidade, para que cada cliente
+                            possa evoluir junto com o avanço tecnológico.
                         </p>
                     </div>
                     <div className="item">
                         <h3>Plataforma</h3>
                         <p>
-                            A plataforma Lemnos oferece uma vitrine digital
-                            intuitiva com uma ampla gama de produtos
-                            tecnológicos de ponta, proporcionando uma
-                            experiência de compra simplificada e personalizada.
+                            A plataforma Lemnos foi desenvolvida para oferecer
+                            uma experiência intuitiva, moderna e eficiente. Com
+                            uma interface amigável e organizada, proporcionamos
+                            uma navegação simples e personalizada, permitindo
+                            que cada usuário encontre exatamente o que precisa
+                            com facilidade, enquanto explora um catálogo
+                            completo de produtos tecnológicos de ponta.
                         </p>
                     </div>
                     <div className="item">
                         <h3>Valores</h3>
                         <p>
-                            Na Lemnos, priorizamos a excelência e a satisfação
-                            do cliente, oferecendo tecnologia e soluções
-                            adaptadas às suas necessidades. Nosso ambiente
-                            acolhedor e informativo atende tanto entusiastas
-                            quanto iniciantes.
+                            Nossos valores são fundamentados na excelência, na
+                            transparência e no compromisso com a satisfação do
+                            cliente. Valorizamos a inovação, o aprendizado
+                            contínuo e a construção de um ambiente acolhedor,
+                            capaz de atender tanto iniciantes quanto entusiastas
+                            da tecnologia, sempre com foco em entregar soluções
+                            relevantes e experiências memoráveis.
                         </p>
                     </div>
                 </div>
             </section>
 
-            <section className="contentMascot">
+            <section className="mascotContent">
                 <div className="title">
                     <hr />
                     <h2>TechFesto</h2>
@@ -162,22 +143,31 @@ export default function About() {
                 </div>
 
                 <div className="content">
-                    <p className="text">
-                        Na Lemnos, nosso mascote, TechFesto, personifica a fusão
-                        entre a mitologia antiga e a inovação contemporânea,
-                        simbolizando nossa busca pela excelência e progresso
-                        tecnológico.
-                        <br />
-                        <br />
-                        Como guardião tecnológico, ele embarca em uma jornada
-                        com nossos clientes, utilizando seu conhecimento para
-                        desvendar novas possibilidades.
-                        <br />
-                        <br />
-                        Junte-se a TechFesto e à comunidade Lemnos na busca pela
-                        excelência e inovação, onde a inspiração mitológica
-                        impulsiona a tecnologia do futuro.
-                    </p>
+                    <div className="textContainer">
+                        <p className="text">
+                            Na Lemnos, nosso mascote TechFesto representa muito
+                            mais do que uma simples identidade visual — ele
+                            simboliza a união entre o conhecimento ancestral e a
+                            inovação tecnológica. Inspirado pela mitologia e
+                            impulsionado pelo futuro, ele traduz a essência da
+                            nossa marca em cada detalhe.
+                        </p>
+                        <p className="text">
+                            Como um verdadeiro guardião da tecnologia, TechFesto
+                            acompanha nossos clientes em uma jornada de
+                            descobertas, utilizando sua sabedoria para revelar
+                            novas possibilidades e incentivar a exploração de
+                            soluções criativas e eficientes.
+                        </p>
+                        <p className="text">
+                            Com seu espírito curioso e visão estratégica,
+                            TechFesto motiva nossa equipe a ir além, conectando
+                            tradição e inovação de forma única. Ele é o símbolo
+                            de uma jornada contínua de evolução, onde passado e
+                            futuro se encontram para construir algo
+                            extraordinário.
+                        </p>
+                    </div>
                     <img
                         src={TechFesto}
                         alt="Mascote TechFesto"

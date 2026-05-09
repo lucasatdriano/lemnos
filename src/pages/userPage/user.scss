@@ -25,12 +25,15 @@ $font-items: 'Poppins', Helvetica;
     background: #f3faf9de;
     display: flex;
     height: auto;
-    padding-bottom: 1.1em;
     border-radius: 20px;
     box-shadow: 2px 2px 15px $color-shadow;
 
     section {
         width: 50%;
+
+        &:first-child {
+            border-right: 2px solid $color-primaryLight;
+        }
 
         .userData {
             width: 100%;
@@ -38,19 +41,20 @@ $font-items: 'Poppins', Helvetica;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 2px solid $color-primaryLight;
 
             .user {
                 display: flex;
                 align-items: center;
-                gap: 0.75em;
+                gap: 1em;
                 padding: 0.5em 0;
-                font-size: 2rem;
+                font-size: 1.8rem;
 
                 img {
                     object-fit: contain;
                     border: 1px solid $color-primaryLight;
-                    width: 50px;
-                    height: 50px;
+                    width: 45px;
+                    height: 45px;
                     border-radius: 50%;
                 }
             }
@@ -58,21 +62,15 @@ $font-items: 'Poppins', Helvetica;
             .configUser {
                 display: flex;
                 align-items: center;
-                gap: 2em;
+                gap: 1em;
 
                 .icon {
-                    height: 38px;
-                    width: 38px;
+                    height: 32px;
+                    width: 32px;
                     color: $color-primaryLight;
                     cursor: pointer;
                 }
             }
-        }
-
-        .lineUser {
-            width: 100%;
-            height: 0;
-            border: 1.5px solid $color-primaryLight;
         }
 
         .updateInfos {
@@ -86,7 +84,8 @@ $font-items: 'Poppins', Helvetica;
                 display: grid;
                 grid-template-columns: 1fr;
                 grid-template-rows: 1fr;
-                gap: 1.5em;
+                gap: 2em;
+                width: 100%;
             }
 
             .containerButtons {
@@ -101,15 +100,13 @@ $font-items: 'Poppins', Helvetica;
                     display: flex;
                     flex-direction: column;
                     gap: 2em;
+
+                    button {
+                        font-size: 1.8rem;
+                    }
                 }
             }
         }
-    }
-
-    .hrSeparate {
-        width: 0;
-        height: 103%;
-        border: 1.5px solid $color-primaryLight;
     }
 
     .clientePage {
@@ -137,7 +134,6 @@ $font-items: 'Poppins', Helvetica;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        padding: 1em;
         gap: 2em;
 
         .hrFuncionario {
@@ -153,10 +149,9 @@ $font-items: 'Poppins', Helvetica;
         display: flex;
 
         button {
-            max-width: 50%;
             min-width: 50%;
             box-shadow: none;
-            font-size: 2.6rem;
+            font-size: 2rem;
             padding: 0.5em;
             border-radius: 0;
 
@@ -165,19 +160,24 @@ $font-items: 'Poppins', Helvetica;
                 border-left: 2px solid #f3faf9de;
             }
 
-            &:hover {
-                filter: brightness(0.9);
+            &.selected {
+                box-shadow: 2px 2px 25px #36cec480;
             }
         }
     }
 
     .allEnderecos {
-        width: 90%;
+        width: 100%;
+        padding: 2em;
         display: flex;
         gap: 1em;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
+        p {
+            opacity: 0.7;
+        }
 
         .dataEnd {
             cursor: pointer;
@@ -187,33 +187,46 @@ $font-items: 'Poppins', Helvetica;
             flex-direction: column;
             background-color: #dce0e050;
             width: 100%;
-            gap: 10%;
+            gap: 0.5em;
             padding: 1em;
             border: $color-primaryLight solid 3px;
-            border-left: $color-primaryLight solid 10px;
+            border-left: $color-primaryLight solid 8px;
             border-radius: 15px;
-            user-select: none;
             box-shadow: 0 0 10px $color-shadow;
 
             &.selected {
-                background-color: #a8adad30;
-                box-shadow: 2px 2px 25px #36cec480;
-            }
-
-            .fixo {
-                font-weight: bold;
+                background-color: #a8adad4a;
+                border: $color-secundaryLight solid 3px;
+                border-left: $color-secundaryLight solid 8px;
+                box-shadow: 2px 2px 25px #41535280;
             }
 
             p {
-                font-size: 1.8rem;
+                font-family: $font-items;
+                font-size: 1.6rem;
             }
         }
 
+        [class*='EnderecoBtn'] {
+            width: 100%;
+            max-width: 20em;
+            font-size: 1.8rem;
+        }
+
         .buttons {
+            width: 100%;
             display: flex;
             align-items: center;
             flex-direction: column;
-            gap: 10px;
+            gap: 1em;
+
+            .deleteEnderecoBtn {
+                background-color: $color-detailsLight;
+
+                &:hover {
+                    box-shadow: 0 0 8px $color-detailsLight;
+                }
+            }
         }
     }
 
@@ -245,6 +258,10 @@ $font-items: 'Poppins', Helvetica;
 
             &::-webkit-scrollbar {
                 display: none;
+            }
+
+            h2 {
+                font-size: 2.8rem;
             }
 
             p {
@@ -375,8 +392,9 @@ $font-items: 'Poppins', Helvetica;
         .modalFornecedor,
         .modalEndereco {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5em;
+            grid-template-columns: repeat(2, 1fr);
+            column-gap: 1.5em;
+            row-gap: 2em;
             padding: 0.5em 2em 1em;
             width: 100%;
 
@@ -394,7 +412,7 @@ $font-items: 'Poppins', Helvetica;
                     position: absolute;
                     display: grid;
                     text-align: center;
-                    grid-template-columns: 1fr 1fr;
+                    grid-template-columns: repeat(2, 1fr);
                     width: 100%;
                     height: 0;
                     max-height: 15em;
@@ -451,8 +469,8 @@ $font-items: 'Poppins', Helvetica;
 
                 .iconDrop {
                     position: absolute;
-                    right: 1vw;
-                    top: 25px;
+                    right: 10px;
+                    top: 50%;
                     z-index: 50;
                     transform: translateY(-50%);
                     width: 24px;
@@ -545,26 +563,25 @@ $font-items: 'Poppins', Helvetica;
         background-color: #72757478;
         box-shadow: 0 0 15px #141414a8;
 
-        .userData {
-            .user {
-                img {
-                    border: 1px solid $color-primaryDark;
+        section {
+            &:first-child {
+                border-right: 2px solid $color-primaryDark;
+            }
+            .userData {
+                border-bottom: 2px solid $color-primaryDark;
+
+                .user {
+                    img {
+                        border: 1px solid $color-primaryDark;
+                    }
+                }
+
+                .configUser {
+                    .icon {
+                        color: $color-fontDark;
+                    }
                 }
             }
-
-            .configUser {
-                .icon {
-                    color: $color-fontDark;
-                }
-            }
-        }
-
-        .lineUser {
-            border: 1.5px solid $color-primaryDark;
-        }
-
-        hr {
-            border: 1.5px solid $color-primaryDark;
         }
 
         .adminPage,
@@ -680,10 +697,6 @@ $font-items: 'Poppins', Helvetica;
             width: 100%;
         }
 
-        .hrSeparate {
-            display: none;
-        }
-
         .selectBtn {
             width: 100%;
             button {
@@ -746,7 +759,7 @@ $font-items: 'Poppins', Helvetica;
                         .dropdown {
                             position: absolute;
                             display: grid;
-                            grid-template-columns: 1fr 1fr;
+                            grid-template-columns: repeat(2, 1fr);
                             width: 100%;
                             height: 0;
                             padding: 1em 10px 10px;
@@ -834,7 +847,7 @@ $font-items: 'Poppins', Helvetica;
         .updateInfos {
             .updateInputs {
                 grid-template-columns: 1fr;
-                grid-template-rows: 1fr 1fr;
+                grid-template-rows: repeat(2, 1fr);
             }
 
             .containerButtons {
@@ -865,12 +878,6 @@ $font-items: 'Poppins', Helvetica;
 
 @media only screen and (max-width: 550px) {
     .userContainer {
-        hr {
-            height: 0;
-            width: 100%;
-            margin-bottom: 1em;
-        }
-
         .clientePage {
             .selectBtn {
                 button {

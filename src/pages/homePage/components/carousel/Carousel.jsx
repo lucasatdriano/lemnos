@@ -1,159 +1,189 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import '@splidejs/splide/dist/css/themes/splide-default.min.css';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-import imgBanner1 from '../../../../assets/banners/banner1.svg';
-import imgBanner2 from '../../../../assets/banners/banner2.svg';
-import imgBanner3 from '../../../../assets/banners/banner3.svg';
-import imgBanner4 from '../../../../assets/banners/banner4.svg';
-import imgBanner5 from '../../../../assets/banners/banner5.svg';
-import imgBannerMob1 from '../../../../assets/banners/bannerMob1.svg';
-import imgBannerMob2 from '../../../../assets/banners/bannerMob2.svg';
-import imgBannerMob3 from '../../../../assets/banners/bannerMob3.svg';
-import imgBannerMob4 from '../../../../assets/banners/bannerMob4.svg';
-import imgBannerMob5 from '../../../../assets/banners/bannerMob5.svg';
-import './carousel.scss';
+import '@splidejs/splide/dist/css/themes/splide-default.min.css';
 import { Link } from 'react-router-dom';
+import './carousel.scss';
+import PropTypes from 'prop-types';
+import { listarProdutosFiltrados } from '../../../../services/UsuarioProdutoService';
 
-const ImageWithLoadingEffect = ({ src, alt, className }) => {
+import imgBanner1 from '../../../../assets/banners/banner1.webp';
+import imgBanner2 from '../../../../assets/banners/banner2.webp';
+import imgBanner3 from '../../../../assets/banners/banner3.webp';
+import imgBanner4 from '../../../../assets/banners/banner4.webp';
+import imgBanner5 from '../../../../assets/banners/banner5.webp';
+
+import imgBannerMob1 from '../../../../assets/banners/bannerMob1.webp';
+import imgBannerMob2 from '../../../../assets/banners/bannerMob2.webp';
+import imgBannerMob3 from '../../../../assets/banners/bannerMob3.webp';
+import imgBannerMob4 from '../../../../assets/banners/bannerMob4.webp';
+import imgBannerMob5 from '../../../../assets/banners/bannerMob5.webp';
+
+const bannersConfig = [
+    {
+        desktop: imgBanner1,
+        mobile: imgBannerMob1,
+        productName: 'Lemnos',
+    },
+    {
+        desktop: imgBanner2,
+        mobile: imgBannerMob2,
+        productName: 'Earbuds Basic Global Mi True Wireless',
+    },
+    {
+        desktop: imgBanner3,
+        mobile: imgBannerMob3,
+        productName: 'Headphone over-ear Bluetooth WB Siren Pro ANC',
+    },
+    {
+        desktop: imgBanner4,
+        mobile: imgBannerMob4,
+        productName: 'Notebook Acer Aspire 5, 256GB, Tela 15/6',
+    },
+    {
+        desktop: imgBanner5,
+        mobile: imgBannerMob5,
+        productName: 'Apple Watch Ultra 2',
+    },
+];
+
+const ResponsiveImage = ({ desktop, mobile, alt }) => {
     const [isLoaded, setIsLoaded] = useState(false);
-    const imgRef = useRef();
-
-    useEffect(() => {
-        if (imgRef.current && imgRef.current.complete) {
-            setIsLoaded(true);
-        }
-    }, []);
 
     return (
-        <img
-            ref={imgRef}
-            src={src}
-            alt={alt}
-            className={className}
-            style={{
-                width: '100%',
-                height: 'auto',
-                filter: isLoaded ? 'none' : 'blur(10px)',
-                transition: 'filter 1s ease-out',
-            }}
-            onLoad={() => setIsLoaded(true)}
-        />
+        <picture>
+            <source media="(max-width: 768px)" srcSet={mobile} />
+            <img
+                src={desktop}
+                alt={alt}
+                onLoad={() => setIsLoaded(true)}
+                style={{
+                    filter: isLoaded ? 'none' : 'blur(10px)',
+                    transition: 'filter 0.8s ease-out',
+                }}
+            />
+        </picture>
     );
 };
 
 export default function Slide() {
-    const [isHovered, setIsHovered] = useState(false);
     const splideRef = useRef(null);
     const [autoplayPaused, setAutoplayPaused] = useState(false);
-    const [splideOptions, setSplideOptions] = useState({
-        type: 'loop',
-        perPage: 1,
-        pauseOnHover: false,
-        speed: 1000,
-        rewind: true,
-        gap: 15,
-    });
+    const [slides, setSlides] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const productIdCache = useRef(new Map());
+
+    const fetchProductIdByName = useCallback(async (productName) => {
+        if (productIdCache.current.has(productName)) {
+            return productIdCache.current.get(productName);
+        }
+
+        try {
+            const filtro = {
+                nome: productName,
+                categoria: null,
+                subCategoria: null,
+                marca: null,
+                menorPreco: 0,
+                maiorPreco: 50000,
+                avaliacao: null,
+            };
+
+            const data = await listarProdutosFiltrados(filtro, 0, 1);
+
+            let productId = null;
+
+            if (data && Array.isArray(data) && data.length > 0) {
+                productId = data[0].id;
+            }
+
+            productIdCache.current.set(productName, productId);
+            return productId;
+        } catch (error) {
+            console.error(`Erro ao buscar produto ${productName}:`, error);
+            productIdCache.current.set(productName, null);
+            return null;
+        }
+    }, []);
+
+    useEffect(() => {
+        async function loadSlides() {
+            setLoading(true);
+            const slidesData = await Promise.all(
+                bannersConfig.map(async (config) => {
+                    const productId = await fetchProductIdByName(
+                        config.productName
+                    );
+                    return {
+                        desktop: config.desktop,
+                        mobile: config.mobile,
+                        link: productId ? `/product/${productId}` : '#',
+                        productName: config.productName,
+                        hasProduct: !!productId,
+                    };
+                })
+            );
+
+            setSlides(slidesData);
+            setLoading(false);
+        }
+
+        loadSlides();
+    }, [fetchProductIdByName]);
 
     const nextSlide = () => {
-        const splide = splideRef.current.splide;
-        splide.go('+1');
+        splideRef.current?.splide.go('+1');
     };
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (!autoplayPaused) {
-                nextSlide();
-            }
+            if (!autoplayPaused) nextSlide();
         }, 5000);
+
         return () => clearInterval(interval);
     }, [autoplayPaused]);
+
+    if (loading) {
+        return (
+            <section className="carousel">
+                <div className="carousel-loading">Carregando banners...</div>
+            </section>
+        );
+    }
 
     return (
         <section className="carousel">
             <Splide
-                options={splideOptions}
                 ref={splideRef}
-                onMouseEnter={() => {
-                    setIsHovered(true);
-                    setAutoplayPaused(true);
+                options={{
+                    type: 'loop',
+                    perPage: 1,
+                    speed: 1000,
+                    gap: 15,
+                    arrows: true,
+                    pagination: true,
                 }}
-                onMouseLeave={() => {
-                    setIsHovered(false);
-                    setTimeout(() => setAutoplayPaused(false), 100);
-                }}
+                onMouseEnter={() => setAutoplayPaused(true)}
+                onMouseLeave={() => setAutoplayPaused(false)}
             >
-                <SplideSlide>
-                    <ImageWithLoadingEffect
-                        src={imgBanner1}
-                        alt="Slide 1"
-                        className="slide"
-                    />
-                    <ImageWithLoadingEffect
-                        src={imgBannerMob1}
-                        alt="Slide 1"
-                        className="slideMob"
-                    />
-                </SplideSlide>
-                <SplideSlide>
-                    <Link to={'/product/7dfa5602-fc10-4f8b-8c81-8d96831b040f'}>
-                        <ImageWithLoadingEffect
-                            src={imgBanner2}
-                            alt="Slide 2"
-                            className="slide"
-                        />
-                        <ImageWithLoadingEffect
-                            src={imgBannerMob2}
-                            alt="Slide 2"
-                            className="slideMob"
-                        />
-                    </Link>
-                </SplideSlide>
-                <SplideSlide>
-                    <Link to={'/product/fd824c36-5b5b-4ab1-af1b-20e9ea622283'}>
-                        <ImageWithLoadingEffect
-                            src={imgBanner3}
-                            alt="Slide 3"
-                            className="slide"
-                        />
-                        <ImageWithLoadingEffect
-                            src={imgBannerMob3}
-                            alt="Slide 3"
-                            className="slideMob"
-                        />
-                    </Link>
-                </SplideSlide>
-                <SplideSlide>
-                    <Link to={'/product/8cba6423-1451-49c3-9135-f9fbe64585b8'}>
-                        <ImageWithLoadingEffect
-                            src={imgBanner4}
-                            alt="Slide 4"
-                            className="slide"
-                        />
-                        <ImageWithLoadingEffect
-                            src={imgBannerMob4}
-                            alt="Slide 4"
-                            className="slideMob"
-                        />
-                    </Link>
-                </SplideSlide>
-                <SplideSlide>
-                    <Link to={'/product/1e9549d2-eb2d-4f9a-a39f-9df2eb255984'}>
-                        <ImageWithLoadingEffect
-                            src={imgBanner5}
-                            alt="Slide 5"
-                            className="slide"
-                        />
-                        <ImageWithLoadingEffect
-                            src={imgBannerMob5}
-                            alt="Slide 5"
-                            className="slideMob"
-                        />
-                    </Link>
-                </SplideSlide>
+                {slides.map((slide, index) => (
+                    <SplideSlide key={index}>
+                        <Link to={slide.link}>
+                            <ResponsiveImage
+                                desktop={slide.desktop}
+                                mobile={slide.mobile}
+                                alt={`Banner ${slide.productName}`}
+                            />
+                        </Link>
+                    </SplideSlide>
+                ))}
             </Splide>
         </section>
     );
 }
+
+ResponsiveImage.propTypes = {
+    desktop: PropTypes.string.isRequired,
+    mobile: PropTypes.string.isRequired,
+    alt: PropTypes.string,
+};

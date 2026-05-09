@@ -125,26 +125,13 @@ const brands = [
 ];
 
 export default function BrandsList() {
-    const scrollers = document.querySelectorAll('.brandsList');
-
-    const addAnimation = () => {
-        scrollers.forEach((scroller) => {
-            scroller.setAttribute('data-animated', true);
-        });
-    };
-
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        addAnimation();
-    }
-
     return (
-        <div className="brandsList" data-animated="true">
-            {brands.map((brand) => (
-                <CardBrands key={brand.id} brand={brand} />
-            ))}
-            {brands.map((brand) => (
-                <CardBrands key={brand.id} brand={brand} />
-            ))}
+        <div className="brandsList">
+            <div className="brandsTrack">
+                {[...brands, ...brands].map((brand, index) => (
+                    <CardBrands key={index} brand={brand} />
+                ))}
+            </div>
         </div>
     );
 }

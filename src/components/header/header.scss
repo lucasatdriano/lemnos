@@ -24,39 +24,36 @@ header {
     font-family: $font-title;
     position: fixed;
     width: 95%;
-    height: 3.5em;
+    height: auto;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     background-color: $color-secundaryLight;
     box-shadow: 4px 2px 20px 3px $color-shadow;
     border-radius: 0 0 25px 25px;
-    padding: 0 1em;
-    gap: 1em;
-    font-size: 2.5rem;
+    padding: 0.5em 1em;
+    gap: 0.5em;
+    font-size: 2.2rem;
     z-index: 50;
     left: 0;
     right: 0;
     margin: 0 auto;
-    animation: expandHeader 0.3s linear forwards;
+    transition: all 0.3s ease;
 
     &.shrink {
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        animation: sizeHeader 0.3s linear forwards;
+        padding-block: 0.2em;
     }
 
     .logo {
         font-family: $font-logo;
-        font-size: 3.5rem;
+        font-size: 3rem;
         color: $color-fontDark;
         text-shadow: 4px 4px 8px #121217b8;
         text-transform: uppercase;
         transition: 0.2s ease;
 
         &:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
     }
 
@@ -65,7 +62,7 @@ header {
         flex-direction: row;
 
         .link {
-            padding: 0 0.8em;
+            padding: 0 0.5em;
             color: $color-fontDark;
             position: relative;
 
@@ -92,15 +89,17 @@ header {
 
     .menuDesktop {
         display: flex;
+        justify-content: center;
         align-items: center;
 
         .favIcon,
         .userIcon,
         .cartIcon {
+            display: flex;
             color: $color-fontDark;
-            margin: 0.5em 0.8em 0;
-            height: 36px;
-            width: 36px;
+            margin-inline: 0.5em;
+            height: 32px;
+            width: 32px;
         }
 
         .linkIcons {
@@ -108,14 +107,13 @@ header {
 
             .spanCarrinhoLength {
                 position: absolute;
-                top: 0;
-                right: 5px;
-                font-size: 2rem;
+                right: 2px;
+                top: -5px;
+                font-size: 1.4rem;
+                padding: 1px 6px;
                 font-weight: 600;
                 background-color: $color-primaryLight;
                 border-radius: 50%;
-                width: 30px;
-                height: 30px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -134,21 +132,6 @@ header {
     }
 }
 
-@keyframes sizeHeader {
-    to {
-        height: 3em;
-    }
-}
-
-@keyframes expandHeader {
-    from {
-        height: 3em;
-    }
-    to {
-        height: 3.5em;
-    }
-}
-
 @media only screen and (max-width: 1150px) {
     header {
         .logo {
@@ -161,44 +144,155 @@ header {
     }
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 900px) {
     header {
-        padding: 0;
-        gap: 1em;
-        justify-content: center;
+        display: grid;
+        grid-template-areas:
+            'menuDep logo icons'
+            'search search search';
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        padding-top: 0;
+        gap: 0 0.5em;
+
+        &.shrink {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+
+            .logo {
+                display: none;
+            }
+
+            .menuDesktop {
+                gap: 0;
+
+                .favIcon,
+                .userIcon {
+                    display: none;
+                }
+
+                .cartIcon {
+                    height: 28px;
+                    width: 28px;
+                }
+            }
+        }
+
+        .menuCat {
+            grid-area: menuDep;
+        }
 
         .logo {
-            font-size: 2.5rem;
+            grid-area: logo;
+            font-size: 2.6rem;
+
+            &:hover {
+                font-size: 2.8rem;
+                transform: scale(1);
+            }
         }
 
         .menuDesktop {
-            display: none;
+            grid-area: icons;
+            display: flex;
+            gap: 1em;
+
+            .favIcon,
+            .userIcon,
+            .cartIcon {
+                margin: 0;
+                height: 28px;
+                width: 28px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .linkIcons {
+                display: flex;
+                align-items: center;
+
+                .spanCarrinhoLength {
+                    font-size: 1.2rem;
+                    padding: 1px 6px;
+                    right: -6px;
+                    top: -5px;
+                }
+
+                .userImg {
+                    height: 34px;
+                    width: 34px;
+                    margin: 0;
+                }
+            }
+        }
+
+        .searchContainer {
+            grid-area: search;
         }
     }
 }
 
 @media only screen and (max-width: 600px) {
     header {
-        padding: 0 10em 0 0;
-        gap: 1em;
-        justify-content: center;
-
         .logo {
-            display: none;
+            display: flex;
+            font-size: 2.2rem;
+
+            &:hover {
+                font-size: 2.4rem;
+                transform: scale(1);
+            }
+        }
+
+        .menuDesktop {
+            gap: 0.5em;
+
+            .favIcon,
+            .userIcon,
+            .cartIcon {
+                height: 28px;
+                width: 28px;
+            }
+
+            .linkIcons {
+                .userImg {
+                    height: 28px;
+                    width: 28px;
+                }
+            }
+        }
+
+        &.shrink {
+            .menuDesktop {
+                .cartIcon {
+                    height: 24px;
+                    width: 24px;
+                }
+
+                .spanCarrinhoLength {
+                    font-size: 1.2rem;
+                    width: 18px;
+                    height: 18px;
+                    right: -6px;
+                    top: -6px;
+                }
+            }
         }
     }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 450px) {
     header {
-        gap: 1em;
-        padding: 0 3.5em 0 0;
-    }
-}
-
-@media only screen and (max-width: 400px) {
-    header {
-        gap: 0.5em;
-        padding: 0 2.5em 0 0;
+        &.shrink {
+            .searchContainer {
+                .searchResults {
+                    top: 95%;
+                    transform: translateX(-52%);
+                    min-width: 90svw;
+                }
+            }
+        }
     }
 }

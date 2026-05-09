@@ -45,7 +45,7 @@ export default function MenuFavorite({ onClose }) {
                 );
 
                 if (!response) {
-                    navigate('/login');
+                    navigate('/auth');
                 }
                 setFavorites(
                     Array.isArray(favoritoDetalhado) ? favoritoDetalhado : []
@@ -87,7 +87,7 @@ export default function MenuFavorite({ onClose }) {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos ao carrinho.'
             );
-            navigate('/login');
+            navigate('/auth');
         }
     };
 
@@ -179,12 +179,12 @@ export default function MenuFavorite({ onClose }) {
                                             handleAddToCart(favorite)
                                         }
                                     >
-                                        Adicionar ao Carrinho
                                         <img
                                             src={iconAddCart}
                                             alt="icon add Cart"
                                             className="iconAdd"
                                         />
+                                        Adicionar ao Carrinho
                                     </button>
                                 </li>
                             );

@@ -21,47 +21,36 @@ $font-web: 'Roboto Flex', Arial;
 $font-items: 'Poppins', Helvetica;
 
 .offers {
-    width: 90%;
     margin: 0 auto;
-    padding-top: 0.5em;
+    padding-top: 1em;
 
     .offersList {
-        display: flex;
-        justify-content: center;
-        flex-direction: row;
         cursor: grab;
 
-        .splide__list {
-            margin: auto;
-            width: 87.5vw;
-        }
+        .splide {
+            padding-inline: 5em;
 
-        .splide__slide {
-            padding-bottom: 1em;
-        }
+            .splide__slide {
+                padding-bottom: 1em;
+                width: 280px;
+            }
 
-        .splide__pagination__page {
-            display: none;
-        }
+            .splide__pagination__page {
+                display: none;
+            }
 
-        .splide__arrow {
-            &.splide__arrow--prev,
-            &.splide__arrow--next {
-                font-size: 2.2rem;
-                transition: 0.3s ease;
-                background-color: $color-primaryLight;
-                box-shadow: 2px 2px 4px $color-shadow;
+            .splide__arrow {
+                &.splide__arrow--prev,
+                &.splide__arrow--next {
+                    font-size: 2rem;
+                    transition: 0.3s ease;
+                    background-color: $color-primaryLight;
+                    box-shadow: 2px 2px 4px $color-shadow;
 
-                &:hover {
-                    opacity: 0.8;
+                    &:hover {
+                        opacity: 0.8;
+                    }
                 }
-            }
-
-            &.splide__arrow--prev {
-                left: -3em;
-            }
-            &.splide__arrow--next {
-                right: -3em;
             }
         }
 
@@ -71,13 +60,17 @@ $font-items: 'Poppins', Helvetica;
     }
 }
 
-@media only screen and (max-width: 950px) {
+@media only screen and (max-width: 800px) {
     .offers {
         .offersList {
-            .splide__arrow {
-                &.splide__arrow--prev,
-                &.splide__arrow--next {
-                    display: none;
+            .splide {
+                padding-inline: 0;
+
+                .splide__arrow {
+                    &.splide__arrow--prev,
+                    &.splide__arrow--next {
+                        display: none;
+                    }
                 }
             }
         }

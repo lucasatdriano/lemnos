@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { RiShoppingCartLine, RiHeartLine, RiUser3Line } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import MenuDep from './components/menuDep/MenuDep';
 import MenuSearch from './components/searchMenu/MenuSearch';
 import MenuFavorite from './components/favoriteMenu/MenuFavorite';
@@ -88,7 +87,6 @@ export default function Header({ toggleTheme }) {
     return (
         <>
             <header className={`header ${shrinkHeader ? 'shrink' : ''}`}>
-                <div id="headerContent"></div>
                 <MenuDep
                     toggleTheme={toggleTheme}
                     showMenuFav={handleShowMenuFav}
@@ -101,9 +99,6 @@ export default function Header({ toggleTheme }) {
 
                 <nav>
                     <ul className="navegation">
-                        <Link to="/" className="link">
-                            Home
-                        </Link>
                         <Link to="/about" className="link">
                             Sobre
                         </Link>
@@ -116,7 +111,7 @@ export default function Header({ toggleTheme }) {
                     <a href="#" onClick={handleShowMenuFav}>
                         <RiHeartLine className="favIcon" />
                     </a>
-                    <Link to="/login" className="linkIcons">
+                    <Link to="/auth" className="linkIcons">
                         {userImg && isLoggedIn ? (
                             <img src={userImg} alt="User" className="userImg" />
                         ) : (
@@ -132,7 +127,9 @@ export default function Header({ toggleTheme }) {
                                 <RiShoppingCartLine className="cartIcon" />
                             </>
                         ) : (
-                            <RiShoppingCartLine className="cartIcon" />
+                            <>
+                                <RiShoppingCartLine className="cartIcon" />
+                            </>
                         )}
                     </Link>
                 </nav>
@@ -142,3 +139,7 @@ export default function Header({ toggleTheme }) {
         </>
     );
 }
+
+Header.propTypes = {
+    toggleTheme: PropTypes.func.isRequired,
+};

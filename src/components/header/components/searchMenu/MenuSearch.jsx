@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './menuSearch.scss';
 import { RiSearch2Line } from 'react-icons/ri';
-import { listarProdutosFiltrados } from '../../../../services/ProdutoService';
+import { listarProdutosFiltrados } from '../../../../services/UsuarioProdutoService';
 
 export default function MenuSearch() {
     const navigate = useNavigate();
@@ -29,7 +29,8 @@ export default function MenuSearch() {
             avaliacao: null,
         };
 
-        const data = await listarProdutosFiltrados(filtro, 0, 5);
+        const data = await listarProdutosFiltrados(filtro, 0, 6);
+
         setProdutos(data);
     }
 

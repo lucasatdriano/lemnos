@@ -2,43 +2,6 @@ import axios from 'axios';
 import AuthService from './AuthService';
 import { baseUri } from './configurations/ServiceConfig';
 
-export async function listarProdutosFiltrados(filtro, page, size) {
-    try {
-        const response = await axios({
-            baseURL: baseUri,
-            method: 'POST',
-            url: '/produto/find',
-            data: {
-                nome: filtro.nome,
-                categoria: filtro.categoria,
-                subCategoria: filtro.subCategoria,
-                marca: filtro.marca,
-                menorPreco: filtro.menorPreco,
-                maiorPreco: filtro.maiorPreco,
-                avaliacao: filtro.avaliacao,
-                page: page,
-                size: size,
-            },
-            timeout: 10000,
-        });
-
-        if (response.status !== 200 && response.status !== 204) {
-            throw new Error('Erro ao filtrar produtos.');
-        }
-
-        return response.data;
-    } catch (error) {
-        if (
-            error.response &&
-            error.response.data &&
-            error.response.data.error
-        ) {
-            console.error(error.response.data.error);
-        }
-        throw error;
-    }
-}
-
 export async function cadastrarProduto(produto) {
     try {
         const response = await axios({

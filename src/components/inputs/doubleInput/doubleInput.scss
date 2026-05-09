@@ -23,44 +23,30 @@ $font-items: 'Poppins', Helvetica;
 
 .doubleRangeInput {
     .rangeSlider {
-        max-width: 18vw;
         font-family: $font-items;
-        position: relative;
-        width: 100%;
-        height: 6px;
-        border-radius: 5px;
-        margin: 25px 0 75px;
-        background: $color-secundaryLight;
+        padding: 1em;
 
         .inputBox {
-            margin-left: -25px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 35px;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 0.5em;
 
             .minBox,
             .maxBox {
                 display: flex;
                 align-items: center;
-                gap: 1em;
-                width: 50%;
+                font-size: 1.4rem;
+                gap: 0.5em;
 
                 .inputWrap {
-                    position: relative;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
                     width: 100%;
 
                     .inputField {
-                        height: 2em;
-                        padding: 0.5em 0.75em;
-                        font-size: 1.8rem;
+                        width: 100%;
+                        padding: 0.25em 0.75em;
+                        font-size: 1.6rem;
                         border-radius: 5px;
-                        position: relative;
-                        width: auto;
-                        max-width: 80%;
                         font-family: $font-items;
                         background: $color-fontDark;
                         border: 1px solid #d4d7e5;
@@ -97,22 +83,6 @@ $font-items: 'Poppins', Helvetica;
                     }
                 }
             }
-        }
-    }
-}
-
-@media only screen and (max-width: 1024px) {
-    .doubleRangeInput {
-        .rangeSlider {
-            max-width: 45vw;
-        }
-    }
-}
-
-@media only screen and (max-width: 860px) {
-    .doubleRangeInput {
-        .rangeSlider {
-            min-width: 70vw;
         }
     }
 }

@@ -20,9 +20,8 @@ $font-title: 'Merriweather Sans', sans-serif;
 $font-web: 'Roboto Flex', Arial;
 $font-items: 'Poppins', Helvetica;
 
-.registration-form-container {
-    border-radius: 20px;
-    margin: 6em auto 0;
+.registrationForm {
+    border-radius: 15px;
     padding: 1em 2em;
     display: flex;
     justify-content: center;
@@ -30,67 +29,55 @@ $font-items: 'Poppins', Helvetica;
     box-shadow: 2px 2px 15px $color-shadow;
 
     h2 {
-        font-size: 3.8rem;
+        font-size: 2.8rem;
         font-family: $font-title;
         text-align: left;
-        width: 8.5em;
+        width: 9em;
     }
 
-    .loginCredencial {
+    .loginFormGoogleSection {
+        width: 30%;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        gap: 16%;
+        gap: 2.5em;
 
-        .btnCredencials {
+        .loginFormGoogleActions {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin: 2em 0;
-            gap: 2em;
 
-            button {
+            .loginGoogleButton {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 gap: 1em;
-                padding: 0.1em 2em;
-                max-width: 16em;
-                font-size: 2.4rem;
+                width: 100%;
+                padding: 0.1em 0.5em;
+                font-size: 2rem;
                 font-family: $font-title;
                 font-weight: bold;
                 border-radius: 10px;
                 background: $color-bgLight;
                 border: none;
                 cursor: pointer;
-                box-shadow: 4px 4px 4px $color-shadow;
+                box-shadow: 4px 4px 16px $color-shadow;
                 transition: 0.25s ease;
 
                 &:hover {
-                    filter: brightness(0.9);
+                    box-shadow: 4px 4px 24px $color-shadow;
+                    filter: brightness(0.95);
                 }
 
-                &.btnFace {
-                    max-width: 18em;
-                    font-size: 2.2rem;
-                }
-
-                .iconGoogle {
+                .loginGoogleIcon {
                     height: 62px;
                     width: 36px;
-                }
-
-                .iconFacebook {
-                    height: 62px;
-                    width: 36px;
-                    color: #0866ff;
                 }
             }
         }
     }
 
-    .containerSeparate {
+    .registrationFormDivider {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -113,29 +100,30 @@ $font-items: 'Poppins', Helvetica;
         }
     }
 
-    .registration {
+    .registrationFormContent {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
         gap: 2.5em;
+        flex: 1;
 
-        .inputsRegistration {
+        .registrationFormFields {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr;
-            gap: 1.5em;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            row-gap: 2.5em;
+            column-gap: 1.5em;
         }
 
-        .btnRegistrationForm {
+        .registrationFormActions {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             place-self: center;
             gap: 3em;
 
             button {
-                font-size: 2rem;
-                width: 10em;
-                height: 2.5em;
+                font-size: 1.8rem;
+                padding: 0.5em 2em;
                 border-radius: 5px;
                 border: none;
                 background-color: $color-primaryLight;
@@ -155,19 +143,19 @@ $font-items: 'Poppins', Helvetica;
 }
 
 .dark {
-    .registration-form-container {
+    .registrationForm {
         background-color: #72757478;
         box-shadow: 0 0 15px #141414a8;
 
-        .loginCredencial {
-            .btnCredencials {
-                button {
+        .loginFormGoogleSection {
+            .loginFormGoogleActions {
+                .loginGoogleButton {
                     box-shadow: 2px 2px 8px $color-shadow;
                 }
             }
         }
 
-        .containerSeparate {
+        .registrationFormDivider {
             color: $color-primaryDark;
 
             hr {
@@ -175,8 +163,8 @@ $font-items: 'Poppins', Helvetica;
             }
         }
 
-        .registration {
-            .btnRegistrationForm {
+        .registrationFormContent {
+            .registrationFormActions {
                 button {
                     background-color: $color-primaryDark;
                     color: $color-fontDark;
@@ -187,26 +175,23 @@ $font-items: 'Poppins', Helvetica;
     }
 }
 
-@media only screen and (max-width: 1024px) {
-    .registration-form-container {
+@media only screen and (max-width: 900px) {
+    .registrationForm {
         flex-direction: column;
-        margin: 4em auto 5em;
+        padding: 0.5em 1em;
 
         h2 {
+            font-size: 2.4rem;
+            width: auto;
             text-align: center;
-            width: 10em;
         }
 
-        .loginCredencial {
-            flex-direction: column;
-            padding: 1em 0 0;
-
-            .btnCredencials {
-                margin: 1.5em 0 0.5em;
-            }
+        .loginFormGoogleSection {
+            width: 100%;
+            padding-top: 1em;
         }
 
-        .containerSeparate {
+        .registrationFormDivider {
             flex-direction: row;
             margin: 0;
             height: 4em;
@@ -218,34 +203,27 @@ $font-items: 'Poppins', Helvetica;
             }
         }
 
-        .registration {
-            align-items: center;
+        .registrationFormContent {
             padding: 0 1em 2em;
 
-            .inputsRegistration {
-                grid-template-columns: 1fr;
-                grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+            .registrationFormActions {
+                gap: 1em;
             }
         }
     }
 }
 
-@media only screen and (max-width: 600px) {
-    .registration-form-container {
-        padding: 0 1em;
-
-        h2 {
-            font-size: 3rem;
-        }
-
-        .registration {
-            .btnRegistrationForm {
+@media only screen and (max-width: 550px) {
+    .registrationForm {
+        .registrationFormContent {
+            .registrationFormFields {
+                grid-template-columns: repeat(1, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+            }
+            .registrationFormActions {
+                width: 100%;
                 grid-template-columns: 1fr;
                 gap: 1em;
-
-                button {
-                    width: 12em;
-                }
             }
         }
     }

@@ -14,132 +14,164 @@ $color-fontDark: #f6fefd;
 $color-fontLight: #121717;
 
 $color-shadow: #12171740;
-
 .carousel {
     width: 95%;
-    height: 100%;
-    margin: 0 auto;
+    margin: auto;
+    position: relative;
 
-    &:hover .splide__pagination .splide__pagination__page.is-active::after {
-        animation-play-state: paused;
-    }
-
-    .splide__slide {
-        padding: 0 0.5em;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: grab;
-
-        img {
-            margin: 0;
-            object-fit: contain;
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 20px;
+    .splide {
+        .splide__track {
+            -webkit-mask: linear-gradient(
+                90deg,
+                transparent,
+                white 20%,
+                white 80%,
+                transparent
+            );
+            mask: linear-gradient(
+                90deg,
+                transparent,
+                white 20%,
+                white 80%,
+                transparent
+            );
         }
-
-        .slideMob {
-            display: none;
-        }
-
-        &:active {
-            cursor: grabbing;
-        }
-    }
-
-    .splide__pagination {
-        .splide__pagination__page {
-            display: inline-block;
-            width: 30px;
-            height: 4px;
-            border-radius: 10px;
-            background-color: $color-secundaryLight;
-            margin: 0 5px;
-            cursor: pointer;
-
-            &.is-active {
-                &::after {
-                    content: '';
-                    position: absolute;
-                    top: 50%;
-                    left: 0;
-                    transform: translateY(-50%);
-                    border-radius: 10px;
-                    width: 0;
-                    height: 100%;
-                    background-color: $color-primaryLight;
-                    animation: preencher 5s linear forwards;
-                    animation-delay: 0s;
-                }
-            }
-        }
-    }
-
-    .splide__arrow {
-        &.splide__arrow--prev,
-        &.splide__arrow--next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2.4rem;
-            background-color: #f7efef5e;
-            box-shadow: 2px 2px 4px $color-shadow;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-
-            &:hover {
-                background-color: $color-shadow;
-            }
-        }
-
-        &.splide__arrow--prev {
-            left: 20px;
-        }
-
-        &.splide__arrow--next {
-            right: 20px;
-        }
-    }
-}
-
-@keyframes preencher {
-    to {
-        width: 100%;
-    }
-}
-
-@media only screen and (max-width: 760px) {
-    .carousel {
-        width: 90%;
 
         .splide__slide {
-            img {
-                max-height: 70vh;
-                max-width: 100%;
-            }
+            padding: 0 0.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
 
-            .slide {
-                display: none;
+            img {
+                object-fit: contain;
+                width: auto;
+                max-width: 100%;
+                max-height: 70vh;
+                border-radius: 20px;
             }
 
             .slideMob {
-                display: block;
+                display: none;
+            }
+
+            &:active {
+                cursor: grabbing;
+            }
+        }
+
+        .splide__pagination {
+            bottom: 1em;
+
+            .splide__pagination__page {
+                position: relative;
+                display: inline-block;
+                width: 30px;
+                height: 4px;
+                border-radius: 10px;
+                background-color: $color-secundaryLight;
+                margin: 0 5px;
+                cursor: pointer;
+                overflow: hidden;
+
+                &.is-active {
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 0;
+                        height: 100%;
+                        background-color: darken($color-primaryLight, 10%);
+                        border-radius: 10px;
+                        animation: preencher 5s linear forwards;
+                    }
+                }
             }
         }
 
         .splide__arrow {
             &.splide__arrow--prev,
             &.splide__arrow--next {
-                font-size: 1.8rem;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 2.4rem;
+                background-color: #3f3d3d90;
+                box-shadow: 2px 2px 4px $color-shadow;
+                transition: background-color 0.3s ease;
+                cursor: pointer;
+                z-index: 10;
+
+                &:hover {
+                    background-color: $color-shadow;
+                    color: $color-fontDark;
+                }
+            }
+
+            &.splide__arrow--prev {
+                left: 30px;
+            }
+
+            &.splide__arrow--next {
+                right: 30px;
             }
         }
+    }
+}
 
-        .splide__pagination {
-            .splide__pagination__page {
-                width: 20px;
-                height: 3px;
+@keyframes preencher {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .carousel {
+        width: 100%;
+        -webkit-mask: none;
+        mask: none;
+
+        .splide {
+            .splide__slide {
+                padding: 0;
+
+                img {
+                    max-height: 50vh;
+                    width: 100%;
+                    object-fit: cover;
+                    border-radius: 8px;
+                }
+
+                .slide {
+                    display: none;
+                }
+
+                .slideMob {
+                    display: block;
+                }
+            }
+
+            .splide__pagination {
+                bottom: -15px;
+
+                .splide__pagination__page {
+                    width: 20px;
+                    height: 3px;
+                }
+            }
+
+            .splide__arrow {
+                &.splide__arrow--prev,
+                &.splide__arrow--next {
+                    display: none;
+                }
             }
         }
     }

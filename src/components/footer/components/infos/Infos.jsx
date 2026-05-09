@@ -1,4 +1,3 @@
-import React from 'react';
 import './infos.scss';
 import { RiTimeLine, RiPhoneFill } from 'react-icons/ri';
 import { TbMailFilled } from 'react-icons/tb';

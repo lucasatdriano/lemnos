@@ -1,0 +1,35 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDarkAlt: #415352;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgDark: #2d2d2d;
+$color-bgLight: #f9fbfb;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.inputFormError {
+    color: $color-detailsLight;
+    position: absolute;
+    left: 15px;
+    font-size: 1.4rem;
+}
+
+.dark {
+    .inputFormError {
+        color: $color-detailsDark;
+    }
+}

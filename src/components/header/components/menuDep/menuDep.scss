@@ -21,6 +21,7 @@ $font-items: 'Poppins', Helvetica;
 
 .menuCat {
     color: $color-fontDark;
+    display: flex;
 
     .menuButton {
         background: transparent;
@@ -29,9 +30,9 @@ $font-items: 'Poppins', Helvetica;
 
         .menuIcon {
             color: $color-fontDark;
-            margin: 0.5em 0.8em 0;
-            height: 36px;
-            width: 36px;
+            height: 32px;
+            width: 32px;
+            margin-top: 5px;
         }
     }
 
@@ -44,38 +45,41 @@ $font-items: 'Poppins', Helvetica;
         background-color: #12171780;
         z-index: 99;
         opacity: 0;
-        display: none;
+        visibility: hidden;
+        display: block;
+        transition: all 0.1s ease;
 
         &.active {
-            animation: modal 0.2s ease-in forwards;
-            display: block;
+            opacity: 1;
+            visibility: visible;
         }
     }
 
     .menu {
         position: fixed;
         top: 0;
-        left: -7em;
+        left: -200px;
         height: 100%;
         background-color: $color-secundaryLight;
         z-index: 900;
         border-radius: 0 20px 20px 0;
         opacity: 0;
-        display: none;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        visibility: hidden;
         overflow-x: hidden;
         overflow-y: auto;
-        animation: menuDep 0.5s ease-in-out forwards;
-        width: 20%;
+        transition: all 0.3s ease;
 
         &::-webkit-scrollbar {
             display: none;
         }
 
         &.active {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            padding-left: 30px;
+            left: 0;
+            opacity: 1;
+            visibility: visible;
         }
 
         .logoMenu {
@@ -92,7 +96,7 @@ $font-items: 'Poppins', Helvetica;
 
         h3 {
             font-family: $font-title;
-            font-size: 2.4rem;
+            font-size: 2rem;
             padding: 10px 0;
             width: 100%;
             text-align: center;
@@ -103,15 +107,15 @@ $font-items: 'Poppins', Helvetica;
         .categorias {
             display: flex;
             flex-direction: column;
-            width: 100%;
 
             .filterDeps {
+                padding-inline: 10px 5em;
                 display: flex;
                 width: 100%;
-                padding: 8px 10px;
+                padding-block: 8px;
                 color: $color-fontDark;
-                font-size: 2rem;
-                transition: 0.3s ease-in;
+                font-size: 1.6rem;
+                transition: 0.2s ease-in;
                 cursor: pointer;
 
                 &:hover {
@@ -137,9 +141,9 @@ $font-items: 'Poppins', Helvetica;
                     gap: 0.5em;
                     align-items: center;
                     padding: 10px 10px 5px;
-                    transition: 0.3s ease-in;
+                    transition: 0.2s ease-in;
                     color: $color-fontDark;
-                    font-size: 2rem;
+                    font-size: 1.6rem;
                     width: 100%;
 
                     &:hover {
@@ -239,67 +243,13 @@ $font-items: 'Poppins', Helvetica;
     }
 }
 
-@keyframes menuDep {
-    to {
-        transform: translateX(5.75em);
-        opacity: 1;
-    }
-}
-@keyframes menuDepFixed {
-    to {
-        transform: translateX(9.75em);
-        opacity: 1;
-    }
-}
-
-@keyframes modal {
-    to {
-        opacity: 1;
-    }
-}
-
-.shrink {
-    .modal {
-        left: -5em;
-    }
-
-    .menu {
-        left: -10em;
-        padding: 0 0 0 2em;
-    }
-}
-
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 1024px) {
     .menuCat {
         .menu {
-            width: 30%;
-        }
-    }
-}
-
-@media only screen and (max-width: 1000px) {
-    .menuCat {
-        .menuButton {
-            .menuIcon {
-                margin: 0.5em 0 0;
-            }
-        }
-
-        .menu {
-            width: 45%;
-
             .logoMenu {
                 width: clamp(4em, 4em + 10vw, 4.5em);
                 height: clamp(4em, 4em + 10vh, 4.5em);
             }
-        }
-    }
-}
-
-@media only screen and (max-width: 620px) {
-    .menuCat {
-        .menu {
-            width: 65%;
         }
     }
 }

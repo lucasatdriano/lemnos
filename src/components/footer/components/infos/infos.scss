@@ -20,9 +20,8 @@ $font-web: 'Roboto Flex', Arial;
 $font-items: 'Poppins', Helvetica;
 
 .infosContent {
-    display: flex;
+    display: grid;
     align-items: center;
-    justify-content: space-around;
     gap: 2em;
     background-color: $color-primaryLight;
     color: $color-fontLight;
@@ -30,43 +29,65 @@ $font-items: 'Poppins', Helvetica;
     padding: 0.5em 1em;
     width: auto;
     box-shadow: 2px 2px 4px $color-shadow;
-
     position: absolute;
-    top: -16%;
+    top: -14%;
     left: 10%;
+    grid-template-areas: 'service phone mail';
+    grid-template-columns: repeat(3, auto);
 
-    .containerService,
-    .containerPhone,
-    .containerMail {
+    .containerService {
+        grid-area: service;
         display: flex;
         align-items: center;
         gap: 0.5em;
 
         p {
-            font-size: 2rem;
+            font-size: 1.6rem;
+            max-width: 20em;
         }
+    }
 
+    .containerPhone {
+        grid-area: phone;
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        p {
+            font-size: 1.6rem;
+        }
+    }
+
+    .containerMail {
+        grid-area: mail;
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        p {
+            font-size: 1.6rem;
+        }
+    }
+
+    .containerService,
+    .containerPhone,
+    .containerMail {
         .containerIcon {
             position: relative;
-            width: 52px;
-            height: 52px;
             border-radius: 50%;
             background-color: $color-terciaryLight;
             box-shadow: 2px 2px 4px $color-shadow;
+            padding: 1.5em;
 
             .icon {
                 position: absolute;
-                width: 46px;
-                height: 46px;
+                width: 36px;
+                height: 36px;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
             }
         }
-    }
-
-    .containerService p {
-        max-width: 15em;
     }
 }
 
@@ -87,39 +108,62 @@ $font-items: 'Poppins', Helvetica;
 
 @media only screen and (max-width: 1080px) {
     .infosContent {
-        top: -12%;
+        top: -10%;
         left: 50%;
         transform: translateX(-50%);
-        width: 96%;
-        gap: 0.8em;
-
-        .containerService,
-        .containerPhone,
-        .containerMail {
-            .containerIcon {
-                min-width: 46px;
-                min-height: 46px;
-
-                .icon {
-                    width: 42px;
-                    height: 42px;
-                }
-            }
-        }
+        width: 95%;
     }
 }
 
 @media only screen and (max-width: 800px) {
     .infosContent {
-        width: 95%;
-        border-radius: 15px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2em;
+        border-radius: 10px;
         padding: 1em;
+        width: 475px;
+        gap: 1.5em;
+
+        grid-template-areas:
+            'phone mail'
+            'service service';
+        grid-template-columns: repeat(2, 1fr);
 
         .containerService p {
             max-width: 30em;
+        }
+
+        .containerMail {
+            justify-content: center;
+            text-align: center;
+
+            p {
+                text-align: left;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .infosContent {
+        width: 95%;
+        border-radius: 15px;
+        padding: 1.5em;
+        gap: 1.5em;
+
+        grid-template-areas:
+            'service'
+            'phone'
+            'mail';
+        grid-template-columns: 1fr;
+
+        .containerService p {
+            max-width: 30em;
+        }
+
+        .containerService,
+        .containerPhone,
+        .containerMail {
+            justify-content: flex-start;
+            width: 100%;
         }
     }
 }

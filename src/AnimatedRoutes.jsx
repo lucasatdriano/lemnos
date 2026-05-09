@@ -3,7 +3,7 @@ import { useLocation, Routes, Route, Navigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Home from './pages/homePage/Home';
 import About from './pages/aboutPage/About';
-import Login from './pages/loginPage/Login';
+import Auth from './pages/authPage/Auth';
 import Product from './pages/productPage/Product';
 import ProductFilter from './pages/productFilterPage/ProductFilter';
 import Cart from './pages/cartPage/Cart';
@@ -30,7 +30,7 @@ export default function AnimatedRoutes() {
                     />
                     <Route path="/productFilter" element={<ProductFilter />} />
                     <Route path="/about" element={<About />} />
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/auth" element={<Auth />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route
                         path="/buy"

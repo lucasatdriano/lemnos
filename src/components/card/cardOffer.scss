@@ -23,408 +23,59 @@ $font-items: 'Poppins', Helvetica;
 .descont {
     position: relative;
 
-    .offerCard {
-        overflow: hidden;
-        width: 18em;
-        height: 25em;
-        background-color: #f6fefd4d;
-        padding: 10px;
-        border-radius: 10px;
-        text-align: left;
-        box-shadow: 2px 2px 8px $color-shadow;
-        cursor: pointer;
-        font-family: $font-items;
-        position: relative;
+    .offerDescont {
+        background-color: $color-detailsLight;
+        padding: 10px 5px;
+        text-align: center;
+        z-index: 10;
+        color: $color-fontDark;
+        border-radius: 5px;
+        transition: 0.5s ease;
+        font-size: 1.4rem;
 
-        .iconFav {
-            cursor: pointer;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: $color-primaryLight;
-            float: right;
-            width: 32px;
-            height: 32px;
-        }
+        position: absolute;
+        top: 2px;
+        right: 2px;
+    }
 
+    .offerPrice {
+        color: $color-detailsLight;
+        text-decoration: line-through;
+        font-size: 1.4rem;
+        opacity: 1;
+        visibility: visible;
+        line-height: 2;
+        transition: 0.2s ease-in-out;
+    }
+
+    &:hover {
         .offerDescont {
-            background-color: $color-detailsLight;
-            padding: 15px 5px;
-            text-align: center;
-            z-index: 10;
-            color: $color-fontDark;
-            border-radius: 5px;
-            transition: 0.5s ease;
-
-            position: absolute;
-            top: 2px;
-            right: 2px;
+            opacity: 0;
         }
 
-        .productImage {
-            width: 100%;
-            height: 10em;
-            border-radius: 10px;
-            object-fit: contain;
-            margin-right: 16px;
-            background: $color-bgLight;
-        }
-
-        .offerDetails {
-            overflow-y: hidden;
-            position: relative;
-            padding-bottom: 3.8em;
-            width: 100%;
-            height: 15em;
-            border-radius: 10px;
-
-            .offerName {
-                font-size: 1.7rem;
-                margin-bottom: 8px;
-                font-weight: 700;
-                padding: 5px 0 0;
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
-                line-clamp: 3;
-                text-overflow: ellipsis;
-            }
-
+        .productDetails {
             .offerPrice {
-                color: $color-detailsLight;
-                text-decoration: line-through;
-                font-size: 1.8rem;
-                opacity: 1;
-                visibility: visible;
-                line-height: 2;
-                transition: 0.2s ease-in-out;
-            }
-
-            .offerPriceDescont {
-                position: absolute;
-                bottom: 40px;
-                font-size: 1.4rem;
-                font-weight: 500;
-                line-height: 1.2;
-                transition: 0.7s ease;
-
-                span {
-                    font-weight: 700;
-                    color: $color-primaryLight;
-                    font-size: 3.6rem;
-                }
-            }
-        }
-
-        .btnAdd {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5em;
-            position: absolute;
-            bottom: -70px;
-            left: 0;
-            border-radius: 10px;
-            background-color: $color-primaryLight;
-            color: $color-fontDark;
-            box-shadow: 0 0 10px $color-primaryDark;
-            border: none;
-            width: 100%;
-            font-size: 2rem;
-            font-family: $font-title;
-            padding: 0.8em 0;
-            transition: 0.5s ease-out;
-            cursor: pointer;
-
-            &:hover {
-                filter: brightness(1.1);
-                box-shadow: 0 0 40px $color-primaryLight;
-            }
-
-            .iconAdd {
-                width: 24px;
-                height: 24px;
-            }
-        }
-
-        &:hover {
-            .offerDescont {
                 opacity: 0;
-            }
-
-            .offerDetails {
-                padding-bottom: 4em;
-
-                .offerPrice {
-                    opacity: 0;
-                }
-
-                .offerPriceDescont {
-                    bottom: 75px;
-                }
-            }
-            .btnAdd {
-                bottom: 0;
             }
         }
     }
 }
 
 .cardList > .descont {
-    .offerCard {
-        width: 65vw;
-        height: 15em;
-        padding: 1em;
-        display: flex;
-        justify-content: space-between;
-        box-shadow: 2px 2px 8px $color-shadow;
-
-        .offerLink {
-            display: flex;
-
-            .iconFav {
-                top: 15px;
-                left: 94%;
-                height: 42px;
-                width: 42px;
-            }
-
-            .offerDescont {
-                right: 95.5%;
-            }
-
-            .productImage {
-                min-width: 20em;
-                max-width: 20em;
-                width: 45%;
-                height: 100%;
-            }
-
-            .offerDetails {
-                padding-bottom: 4em;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                height: 100%;
-
-                .offerName {
-                    font-size: 2rem;
-                    margin: 0;
-                    font-weight: 700;
-                }
-
-                .offerPriceDescont {
-                    position: relative;
-                    top: 37%;
-                }
-            }
-        }
-
-        .btnAdd {
-            position: relative;
-            top: 70%;
-            max-width: 20em;
-            height: 3em;
-
-            &:hover {
-                box-shadow: 0 0 20px $color-primaryLight;
-            }
-        }
-
-        &:hover {
-            .offerDescont {
-                opacity: 1;
-            }
-
-            .offerDetails {
-                .offerPrice {
-                    opacity: 1;
-                }
-            }
-        }
-    }
-    .offerCard {
+    .productCard {
         .productLink {
-            display: flex;
-
-            .productDetails {
-                display: flex;
-                justify-content: space-between;
-                flex-direction: column;
-                position: relative;
-
-                .productName {
-                    position: relative;
-                }
-
-                .productPrice {
-                    top: 0;
-                    position: relative;
-                }
-            }
-        }
-    }
-}
-
-.dark {
-    .descont {
-        .offerCard {
-            background-color: #72757478;
-            box-shadow: 0 0 15px #141414a8;
-
             .offerDescont {
-                background-color: $color-detailsDark;
-            }
-
-            .offerDetails {
-                color: $color-fontDark;
-
-                .offerPrice {
-                    color: $color-detailsDark;
-                }
-
-                .offerPriceDescont {
-                    span {
-                        color: $color-primaryDark;
-                    }
-                }
-            }
-
-            .btnAdd {
-                background-color: $color-primaryDark;
-
-                &:hover {
-                    filter: brightness(1.1);
-                    box-shadow: 0 0 40px $color-primaryDark;
-                }
+                top: 5px;
+                right: 5px;
             }
         }
     }
 }
 
-@media only screen and (max-width: 700px) {
-    .offers {
-        .descont {
-            .offerCard {
-                width: 18em;
-                height: 25em;
-
-                .offerLink {
-                    flex-direction: column;
-
-                    .productImage {
-                        width: 100%;
-                        height: 10em;
-                    }
-
-                    .offerDetails {
-                        .offerName {
-                            margin-bottom: 0;
-                        }
-
-                        .offerPriceDescont {
-                            bottom: 75px;
-
-                            span {
-                                font-size: 3.2rem;
-                            }
-                        }
-                    }
-                }
-
-                .btnAdd {
-                    bottom: 0;
-                }
-
-                &:hover {
-                    .offerDetails {
-                        .offerPriceDescont {
-                            bottom: 75px;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 800px) {
     .descont {
-        .offerCard {
-            width: 80vw;
-            height: 18em;
-            transition: 0.5s ease-in-out;
-
-            .offerLink {
-                display: flex;
-
-                .productImage {
-                    height: 13em;
-                    width: 35%;
-                }
-
-                .offerDetails {
-                    gap: 2.5em;
-
-                    .offertName {
-                        font-size: 2rem;
-                        margin-bottom: 0.5em;
-                    }
-
-                    .offerPrice {
-                        color: $color-detailsLight;
-                        text-decoration: line-through;
-                        font-size: 1.8rem;
-                        opacity: 1;
-                        visibility: visible;
-                        line-height: 2;
-                        transition: 0.2s ease-in-out;
-                    }
-
-                    .offerPriceDescont {
-                        bottom: 40px;
-                    }
-                }
-            }
-
-            .btnAdd {
-                bottom: 0;
-            }
-
-            &:hover {
-                .offerDetails {
-                    .offerPrice {
-                        opacity: 1;
-                    }
-
-                    .offerPriceDescont {
-                        bottom: 40px;
-                    }
-                }
-            }
-        }
-    }
-}
-
-@media only screen and (max-width: 500px) {
-    .descont {
-        .offerCard {
-            width: 90vw;
-
-            .offerLink {
-                .offerDetails {
-                    .offerName {
-                        font-size: 1.8rem;
-                    }
-
-                    .offerPriceDescont {
-                        span {
-                            font-size: 3rem;
-                        }
-                    }
-                }
-            }
+        .offerDescont {
+            font-size: 1.2rem;
         }
     }
 }

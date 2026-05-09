@@ -35,7 +35,7 @@ export default function Card({ produto }) {
                         (fav) => fav.id === produto.id
                     );
                     if (!favorites) {
-                        navigate('/login');
+                        navigate('/auth');
                     }
                     setIsFavorite(isFavorited);
                 } catch (error) {
@@ -60,7 +60,7 @@ export default function Card({ produto }) {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos ao carrinho.'
             );
-            navigate('/login');
+            navigate('/auth');
         }
     }
 
@@ -85,7 +85,7 @@ export default function Card({ produto }) {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos aos favoritos.'
             );
-            navigate('/login');
+            navigate('/auth');
         }
     };
 
@@ -106,7 +106,7 @@ export default function Card({ produto }) {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos aos favoritos.'
             );
-            navigate('/login');
+            navigate('/auth');
         }
     };
 
@@ -115,11 +115,8 @@ export default function Card({ produto }) {
     return (
         <>
             <div className="descont">
-                <div className={hasDiscount ? 'offerCard' : 'productCard'}>
-                    <Link
-                        to={`/product/${produto.id}`}
-                        className={hasDiscount ? 'offerLink' : 'productLink'}
-                    >
+                <div className="productCard">
+                    <Link to={`/product/${produto.id}`} className="productLink">
                         {hasDiscount && (
                             <p className="offerDescont">{produto.desconto}%</p>
                         )}
@@ -143,44 +140,27 @@ export default function Card({ produto }) {
                             alt={produto.nome}
                             className={'productImage'}
                         />
-                        <div
-                            className={
-                                hasDiscount ? 'offerDetails' : 'productDetails'
-                            }
-                        >
-                            <h2
-                                className={
-                                    hasDiscount ? 'offerName' : 'productName'
-                                }
-                            >
-                                {produto.nome}
-                            </h2>
-                            {hasDiscount ? (
-                                <>
+                        <div className="productDetails">
+                            <h2 className="productName">{produto.nome}</h2>
+                            <>
+                                {hasDiscount && (
                                     <p className="offerPrice">
                                         {BRL.format(produto.valorTotal)}
                                     </p>
-                                    <p className="offerPriceDescont">
-                                        À vista <br />
-                                        <span>
-                                            {BRL.format(
-                                                produto.valorComDesconto
-                                            )}
-                                        </span>{' '}
-                                        <br />
-                                        no PIX com 15% de desconto
-                                    </p>
-                                </>
-                            ) : (
+                                )}
                                 <p className="productPrice">
                                     À vista <br />
                                     <span>
-                                        {BRL.format(produto.valorTotal)}
-                                    </span>{' '}
+                                        {hasDiscount
+                                            ? BRL.format(
+                                                  produto.valorComDesconto
+                                              )
+                                            : BRL.format(produto.valorTotal)}
+                                    </span>
                                     <br />
                                     no PIX com 15% de desconto
                                 </p>
-                            )}
+                            </>
                         </div>
                     </Link>
                     <button
@@ -188,12 +168,12 @@ export default function Card({ produto }) {
                         className="btnAdd"
                         onClick={handleAddToCart}
                     >
-                        Adicionar ao Carrinho
                         <img
                             src={iconAddCart}
                             alt="icone adicionar carrinho"
                             className="iconAdd"
                         />
+                        Adicionar ao Carrinho
                     </button>
                 </div>
             </div>

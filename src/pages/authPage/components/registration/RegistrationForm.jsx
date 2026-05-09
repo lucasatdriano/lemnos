@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import CustomInput from '../../../../components/inputs/customInput/Inputs';
 import './registrationForm.scss';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import {
     auth,
@@ -10,6 +9,8 @@ import {
 } from '../../../../services/configurations/FirebaseConfig';
 import { signInWithPopup } from 'firebase/auth';
 import { loginFirebase } from '../../../../services/LoginService';
+import PasswordToggle from '../../../../components/inputs/passwordToggle/PasswordToggle';
+import InputError from '../../../../components/inputs/inputError/InputError';
 
 export default function RegistrationForm({
     onLogin,
@@ -48,7 +49,7 @@ export default function RegistrationForm({
         if (!form.name) {
             errors.name = 'O campo Nome é obrigatório';
         } else if (/\d/.test(form.name)) {
-            errors.name = 'O campo Nome não pode conter números';
+            errors.name = 'O Nome não pode conter números';
         }
 
         const cpfRegex = /^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/;
@@ -113,27 +114,30 @@ export default function RegistrationForm({
     };
 
     return (
-        <section className="registration-form-container">
-            <div className="loginCredencial">
+        <section className="registrationForm">
+            <div className="loginFormGoogleSection">
                 <h2>Entre com sua Conta do Google</h2>
-                <div className="btnCredencials">
-                    <button onClick={handleGoogleLogin}>
-                        <FcGoogle className="iconGoogle" />
+                <div className="loginFormGoogleActions">
+                    <button
+                        onClick={handleGoogleLogin}
+                        className="loginGoogleButton"
+                    >
+                        <FcGoogle className="loginGoogleIcon" />
                         Entrar com Google
                     </button>
                 </div>
             </div>
 
-            <div className="containerSeparate">
+            <div className="registrationFormDivider">
                 <hr />
                 <h3>OU</h3>
                 <hr />
             </div>
 
-            <form className="registration" onSubmit={handleSubmit}>
+            <form className="registrationFormContent" onSubmit={handleSubmit}>
                 <h2>Crie sua Conta Lemnos</h2>
-                <div className="inputsRegistration">
-                    <div className="groupInput">
+                <div className="registrationFormFields">
+                    <div className="registrationFormField">
                         <CustomInput
                             type="text"
                             label="Nome Completo:"
@@ -144,12 +148,10 @@ export default function RegistrationForm({
                             value={form.name}
                             onChange={handleChange}
                         />
-                        {errors.name && (
-                            <span className="invalid">{errors.name}</span>
-                        )}
+                        <InputError error={errors.name} />
                     </div>
 
-                    <div className="groupInput">
+                    <div className="registrationFormField">
                         <CustomInput
                             type="text"
                             label="CPF:"
@@ -162,12 +164,10 @@ export default function RegistrationForm({
                             pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
                             onChange={handleChange}
                         />
-                        {errors.cpf && (
-                            <span className="invalid">{errors.cpf}</span>
-                        )}
+                        <InputError error={errors.cpf} />
                     </div>
 
-                    <div className="groupInput">
+                    <div className="registrationFormField">
                         <CustomInput
                             type="text"
                             label="Email:"
@@ -177,12 +177,10 @@ export default function RegistrationForm({
                             value={form.email}
                             onChange={handleChange}
                         />
-                        {errors.email && (
-                            <span className="invalid">{errors.email}</span>
-                        )}
+                        <InputError error={errors.email} />
                     </div>
 
-                    <div className="groupInput">
+                    <div className="registrationFormField">
                         <CustomInput
                             type="text"
                             label="Confirme seu Email:"
@@ -192,12 +190,10 @@ export default function RegistrationForm({
                             value={form.confEmail}
                             onChange={handleChange}
                         />
-                        {errors.confEmail && (
-                            <span className="invalid">{errors.confEmail}</span>
-                        )}
+                        <InputError error={errors.confEmail} />
                     </div>
 
-                    <div className="groupInput">
+                    <div className="registrationFormField">
                         <CustomInput
                             type={showPassword ? 'text' : 'password'}
                             label="Senha:"
@@ -208,23 +204,14 @@ export default function RegistrationForm({
                             value={form.password}
                             onChange={handleChange}
                         />
-                        {showPassword ? (
-                            <FaRegEyeSlash
-                                className="iconPwd"
-                                onClick={togglePasswordVisibility}
-                            />
-                        ) : (
-                            <FaRegEye
-                                className="iconPwd"
-                                onClick={togglePasswordVisibility}
-                            />
-                        )}
-                        {errors.password && (
-                            <span className="invalid">{errors.password}</span>
-                        )}
+                        <PasswordToggle
+                            visible={showPassword}
+                            onToggle={togglePasswordVisibility}
+                        />
+                        <InputError error={errors.password} />
                     </div>
 
-                    <div className="groupInput">
+                    <div className="registrationFormField">
                         <CustomInput
                             type={showConfPassword ? 'text' : 'password'}
                             label="Confirme sua Senha:"
@@ -234,26 +221,15 @@ export default function RegistrationForm({
                             value={form.confPassword}
                             onChange={handleChange}
                         />
-                        {showConfPassword ? (
-                            <FaRegEyeSlash
-                                className="iconPwd"
-                                onClick={toggleConfPasswordVisibility}
-                            />
-                        ) : (
-                            <FaRegEye
-                                className="iconPwd"
-                                onClick={toggleConfPasswordVisibility}
-                            />
-                        )}
-                        {errors.confPassword && (
-                            <span className="invalid">
-                                {errors.confPassword}
-                            </span>
-                        )}
+                        <PasswordToggle
+                            visible={showConfPassword}
+                            onToggle={toggleConfPasswordVisibility}
+                        />
+                        <InputError error={errors.confPassword} />
                     </div>
                 </div>
 
-                <div className="btnRegistrationForm">
+                <div className="registrationFormActions">
                     <button type="submit">Cadastrar</button>
                     <button type="button" onClick={handleBackToLogin}>
                         Voltar para Login

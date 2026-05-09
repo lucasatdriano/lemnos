@@ -20,8 +20,6 @@ $font-title: 'Merriweather Sans', sans-serif;
 $font-web: 'Roboto Flex', Arial;
 $font-items: 'Poppins', Helvetica;
 
-/* toolTip.scss */
-
 .tooltip {
     position: relative;
     display: inline-block;
@@ -33,10 +31,11 @@ $font-items: 'Poppins', Helvetica;
         color: #fff;
         text-align: center;
         border-radius: 4px;
-        padding: 8px;
+        padding: 6px;
         position: absolute;
         z-index: 1;
-        bottom: 30px;
+        font-size: 1.4rem;
+        bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
         white-space: nowrap;
@@ -47,7 +46,7 @@ $font-items: 'Poppins', Helvetica;
     .tooltip-text.visible {
         visibility: visible;
         opacity: 1;
-        bottom: 60px;
+        bottom: 40px;
     }
 }
 

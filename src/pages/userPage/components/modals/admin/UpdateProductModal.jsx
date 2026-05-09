@@ -4,7 +4,7 @@ import { IoClose } from 'react-icons/io5';
 import { RiSearch2Line } from 'react-icons/ri';
 import CustomInput from '../../../../../components/inputs/customInput/Inputs';
 import { useEffect, useState } from 'react';
-import { listarProdutosFiltrados } from '../../../../../services/ProdutoService';
+import { listarProdutosFiltrados } from '../../../../../services/UsuarioProdutoService';
 
 export default function UpdateProductModal({ onUpdate, onSelect, onClose }) {
     const BRL = new Intl.NumberFormat('pt-BR', {

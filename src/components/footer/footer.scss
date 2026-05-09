@@ -22,14 +22,17 @@ $font-items: 'Poppins', Helvetica;
 footer {
     background-color: $color-secundaryLight;
     color: $color-fontDark;
-    margin-top: -3em;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     #footerContent {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 3em 0 0.7em 3em;
+        padding: 3em 0 2em 2em;
+        width: 100%;
 
         img {
             height: 10em;
@@ -43,14 +46,14 @@ footer {
             gap: 5em;
 
             h3 {
-                font-size: 2.6rem;
+                font-size: 2rem;
                 text-transform: uppercase;
             }
 
             li {
                 a {
                     color: #f6fefd9f;
-                    font-size: clamp(1.8rem, 1.8rem + 1vw, 2.2rem);
+                    font-size: clamp(1.6rem, 1rem + 1vw, 1.8rem);
                     margin: 0 0 2px 5px;
                     transition: 0.2s ease;
 
@@ -62,8 +65,6 @@ footer {
         }
 
         .iconsNav {
-            width: 20em;
-
             .icons {
                 display: flex;
                 align-items: center;
@@ -73,8 +74,8 @@ footer {
 
                 .icon {
                     margin: 5px;
-                    width: 42px;
-                    height: 42px;
+                    width: 36px;
+                    height: 36px;
                     color: $color-fontDark;
                 }
             }
@@ -88,18 +89,21 @@ footer {
                     $color-fontDark
                 );
                 border: none;
+                border-radius: 5px;
             }
         }
     }
 
     .hrAuthorship {
-        width: 100%;
+        width: 98%;
     }
 
     .authorship {
         display: flex;
         margin: 5px 20px 0 20px;
         justify-content: space-between;
+        width: 100%;
+        padding-inline: 3em;
 
         a {
             color: $color-primaryLight;
@@ -110,29 +114,11 @@ footer {
 @media only screen and (max-width: 1320px) {
     footer {
         #footerContent {
-            padding-left: 0.7em;
+            padding-left: 0.5em;
 
             img {
-                display: none;
-            }
-
-            .navLinks {
-                gap: 3em;
-            }
-
-            .iconsNav {
-                width: 17em;
-
-                .icons {
-                    .icon {
-                        width: 40px;
-                        height: 40px;
-                    }
-                }
-
-                hr {
-                    height: 4px;
-                }
+                height: 8em;
+                width: 16em;
             }
         }
     }
@@ -140,29 +126,15 @@ footer {
 
 @media only screen and (max-width: 1080px) {
     footer {
-        margin-top: 2em;
-
         #footerContent {
-            padding-bottom: 2em;
             flex-direction: column;
+
+            img {
+                display: none;
+            }
 
             .navLinks {
                 padding: 0 0 20px;
-            }
-
-            .iconsNav {
-                width: 20em;
-
-                .icons {
-                    .icon {
-                        width: 42px;
-                        height: 42px;
-                    }
-                }
-
-                hr {
-                    height: 5px;
-                }
             }
         }
     }
@@ -170,8 +142,26 @@ footer {
 
 @media only screen and (max-width: 800px) {
     footer {
+        padding-top: 5em;
+
+        #footerContent {
+            .navLinks {
+                gap: 2em;
+            }
+        }
+
+        .authorship {
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    footer {
         padding-top: 9em;
-        margin-top: 8em;
+        margin-top: 2em;
 
         #footerContent {
             .navLinks {

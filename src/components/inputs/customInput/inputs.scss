@@ -31,13 +31,12 @@ $font-items: 'Poppins', Helvetica;
         background-color: $color-card;
         border: 2px solid $color-shadow;
         color: $color-fontLight;
-        font-size: 2.4rem;
-        padding: 0.5em 1em 0.3em;
-        max-width: 16em;
-        min-width: 100%;
-        border-radius: 15px;
+        font-size: 2rem;
+        padding: 0.5em 0.5em 0.3em;
+        border-radius: 10px;
         transition: border-color 0.3s ease;
         cursor: text;
+        outline: none;
         font-family: $font-web;
         box-shadow: 2px 2px 4px $color-shadow;
         transition: 0.2s ease-in-out;
@@ -50,11 +49,12 @@ $font-items: 'Poppins', Helvetica;
 
         &:focus {
             box-shadow: 0px 0px 15px $color-shadow;
+            border: 2px solid $color-secundaryDark;
         }
 
         &:valid {
-            border: none;
-            box-shadow: 0px 0px 15px $color-primaryDark;
+            box-shadow: 0px 0px 4px $color-primaryDark;
+            border: 2px solid $color-primaryDark;
         }
 
         &:disabled + label {
@@ -105,7 +105,6 @@ $font-items: 'Poppins', Helvetica;
         transform: translateY(-50%);
         left: 15px;
         opacity: 0.6;
-        padding: 0 10px;
         transition: 0.2s ease-in-out;
         cursor: text;
     }

@@ -10,57 +10,57 @@ import {
 } from '../../../../services/EnderecoService';
 import AuthService from '../../../../services/AuthService';
 
-const estados = [
-    'AC',
-    'AL',
-    'AP',
-    'AM',
-    'BA',
-    'CE',
-    'DF',
-    'ES',
-    'GO',
-    'MA',
-    'MT',
-    'MS',
-    'MG',
-    'PA',
-    'PB',
-    'PR',
-    'PE',
-    'PI',
-    'RJ',
-    'RN',
-    'RS',
-    'RO',
-    'RR',
-    'SC',
-    'SP',
-    'SE',
-    'TO',
-    '',
-];
+// const estados = [
+//     'AC',
+//     'AL',
+//     'AP',
+//     'AM',
+//     'BA',
+//     'CE',
+//     'DF',
+//     'ES',
+//     'GO',
+//     'MA',
+//     'MT',
+//     'MS',
+//     'MG',
+//     'PA',
+//     'PB',
+//     'PR',
+//     'PE',
+//     'PI',
+//     'RJ',
+//     'RN',
+//     'RS',
+//     'RO',
+//     'RR',
+//     'SC',
+//     'SP',
+//     'SE',
+//     'TO',
+//     '',
+// ];
 
-const Dropdown = ({ isOpen, options, onSelect, filterFunction }) => {
-    const filteredOptions = filterFunction
-        ? options.filter(filterFunction)
-        : options;
+// const Dropdown = ({ isOpen, options, onSelect, filterFunction }) => {
+//     const filteredOptions = filterFunction
+//         ? options.filter(filterFunction)
+//         : options;
 
-    return (
-        <div className={`dropdown ${isOpen ? 'open' : ''}`}>
-            {isOpen &&
-                filteredOptions.map((option, index) => (
-                    <div
-                        key={index}
-                        className="dropdown-estado"
-                        onClick={() => onSelect(option)}
-                    >
-                        {option}
-                    </div>
-                ))}
-        </div>
-    );
-};
+//     return (
+//         <div className={`dropdown ${isOpen ? 'open' : ''}`}>
+//             {isOpen &&
+//                 filteredOptions.map((option, index) => (
+//                     <div
+//                         key={index}
+//                         className="dropdown-estado"
+//                         onClick={() => onSelect(option)}
+//                     >
+//                         {option}
+//                     </div>
+//                 ))}
+//         </div>
+//     );
+// };
 
 export default function EnderecoModal({ onClose }) {
     const [form, setForm] = useState({
@@ -74,7 +74,7 @@ export default function EnderecoModal({ onClose }) {
     });
     const [errors, setErrors] = useState({});
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
+    // const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         if (form.cep.length == 9) {
@@ -101,9 +101,9 @@ export default function EnderecoModal({ onClose }) {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-    const handleSearch = (value) => {
-        setSearchTerm(value);
-    };
+    // const handleSearch = (value) => {
+    //     setSearchTerm(value);
+    // };
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -179,11 +179,11 @@ export default function EnderecoModal({ onClose }) {
                             maxLength={2}
                             value={form.estado}
                             onFocus={handleDropdownToggle}
-                            onChange={(e) => {
-                                const upperCaseValue =
-                                    e.target.value.toUpperCase();
-                                handleSearch(upperCaseValue);
-                            }}
+                            // onChange={(e) => {
+                            //     const upperCaseValue =
+                            //         e.target.value.toUpperCase();
+                            //     handleSearch(upperCaseValue);
+                            // }}
                             disabled="disabled"
                         />
                         {errors.estado && (
@@ -200,7 +200,7 @@ export default function EnderecoModal({ onClose }) {
                                 onClick={handleDropdownToggle}
                             />
                         )}
-                        <Dropdown
+                        {/* <Dropdown
                             isOpen={isDropdownOpen}
                             options={estados}
                             onSelect={() => {
@@ -211,7 +211,7 @@ export default function EnderecoModal({ onClose }) {
                                     .toLowerCase()
                                     .includes(searchTerm.toLowerCase())
                             }
-                        />
+                        /> */}
                     </div>
 
                     <div className="groupInput">
