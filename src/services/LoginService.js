@@ -63,7 +63,9 @@ export async function loginFirebase(token) {
         AuthService.setToken(response.data.token);
         return true;
     } catch (error) {
-        toast.error(error);
+        toast.error(error, {
+            position: "bottom-right"
+        });
         return false;
     }
 }

@@ -106,10 +106,14 @@ export default function PaymentPage() {
             const success = await updateCliente(usuario);
             if (success) {
                 setIsCpfRegistered(true);
-                toast.success('CPF cadastrado!');
+                toast.success('CPF cadastrado!', {
+                    position: "bottom-right"
+                });
             }
         } catch (error) {
-            toast.error('Erro ao cadastrar CPF.');
+            toast.error('Erro ao cadastrar CPF.', {
+                position: "bottom-right"
+            });
         }
     };
 
@@ -144,17 +148,23 @@ export default function PaymentPage() {
 
     const handleConfirmOrder = async () => {
         if (!isCpfRegistered) {
-            toast.warning('Por favor, cadastre seu CPF antes de continuar.');
+            toast.warning('Por favor, cadastre seu CPF antes de continuar.', {
+                position: "bottom-right"
+            });
             return;
         }
 
         if (!selectedPaymentMethod) {
-            toast.warning('Por favor, selecione um método de pagamento.');
+            toast.warning('Por favor, selecione um método de pagamento.', {
+                position: "bottom-right"
+            });
             return;
         }
 
         if (!selectedAddress.cep) {
-            toast.warning('Por favor, selecione um endereço de entrega.');
+            toast.warning('Por favor, selecione um endereço de entrega.', {
+                position: "bottom-right"
+            });
             return;
         }
 

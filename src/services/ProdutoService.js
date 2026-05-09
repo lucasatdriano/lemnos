@@ -1,6 +1,77 @@
 import axios from 'axios';
 import AuthService from './AuthService';
 import { baseUri } from './configurations/ServiceConfig';
+import { toast } from 'react-toastify';
+
+export async function listarProdutosFiltrados(filtro, page, size) {
+    try {
+        const response = await axios({
+            baseURL: baseUri,
+            method: 'POST',
+            url: '/produto/find',
+            withCredentials: true,
+            data: {
+                nome: filtro.nome,
+                categoria: filtro.categoria,
+                subCategoria: filtro.subCategoria,
+                marca: filtro.marca,
+                menorPreco: filtro.menorPreco,
+                maiorPreco: filtro.maiorPreco,
+                avaliacao: filtro.avaliacao,
+                page: page,
+                size: size,
+            },
+            timeout: 10000,
+        });
+
+        if (response.status !== 200 && response.status !== 204) {
+            throw new Error('Erro ao filtrar produtos.');
+        }
+
+        return response.data;
+    } catch (error) {
+        if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+        ) {
+            console.error(error.response.data.error);
+        }
+        throw error;
+    }
+}
+
+export async function listarProdutosComDesconto() {
+    try {
+        const response = await axios({
+            baseURL: baseUri,
+            method: 'GET',
+            url: '/produto/desconto',
+            timeout: 10000,
+        });
+
+        if (response.status !== 200 && response.status !== 204) {
+            throw new Error('Erro ao listar produtos com desconto.');
+        }
+
+        return response.data;
+    } catch (error) {
+        if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+        ) {
+            toast.error(error.response.data.error, {
+                position: 'bottom-right',
+            });
+        } else {
+            toast.error('Erro ao listar produtos.', {
+                position: 'bottom-right',
+            });
+        }
+        throw error;
+    }
+}
 
 export async function cadastrarProduto(produto) {
     try {
@@ -14,12 +85,12 @@ export async function cadastrarProduto(produto) {
             },
             data: {
                 nome: produto.nome,
-                valor: produto.preco,
+                valor: produto.valor,
                 descricao: produto.descricao,
                 desconto: produto.desconto,
                 cor: produto.cor,
                 modelo: produto.modelo,
-                imagemPrincipal: produto.imagemPrinc,
+                imagemPrincipal: produto.imagemPrincipal,
                 imagens: produto.imagens,
                 subCategoria: produto.subCategoria,
                 peso: produto.peso,
@@ -89,20 +160,6 @@ export async function getProdutoById(id) {
         return response.data;
     } catch (error) {
         console.error('Erro ao obter detalhes do produto:', error);
-        return null;
-    }
-}
-
-export async function getAllProdutos() {
-    try {
-        const response = await axios({
-            baseURL: baseUri,
-            url: `/produto`,
-            timeout: 10000,
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao listar Produtos:', error);
         return null;
     }
 }

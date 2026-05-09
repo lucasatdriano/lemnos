@@ -32,7 +32,7 @@ export default function MenuFavorite({ onClose }) {
     }, []);
 
     const fetchFavorites = async () => {
-        if (AuthService.isLoggedIn() && AuthService.getRole() == 'CLIENTE') {
+        if (AuthService.isLoggedIn() && AuthService.isClienteRole()) {
             try {
                 const response = await listarProdutosFavoritos();
                 const favoritoDetalhado = await Promise.all(
@@ -67,7 +67,9 @@ export default function MenuFavorite({ onClose }) {
                 fetchFavorites();
             }
         } catch (error) {
-            toast.error('Erro ao remover produto dos favoritos.');
+            toast.error('Erro ao remover produto dos favoritos.', {
+                position: "bottom-right"
+            });
         }
     };
 
@@ -79,13 +81,19 @@ export default function MenuFavorite({ onClose }) {
         if (AuthService.isLoggedIn()) {
             try {
                 await adicionarProdutoCarrinho(favorite, 1);
-                toast.success('Produto adicionado ao carrinho!');
+                toast.success('Produto adicionado ao carrinho!', {
+                    position: "bottom-right"
+                });
             } catch (error) {
-                toast.error('Erro ao adicionar produto ao carrinho.');
+                toast.error('Erro ao adicionar produto ao carrinho.', {
+                    position: "bottom-right"
+                });
             }
         } else {
             toast.warning(
-                'Você precisa estar logado para adicionar produtos ao carrinho.'
+                'Você precisa estar logado para adicionar produtos ao carrinho.', {
+                    position: "bottom-right"
+                }
             );
             navigate('/auth');
         }

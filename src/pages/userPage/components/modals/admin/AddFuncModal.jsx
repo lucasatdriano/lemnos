@@ -86,7 +86,9 @@ export default function FuncionarioModal({ onClose, tipoEntidade }) {
             setIsFuncionarioListOpen(false);
         } catch (error) {
             console.error('Erro ao carregar dados do funcionário:', error);
-            toast.error('Erro ao carregar dados do funcionário.');
+            toast.error('Erro ao carregar dados do funcionário.', {
+                position: "bottom-right"
+            });
             throw error;
         }
     };
@@ -174,7 +176,9 @@ export default function FuncionarioModal({ onClose, tipoEntidade }) {
                     formattedForm.endereco.cep
                 );
                 if (!cepValido) {
-                    toast.error('CEP não existente.');
+                    toast.error('CEP não existente.', {
+                        position: "bottom-right"
+                    });
                     return;
                 }
 
@@ -196,8 +200,12 @@ export default function FuncionarioModal({ onClose, tipoEntidade }) {
                 }
             } catch (error) {
                 console.error('Erro ao cadastrar funcionário:', error);
-                toast.error('Erro ao cadastrar funcionário.');
-                toast.error(error.response.data.message);
+                toast.error('Erro ao cadastrar funcionário.', {
+                    position: "bottom-right"
+                });
+                toast.error(error.response.data.message, {
+                    position: "bottom-right"
+                });
             }
         }
     };
@@ -215,11 +223,15 @@ export default function FuncionarioModal({ onClose, tipoEntidade }) {
 
             try {
                 await excluirFuncionario(formattedForm.email);
-                toast.success('Funcionário desativado');
+                toast.success('Funcionário desativado', {
+                    position: "bottom-right"
+                });
                 setForm(initialFormState);
                 setSelectedFunc(null);
             } catch (error) {
-                toast.error('Erro ao desativar funcionário.');
+                toast.error('Erro ao desativar funcionário.', {
+                    position: "bottom-right"
+                });
                 console.error('Erro ao desativar funcionário:', error);
             }
         }
@@ -235,7 +247,9 @@ export default function FuncionarioModal({ onClose, tipoEntidade }) {
                     formattedForm.endereco.cep
                 );
                 if (!cepValido) {
-                    toast.error('CEP não existente.');
+                    toast.error('CEP não existente.', {
+                        position: "bottom-right"
+                    });
                     return;
                 }
 
@@ -249,7 +263,9 @@ export default function FuncionarioModal({ onClose, tipoEntidade }) {
                     );
 
                     if (enderecoAtualizada === true) {
-                        toast.success('Endereço atualizado');
+                        toast.success('Endereço atualizado', {
+                            position: "bottom-right"
+                        });
                         setForm(initialFormState);
                         setSelectedFunc(null);
                         return;
@@ -258,7 +274,9 @@ export default function FuncionarioModal({ onClose, tipoEntidade }) {
                 toast.success('Funcionario atualizado');
             } catch (error) {
                 console.error('Erro ao atualizar funcionário:', error);
-                toast.error(error.response.data.message);
+                toast.error(error.response.data.message, {
+                    position: "bottom-right"
+                });
                 throw error;
             }
         }

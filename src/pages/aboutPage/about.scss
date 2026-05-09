@@ -82,6 +82,10 @@ main {
             flex-wrap: wrap;
 
             .item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
                 background-color: $color-secundaryLight;
                 color: $color-fontDark;
                 width: 25vw;

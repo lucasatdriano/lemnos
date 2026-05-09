@@ -376,5 +376,14 @@
         "numeroLogradouro": "900",
         "cnpj": "45678901019154",
         "complemento": "Bloco D"
+    },
+    {
+        "nome": "GamerTech Store",
+        "telefone": "11982706287",
+        "cep": "45678901",
+        "email": "contato@gamertech.com.br",
+        "numeroLogradouro": "900",
+        "cnpj": "45678921019154",
+        "complemento": "Bloco A"
     }
 ]

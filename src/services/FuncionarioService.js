@@ -21,7 +21,9 @@ export async function getFuncionarioByToken() {
         }
         return response.data;
     } catch (error) {
-        toast.error(error);
+        toast.error(error, {
+            position: "bottom-right"
+        });
     }
 }
 
@@ -42,7 +44,9 @@ export async function getFuncionarioByEmail(email) {
         }
         return response.data;
     } catch (error) {
-        toast.error(error);
+        toast.error(error, {
+            position: "bottom-right"
+        });
     }
 }
 
@@ -68,7 +72,9 @@ export async function getFuncionarioByNome(nome) {
 
         return response.data;
     } catch (error) {
-        toast.error(error);
+        toast.error(error, {
+            position: "bottom-right"
+        });
     }
 }
 
@@ -89,7 +95,9 @@ export async function getFuncionarios() {
         }
         return response.data;
     } catch (error) {
-        toast.error(error);
+        toast.error(error, {
+            position: "bottom-right"
+        });
     }
 }
 
@@ -118,7 +126,9 @@ export async function cadastrarFuncionario(funcionario, tipoEntidade) {
         if (response.status != 201) {
             return false;
         }
-        toast.success('Funcionário cadastrado');
+        toast.success('Funcionário cadastrado', {
+            position: "bottom-right"
+        });
 
         return true;
     } catch (error) {
@@ -127,7 +137,9 @@ export async function cadastrarFuncionario(funcionario, tipoEntidade) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.error, {
+                position: "bottom-right"
+            });
         }
         return false;
     }
@@ -193,7 +205,9 @@ export async function excluirFuncionario(email) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.error, {
+                position: "bottom-right"
+            });
         }
         return false;
     }

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import LogoVertical from '../../../../assets/imgLemnos/logoVerticalClaro.svg';
+import LogoHorizontal from '../../../../assets/imgLemnos/logoHorizontalClaro.svg';
 import './menuDep.scss';
 import { AiOutlineTeam } from 'react-icons/ai';
 import {
@@ -80,11 +80,13 @@ export default function MenuDep({ toggleTheme, showMenuFav }) {
                 className={`menu ${isActive ? 'active' : ''}`}
             >
                 <Link to="/" className="link" onClick={handleCloseMenu}>
-                    <img src={LogoVertical} alt="Logo" className="logoMenu" />
+                    <img src={LogoHorizontal} alt="Logo" className="logoMenu" />
                 </Link>
                 <hr className="hrMenu" />
 
                 <h3>Departamentos</h3>
+
+                <hr className="hrMenu" />
                 <ul className="categorias">
                     <Link
                         to="/productFilter/Periféricos"
@@ -165,7 +167,9 @@ export default function MenuDep({ toggleTheme, showMenuFav }) {
                     </Link>
                 </ul>
 
+                <hr className="hrMenu" />
                 <h3>Navegação</h3>
+                <hr className="hrMenu" />
                 <nav className="menuNav">
                     <ul className="navegacoes">
                         <Link to="/" className="link" onClick={handleCloseMenu}>

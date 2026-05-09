@@ -46,7 +46,9 @@ export async function getEnderecoFromCep(cep) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.error, {
+                position: "bottom-right"
+            });
         }
         return false;
     }
@@ -83,7 +85,9 @@ export async function cadastrarEndereco(emailEntidade, endereco, tipoEntidade) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.error, {
+                position: "bottom-right"
+            });
         }
         return false;
     }
@@ -120,7 +124,9 @@ export async function updateEndereco(emailEntidade, endereco, TipoEntidade) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.error, {
+                position: "bottom-right"
+            });
         }
         console.error(error);
         return false;
@@ -140,7 +146,7 @@ export async function excluirEndereco(email, cep, entidade) {
             params: {
                 email: email,
                 cep: cep,
-                e: entidade,
+                e: entidade.replace("ROLE_", "").toLowerCase(),
             },
             timeout: 10000,
         });
@@ -156,7 +162,9 @@ export async function excluirEndereco(email, cep, entidade) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.error, {
+                position: "bottom-right"
+            });
         }
         return false;
     }

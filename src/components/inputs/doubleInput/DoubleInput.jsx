@@ -18,6 +18,7 @@ export default function DoubleInputRange({
         style: 'currency',
         currency: 'BRL',
     });
+
     const [values, setValues] = useState([minValue, maxValue]);
 
     useEffect(() => {
@@ -38,48 +39,50 @@ export default function DoubleInputRange({
         const value = parseInt(e.target.value, 10);
         if (!isNaN(value)) {
             setValues([value, values[1]]);
+            setMinValue(value);
         }
     };
 
     const handleMinInputBlur = () => {
-        const [minVal, maxVal] = values;
+        let [minVal, maxVal] = values;
         if (isNaN(minVal) || minVal < MIN) {
-            toast.warning('O valor mínimo não pode ser menor que 0.');
-            setMinValue(MIN);
-            setValues([MIN, maxVal]);
+            toast.warning('O valor mínimo não pode ser menor que 0.', {
+                position: "bottom-right"
+            });
+            minVal = MIN;
         } else if (minVal > maxVal) {
-            toast.warning(
-                'O valor mínimo não pode ser maior que o valor máximo.'
-            );
-            setMinValue(maxVal);
-            setValues([maxVal, maxVal]);
-        } else {
-            setMinValue(minVal);
+            toast.warning('O valor mínimo não pode ser maior que o valor máximo.', {
+                position: "bottom-right"
+            });
+            minVal = maxVal;
         }
+        setMinValue(minVal);
+        setValues([minVal, maxVal]);
     };
 
     const handleMaxInputChange = (e) => {
         const value = parseInt(e.target.value, 10);
         if (!isNaN(value)) {
             setValues([values[0], value]);
+            setMaxValue(value);
         }
     };
 
     const handleMaxInputBlur = () => {
-        const [minVal, maxVal] = values;
+        let [minVal, maxVal] = values;
         if (isNaN(maxVal) || maxVal > maxPrice) {
-            toast.warning('O valor máximo não pode ser maior que 10000.');
-            setMaxValue(maxPrice);
-            setValues([minVal, maxPrice]);
+            toast.warning(`O valor máximo não pode ser maior que ${BRL.format(maxPrice)}.`, {
+                position: "bottom-right"
+            });
+            maxVal = maxPrice;
         } else if (maxVal < minVal) {
-            toast.warning(
-                'O valor máximo não pode ser menor que o valor mínimo.'
-            );
-            setMaxValue(minVal);
-            setValues([minVal, minVal]);
-        } else {
-            setMaxValue(maxVal);
+            toast.warning('O valor máximo não pode ser menor que o valor mínimo.', {
+                position: "bottom-right"
+            });
+            maxVal = minVal;
         }
+        setMaxValue(maxVal);
+        setValues([minVal, maxVal]);
     };
 
     return (
@@ -132,12 +135,12 @@ export default function DoubleInputRange({
                             <input
                                 type="text"
                                 className="inputField minInput"
-                                value={BRL.format(values[0])}
+                                value={values[0]}
                                 onChange={handleMinInputChange}
                                 onBlur={handleMinInputBlur}
-                                inputMode="numeric"
                                 min={MIN}
                                 max={maxPrice}
+                                inputMode='numeric'
                             />
                         </div>
                     </div>
@@ -147,10 +150,9 @@ export default function DoubleInputRange({
                             <input
                                 type="text"
                                 className="inputField maxInput"
-                                value={BRL.format(values[1])}
+                                value={values[1]}
                                 onChange={handleMaxInputChange}
                                 onBlur={handleMaxInputBlur}
-                                inputMode="numeric"
                                 min={MIN}
                                 max={maxPrice}
                             />

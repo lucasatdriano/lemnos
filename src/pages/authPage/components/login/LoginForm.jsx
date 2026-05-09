@@ -51,13 +51,19 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
 
                 if (loginSuccess) {
                     onLogin();
-                    toast.success('Usuário logado');
+                    toast.success('Usuário logado', {
+                        position: "bottom-right"
+                    });
                 } else {
-                    toast.warning('Usuário não cadastrado.');
+                    toast.warning('Usuário não cadastrado.', {
+                        position: "bottom-right"
+                    });
                 }
             } catch (error) {
                 console.error('Error during login:', error.code, error.message);
-                toast.error('Erro ao fazer login, tente novamente.');
+                toast.error('Erro ao fazer login, tente novamente.', {
+                    position: "bottom-right"
+                });
             }
         }
     };
@@ -73,7 +79,9 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
             console.log(result.user);
             if (AuthService.isLoggedIn() && loginSuccess) {
                 onLogin();
-                toast.success('Usuário logado');
+                toast.success('Usuário logado', {
+                    position: "bottom-right"
+                });
             }
         } catch (error) {
             console.error(error);

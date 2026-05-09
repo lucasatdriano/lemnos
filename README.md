@@ -1,9 +1,10 @@
 # Lemnos
 
-### **🚧 Atenção: Este projeto está em desenvolvimento. A API externa está atualmente fora do ar.**
+### **🚧 Atenção: Este projeto está em desenvolvimento.**
 
 Este é um projeto de e-commerce de tecnologia desenvolvido em React como parte do Trabalho de Conclusão de Curso (TCC). O projeto inclui uma variedade de funcionalidades avançadas para proporcionar uma experiência de usuário completa e envolvente.
-<img src="src/assets/imgLemnos/logoHorizontalClaro.svg" alt="Logo da Lemnos" height="300" width="100%"/>
+<img src="src/assets/imgLemnos/logoHorizontalClaro.svg" alt="Logo da Lemnos" height="250" width="100%"/>
+<img src="src/assets/capaReadMe.png" alt="Capa do Projeto" width="100%"/>
 
 ## Índice
 - <a href="#%EF%B8%8F-tecnologias-utilizadas">Tecnologias Utilizadas</a>
@@ -25,31 +26,31 @@ Este é um projeto de e-commerce de tecnologia desenvolvido em React como parte 
 ## 🚀 Funcionalidades
 Algumas das funcionalidades desse projeto são: 
 
-## 🔑 Autenticação
+### 🔑 Autenticação
 **Login:** Sistema de login seguro.  
 **Cadastro:** Registro de usuários utilizando Google Firebase.
 
-## 🔍 Filtros e Pesquisa
+### 🔍 Filtros e Pesquisa
 **Filtros:** Filtragem avançada de produtos por categoria, preço, etc.  
 **Pesquisa:** Barra de busca para encontrar produtos rapidamente.
 
-## 🛒 Mostruário Dinâmico e Infinite Scroll
+### 🛒 Mostruário Dinâmico e Infinite Scroll
 **Mostruário Dinâmico:** Exibição de produtos de forma dinâmica.  
 **Infinite Scroll:** Carregamento contínuo de produtos à medida que o usuário rola a página.
 
-## 🌙 Modo Escuro
+### 🌙 Modo Escuro
 **Tema Escuro:** Alternância entre modos claro e escuro para melhor experiência do usuário.
 
-## 📜 Histórico de Pedidos
+### 📜 Histórico de Pedidos
 **Histórico:** Exibição dos pedidos anteriores dos usuários.
 
-## 📦 Tela de Produtos
+### 📦 Tela de Produtos
 **Detalhes:** Página detalhada para cada produto.
 
-## 🛠️ Página de Admin
+### 🛠️ Página de Admin
 **Administração:** Ferramentas de gerenciamento de produtos e usuários.
 
-## 🔒 Segurança
+### 🔒 Segurança
 **Criptografia:** Dados dos usuários são protegidos com criptografia de ponta a ponta.  
 **Prevenção de Vazamento de Dados:** Implementação de práticas de segurança para proteger contra vazamentos de dados.
 
@@ -97,6 +98,6 @@ Algumas das funcionalidades desse projeto são:
 ## 📞 Contato
 Este projeto foi desenvolvido por mim, Lucas Adriano, como parte do Trabalho de Conclusão de Curso (TCC) em Desenvolvimento de Sistemas. Entre em contato em caso de dúvidas ou sugestões.
 
-- **Email**: [lucasatdriano@gmail.com](mailto:lucasatdriano@gmail.com)
-- **LinkedIn**: [Lucas Adriano](https://linkedin.com/in/lucas-adriano-037003278/)
-- **Instagram**: [@__lgoncalves](https://instagram.com/__lgoncalves/)
+-   **Email**: [lucasadriano@gmail.com](mailto:lucasatdriano@gmail.com)
+-   **LinkedIn**: [Lucas Adriano](https://linkedin.com/in/lucasadrianodev)
+-   **Instagram**: [@__lgoncalves](https://instagram.com/__lgoncalves/)

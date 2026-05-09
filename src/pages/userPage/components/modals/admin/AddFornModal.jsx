@@ -67,7 +67,9 @@ export default function FornecedorModal({ onClose, tipoEntidade }) {
             setIsFornecedorListOpen(false);
         } catch (error) {
             console.error('Erro ao carregar dados do fornecedor:', error);
-            toast.error('Erro ao carregar dados do fornecedor.');
+            toast.error('Erro ao carregar dados do fornecedor.', {
+                position: "bottom-right"
+            });
             throw error;
         }
     };
@@ -127,7 +129,9 @@ export default function FornecedorModal({ onClose, tipoEntidade }) {
                     formattedForm.endereco.cep
                 );
                 if (!cepValido) {
-                    toast.error('CEP não existente.');
+                    toast.error('CEP não existente.', {
+                        position: "bottom-right"
+                    });
                     return;
                 }
 
@@ -147,7 +151,9 @@ export default function FornecedorModal({ onClose, tipoEntidade }) {
                 }
             } catch (error) {
                 console.error('Erro ao cadastrar fornecedor:', error);
-                toast.error('Erro ao cadastrar fornecedor.');
+                toast.error('Erro ao cadastrar fornecedor.', {
+                    position: "bottom-right"
+                });
                 throw error;
             }
         }
@@ -178,7 +184,9 @@ export default function FornecedorModal({ onClose, tipoEntidade }) {
                     formattedForm.endereco.cep
                 );
                 if (!cepValido) {
-                    toast.error('CEP não existente.');
+                    toast.error('CEP não existente.', {
+                        position: "bottom-right"
+                    });
                     return;
                 }
 
@@ -193,7 +201,9 @@ export default function FornecedorModal({ onClose, tipoEntidade }) {
                     );
 
                     if (enderecoAtualizada === true) {
-                        toast.success('Fornecedor atualizado');
+                        toast.success('Fornecedor atualizado', {
+                            position: "bottom-right"
+                        });
                         setSelectedForn(null);
                         setForm(initialFormState);
                         return;
@@ -201,7 +211,9 @@ export default function FornecedorModal({ onClose, tipoEntidade }) {
                 }
             } catch (error) {
                 console.error('Erro ao atualizar fornecedor:', error);
-                toast.error('Erro ao atualizar fornecedor.');
+                toast.error('Erro ao atualizar fornecedor.', {
+                    position: "bottom-right"
+                });
                 throw error;
             }
         }

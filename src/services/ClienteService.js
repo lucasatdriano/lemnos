@@ -62,7 +62,9 @@ export async function cadastrarUsuario(usuario) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.error, {
+                position: "bottom-right"
+            });
         }
     }
 }

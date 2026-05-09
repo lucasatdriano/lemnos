@@ -26,7 +26,9 @@ export async function cadastrarFornecedor(fornecedor, tipoEntidade) {
         if (response.status != 201) {
             return false;
         }
-        toast.success('Fornecedor cadastrado');
+        toast.success('Fornecedor cadastrado', {
+            position: "bottom-right"
+        });
 
         return true;
     } catch (error) {
@@ -35,7 +37,9 @@ export async function cadastrarFornecedor(fornecedor, tipoEntidade) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.error, {
+                position: "bottom-right"
+            });
         }
         return false;
     }
@@ -58,7 +62,9 @@ export async function getFornecedorByEmail(email) {
         }
         return response.data;
     } catch (error) {
-        toast.error(error);
+        toast.error(error, {
+            position: "bottom-right"
+        });
     }
 }
 
@@ -75,7 +81,9 @@ export async function getFornecedores() {
         }
         return response.data;
     } catch (error) {
-        toast.error(error);
+        toast.error(error, {
+            position: "bottom-right"
+        });
     }
 }
 
@@ -100,7 +108,9 @@ export async function getFornecedoresByNome(fornecedor) {
         }
         return response.data;
     } catch (error) {
-        toast.error(error);
+        toast.error(error, {
+            position: "bottom-right"
+        });
     }
 }
 
@@ -136,7 +146,9 @@ export async function updateFornecedor(fornecedor) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.error, {
+                position: "bottom-right"
+            });
         }
         return false;
     }

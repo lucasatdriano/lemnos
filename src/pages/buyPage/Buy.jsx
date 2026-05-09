@@ -120,7 +120,9 @@ export default function BuyPage() {
             const newPedido = pedidos[pedidos.length - 1];
             setPedidoId(newPedido.id);
             setPedidoStatus(newPedido.status);
-            toast.success('Compra Realizada');
+            toast.success('Compra Realizada', {
+                position: "bottom-right"
+            });
         } catch (error) {
             console.error('Erro ao realizar compra', error);
         }

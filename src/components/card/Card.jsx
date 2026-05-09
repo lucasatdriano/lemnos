@@ -27,7 +27,7 @@ export default function Card({ produto }) {
         const setInfo = async () => {
             if (
                 AuthService.isLoggedIn() &&
-                AuthService.getRole() == 'CLIENTE'
+                AuthService.isClienteRole()
             ) {
                 try {
                     const favorites = await listarProdutosFavoritos();
@@ -51,14 +51,20 @@ export default function Card({ produto }) {
         if (AuthService.isLoggedIn()) {
             try {
                 await adicionarProdutoCarrinho(produto, 1);
-                toast.success('Produto adicionado ao carrinho!');
+                toast.success('Produto adicionado ao carrinho!', {
+                    position: "bottom-right"
+                });
             } catch (error) {
                 console.error('Erro ao adicionar produto ao carrinho:', error);
-                toast.error('Erro ao adicionar produto ao carrinho.');
+                toast.error('Erro ao adicionar produto ao carrinho.', {
+                    position: "bottom-right"
+                });
             }
         } else {
             toast.warning(
-                'Você precisa estar logado para adicionar produtos ao carrinho.'
+                'Você precisa estar logado para adicionar produtos ao carrinho.', {
+                    position: "bottom-right"
+                }
             );
             navigate('/auth');
         }
@@ -68,22 +74,28 @@ export default function Card({ produto }) {
         e.preventDefault();
         e.stopPropagation();
         if (AuthService.isLoggedIn()) {
-            if (AuthService.getRole() == 'CLIENTE') {
+            if (AuthService.isClienteRole()) {
                 try {
                     await adicionarFavorito(produto);
                     setIsFavorite(true);
-                    toast.success('Produto adicionado aos favoritos!');
+                    toast.success('Produto adicionado aos favoritos!', {
+                        position: "bottom-right"
+                    });
                 } catch (error) {
                     console.error('Erro ao adicionar produto aos favoritos.');
                 }
             } else {
                 toast.warning(
-                    'Usuário não permitido adicionar produtos aos favoritos.'
+                    'Usuário não permitido adicionar produtos aos favoritos.', {
+                        position: "bottom-right"
+                    }
                 );
             }
         } else {
             toast.warning(
-                'Você precisa estar logado para adicionar produtos aos favoritos.'
+                'Você precisa estar logado para adicionar produtos aos favoritos.', {
+                    position: "bottom-right"
+                }
             );
             navigate('/auth');
         }
@@ -92,19 +104,25 @@ export default function Card({ produto }) {
     const handleRemoveFavorite = async (produto, e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (AuthService.isLoggedIn() && AuthService.getRole() == 'CLIENTE') {
+        if (AuthService.isLoggedIn() && AuthService.isClienteRole()) {
             try {
                 const success = await desfavoritarProduto(produto);
                 if (success) {
                     setIsFavorite(false);
-                    toast.success('Produto removido dos favoritos!');
+                    toast.success('Produto removido dos favoritos!', {
+                        position: "bottom-right"
+                    });
                 }
             } catch (error) {
-                toast.error('Erro ao remover produto dos favoritos.');
+                toast.error('Erro ao remover produto dos favoritos.', {
+                    position: "bottom-right"
+                });
             }
         } else {
             toast.warning(
-                'Você precisa estar logado para adicionar produtos aos favoritos.'
+                'Você precisa estar logado para adicionar produtos aos favoritos.', {
+                    position: "bottom-right"
+                }
             );
             navigate('/auth');
         }

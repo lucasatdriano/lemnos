@@ -75,6 +75,18 @@ const AuthService = {
     getRole() {
         return localStorage.getItem('role');
     },
+
+    isClienteRole() {
+        return this.getRole() === "ROLE_CLIENTE";
+    },
+
+    isFuncionarioRole() {
+        return this.getRole() === "ROLE_FUNCIONARIO";
+    },
+
+    isAdminRole() {
+        return this.getRole() === "ROLE_ADMIN";
+    },
 };
 
 export default AuthService;

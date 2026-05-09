@@ -135,7 +135,9 @@ export default function Cart() {
 
     const handleCalculateDelivery = async () => {
         if (cart.items === null) {
-            toast.warning('Por favor, adicione um produto no seu carrinho.');
+            toast.warning('Por favor, adicione um produto no seu carrinho.', {
+                position: "bottom-right"
+            });
             setShowOptions(false);
         } else if (cep.length === 9 && cep.match(/^\d{5}-\d{3}$/)) {
             try {
@@ -143,20 +145,28 @@ export default function Cart() {
                 if (cepValido) {
                     setShowOptions(true);
                 } else {
-                    toast.error('CEP não existente.');
+                    toast.error('CEP não existente.', {
+                        position: "bottom-right"
+                    });
                     setShowOptions(false);
                 }
             } catch (error) {
-                toast.error('Erro ao verificar o CEP.');
+                toast.error('Erro ao verificar o CEP.', {
+                    position: "bottom-right"
+                });
                 setShowOptions(false);
             }
         } else if (cep.length === 0) {
-            toast.warning('Por favor, adicione o seu CEP para calcularmos.');
+            toast.warning('Por favor, adicione o seu CEP para calcularmos.', {
+                position: "bottom-right"
+            });
             cepInputRef.current.focus();
             setShowOptions(false);
         } else if (cep.length !== 9) {
             toast.warning(
-                'Por favor, adicione o seu CEP completo para calcularmos.'
+                'Por favor, adicione o seu CEP completo para calcularmos.', {
+                    position: "bottom-right"
+                }
             );
             cepInputRef.current.focus();
             setShowOptions(false);
@@ -228,13 +238,19 @@ export default function Cart() {
     const finalizarPedido = async () => {
         try {
             if (cart.length === 0) {
-                toast.warning('Por favor, adicione algum item no carrinho.');
+                toast.warning('Por favor, adicione algum item no carrinho.', {
+                    position: "bottom-right"
+                });
                 cartRef.current.scrollIntoView({ behavior: 'smooth' });
             } else if (cep.length !== 9) {
-                toast.warning('Por favor, adicione o seu CEP para prosseguir.');
+                toast.warning('Por favor, adicione o seu CEP para prosseguir.', {
+                    position: "bottom-right"
+                });
                 cepInputRef.current.focus();
             } else if (selectedDeliveryOption === '') {
-                toast.warning('Por favor, selecione uma opção de entrega.');
+                toast.warning('Por favor, selecione uma opção de entrega.', {
+                    position: "bottom-right"
+                });
                 cepInputRef.current.scrollIntoView({ behavior: 'smooth' });
             } else {
                 setShowOptions(false);

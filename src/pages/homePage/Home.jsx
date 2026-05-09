@@ -38,12 +38,12 @@ export default function Home() {
                 <Slide />
 
                 <section className="brands">
-                    <h2>Principais Marcas</h2>
+                    <h2 className='subTitle'>Principais Marcas</h2>
                     <BrandsList />
                 </section>
 
                 <section className="mainDep">
-                    <h2>Principais Departamentos</h2>
+                    <h2 className='subTitle'>Principais Departamentos</h2>
 
                     <div className="containerDeps">
                         <Link
@@ -108,13 +108,13 @@ export default function Home() {
                     </div>
                 </section>
 
-                <h2>Ofertas</h2>
+                <h2 className='subTitle'>Ofertas</h2>
                 <section className="offers">
                     <OfferList onlyOnSale />
                 </section>
 
                 <section className="mainProds">
-                    <h2>Principais Produtos</h2>
+                    <h2 className='subTitle'>Principais Produtos</h2>
                     <div className="productsList">
                         {produtos.map((produto) => (
                             <Card key={produto.id} produto={produto} />
