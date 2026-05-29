@@ -1,0 +1,135 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #0d977e;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgDark: #2d2d2d;
+$color-bgLight: #f9fbfb;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.orderHistoryContainer {
+    padding-bottom: 3em;
+    width: 100%;
+    text-align: center;
+    overflow-y: auto;
+
+    &.ordersEmpty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+        padding-top: 2em;
+
+        h3 {
+            font-size: 1.8rem;
+        }
+
+        p {
+            opacity: 0.7;
+        }
+
+        .buyProductsButton {
+            max-width: 50%;
+            font-size: 1.8rem;
+        }
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .listItens {
+        display: flex;
+        text-align: left;
+        flex-direction: column;
+        gap: 1em;
+        padding: 1em;
+
+        .orderCard {
+            display: grid;
+            gap: 0.5em;
+            font-family: $font-items;
+            border: $color-primaryLight solid 3px;
+            border-left: $color-primaryLight solid 10px;
+            border-radius: 15px;
+            padding: 1em;
+            background-color: #dce0e050;
+            cursor: pointer;
+            font-size: 1.8rem;
+            box-shadow: 0 0 10px $color-shadow;
+
+            .orderDate {
+                opacity: 0.8;
+                padding: 0 0.5em 0.5em;
+                border-bottom: 1px solid $color-primaryLight;
+            }
+
+            .orderDetails {
+                display: flex;
+                justify-content: space-evenly;
+                text-align: center;
+
+                p {
+                    opacity: 0.8;
+                    display: grid;
+                }
+            }
+
+            .greenStatus {
+                font-weight: 600;
+                color: #08652b;
+            }
+
+            .statusColor {
+                font-weight: 600;
+                color: #eb6a00;
+            }
+        }
+    }
+
+    .mostMoreButton {
+        font-weight: bold;
+        color: $color-primaryLight;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 1.8rem;
+    }
+}
+
+.dark {
+    .orderHistoryContainer {
+        .listItens {
+            .orderCard {
+                border: $color-primaryDark solid 3px;
+                border-left: $color-primaryDark solid 10px;
+                color: $color-fontDark;
+                box-shadow: 0 0 10px #141414a8;
+
+                .greenStatus {
+                    color: #45f73f;
+                }
+
+                .statusColor {
+                    color: #dfb80d;
+                }
+            }
+        }
+
+        .mostMoreButton {
+            color: $color-primaryDark;
+        }
+    }
+}

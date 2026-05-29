@@ -25,6 +25,11 @@ export default function DoubleInputRange({
         setValues([minValue, maxValue]);
     }, [minValue, maxValue]);
 
+    const parseCurrencyToNumber = (value) => {
+        const numeric = value.replace(/\D/g, '');
+        return numeric ? parseInt(numeric, 10) : NaN;
+    };
+
     const handleRangeChange = (newValues) => {
         setValues(newValues);
     };
@@ -36,51 +41,63 @@ export default function DoubleInputRange({
     };
 
     const handleMinInputChange = (e) => {
-        const value = parseInt(e.target.value, 10);
-        if (!isNaN(value)) {
-            setValues([value, values[1]]);
-            setMinValue(value);
+        const rawValue = e.target.value;
+        const numericValue = parseCurrencyToNumber(rawValue);
+
+        if (!isNaN(numericValue) && numericValue <= maxPrice) {
+            setValues([numericValue, values[1]]);
+            setMinValue(numericValue);
+        } else if (rawValue === '') {
+            setValues([0, values[1]]);
+            setMinValue(0);
         }
     };
 
     const handleMinInputBlur = () => {
         let [minVal, maxVal] = values;
+
         if (isNaN(minVal) || minVal < MIN) {
-            toast.warning('O valor mínimo não pode ser menor que 0.', {
-                position: "bottom-right"
-            });
+            toast.warning('O valor mínimo não pode ser menor que 0.');
             minVal = MIN;
         } else if (minVal > maxVal) {
-            toast.warning('O valor mínimo não pode ser maior que o valor máximo.', {
-                position: "bottom-right"
-            });
+            toast.warning(
+                'O valor mínimo não pode ser maior que o valor máximo.'
+            );
             minVal = maxVal;
         }
+
         setMinValue(minVal);
         setValues([minVal, maxVal]);
     };
 
     const handleMaxInputChange = (e) => {
-        const value = parseInt(e.target.value, 10);
-        if (!isNaN(value)) {
-            setValues([values[0], value]);
-            setMaxValue(value);
+        const rawValue = e.target.value;
+        const numericValue = parseCurrencyToNumber(rawValue);
+
+        if (!isNaN(numericValue) && numericValue <= maxPrice) {
+            setValues([values[0], numericValue]);
+            setMaxValue(numericValue);
+        } else if (rawValue === '') {
+            setValues([values[0], maxPrice]);
+            setMaxValue(maxPrice);
         }
     };
 
     const handleMaxInputBlur = () => {
         let [minVal, maxVal] = values;
+
         if (isNaN(maxVal) || maxVal > maxPrice) {
-            toast.warning(`O valor máximo não pode ser maior que ${BRL.format(maxPrice)}.`, {
-                position: "bottom-right"
-            });
+            toast.warning(
+                `O valor máximo não pode ser maior que ${BRL.format(maxPrice)}.`
+            );
             maxVal = maxPrice;
         } else if (maxVal < minVal) {
-            toast.warning('O valor máximo não pode ser menor que o valor mínimo.', {
-                position: "bottom-right"
-            });
+            toast.warning(
+                'O valor máximo não pode ser menor que o valor mínimo.'
+            );
             maxVal = minVal;
         }
+
         setMaxValue(maxVal);
         setValues([minVal, maxVal]);
     };
@@ -135,12 +152,10 @@ export default function DoubleInputRange({
                             <input
                                 type="text"
                                 className="inputField minInput"
-                                value={values[0]}
+                                value={BRL.format(values[0])}
                                 onChange={handleMinInputChange}
                                 onBlur={handleMinInputBlur}
-                                min={MIN}
-                                max={maxPrice}
-                                inputMode='numeric'
+                                inputMode="numeric"
                             />
                         </div>
                     </div>
@@ -150,11 +165,10 @@ export default function DoubleInputRange({
                             <input
                                 type="text"
                                 className="inputField maxInput"
-                                value={values[1]}
+                                value={BRL.format(values[1])}
                                 onChange={handleMaxInputChange}
                                 onBlur={handleMaxInputBlur}
-                                min={MIN}
-                                max={maxPrice}
+                                inputMode="numeric"
                             />
                         </div>
                     </div>

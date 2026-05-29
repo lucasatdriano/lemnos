@@ -1,0 +1,72 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #0d977e;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #b33e8c;
+
+$color-bgDark: #2d2d2d;
+$color-bgLight: #f2f2f2;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.modal {
+    .hrComplete {
+        width: 100%;
+        border: 2px solid $color-primaryLight;
+    }
+
+    .iconCheck {
+        height: 48px;
+        width: 48px;
+        color: #17c017;
+        margin: 1em;
+    }
+
+    .btnBuy {
+        border: 0;
+        outline: 0;
+        font-size: 2rem;
+        color: $color-fontLight;
+        font-weight: 600;
+        border-radius: 5px;
+        padding: 0.75em 1.5em;
+        background: $color-primaryLight;
+        cursor: pointer;
+        box-shadow: 4px 4px 10px $color-shadow;
+        transition: 0.2s ease;
+
+        &:hover {
+            filter: brightness(0.9);
+            box-shadow: 8px 8px 20px $color-shadow;
+        }
+    }
+}
+
+.dark {
+    .modal {
+        .iconCheck {
+            color: #17c017;
+        }
+
+        .btnBuy {
+            background: $color-primaryDark;
+            box-shadow: 4px 4px 10px #141414a8;
+
+            &:hover {
+                filter: brightness(1.1);
+                box-shadow: 4px 4px 20px #141414a8;
+            }
+        }
+    }
+}

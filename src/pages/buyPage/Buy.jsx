@@ -12,7 +12,7 @@ import { FaCreditCard, FaRoute, FaTruckFast } from 'react-icons/fa6';
 import { LuPackageCheck } from 'react-icons/lu';
 import { PiFileMagnifyingGlass } from 'react-icons/pi';
 import { IoCart } from 'react-icons/io5';
-import ModalCompleted from './components/ModalCompleted';
+import ModalCompleted from '../../components/modals/completedModal/CompletedModal';
 import './buy.scss';
 import AuthService from '../../services/AuthService';
 import {
@@ -23,6 +23,7 @@ import {
 } from '../../services/UsuarioProdutoService';
 import { getCliente } from '../../services/ClienteService';
 import { toast } from 'react-toastify';
+import UnifiedModals from '../../components/modals/UnifiedModals';
 
 const BRL = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -46,7 +47,7 @@ export default function BuyPage() {
     const carrinho = useSelector((state) => state.cart.items);
     const valorCompra = useSelector((state) => state.cart.totalAmount);
 
-    const [isModalCompleted, setIsModalCompleted] = useState(false);
+    const [modalComplete, setModalComplete] = useState(false);
     const [cliente, setCliente] = useState({});
     const [pedidoStatus, setPedidoStatus] = useState('');
     const [pedidoId, setPedidoId] = useState(null);
@@ -102,7 +103,11 @@ export default function BuyPage() {
 
     useEffect(() => {
         if (statusUpdates >= 5) {
-            setIsModalCompleted(true);
+            const timer = setTimeout(() => {
+                setModalComplete(true);
+            }, 1000);
+
+            return () => clearTimeout(timer);
         }
     }, [statusUpdates]);
 
@@ -120,9 +125,7 @@ export default function BuyPage() {
             const newPedido = pedidos[pedidos.length - 1];
             setPedidoId(newPedido.id);
             setPedidoStatus(newPedido.status);
-            toast.success('Compra Realizada', {
-                position: "bottom-right"
-            });
+            toast.success('Compra Realizada');
         } catch (error) {
             console.error('Erro ao realizar compra', error);
         }
@@ -435,8 +438,12 @@ export default function BuyPage() {
                     </div>
                 </section>
             </main>
-            {isModalCompleted && (
-                <ModalCompleted onClose={() => setIsModalCompleted(false)} />
+            {modalComplete && (
+                <UnifiedModals
+                    openModalType="completed"
+                    modalMode="complete"
+                    onClose={() => setModalComplete(false)}
+                />
             )}
         </>
     );

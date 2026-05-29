@@ -11,10 +11,11 @@ import { signInWithPopup } from 'firebase/auth';
 import { loginFirebase } from '../../../../services/LoginService';
 import PasswordToggle from '../../../../components/inputs/passwordToggle/PasswordToggle';
 import InputError from '../../../../components/inputs/inputError/InputError';
+import { validateRegister } from '../../../../validations/registerValidator';
 
 export default function RegistrationForm({
     onLogin,
-    onCadastroSuccess,
+    onRegisterSuccess,
     handleBackToLogin,
 }) {
     const [form, setForm] = useState({
@@ -35,54 +36,30 @@ export default function RegistrationForm({
             ...prevForm,
             [name]: value,
         }));
+
+        if (errors[name]) {
+            setErrors((prev) => ({ ...prev, [name]: '' }));
+        }
     };
 
-    const handleSubmit = (e) => {
+    const handleRegister = (e) => {
         e.preventDefault();
 
-        const formattedForm = {
-            ...form,
+        const { isValid, errors: validationErrors } = validateRegister(form);
+
+        if (!isValid) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        const formToSubmit = {
+            name: form.name,
+            cpf: form.cpf,
+            email: form.email,
+            password: form.password,
         };
 
-        const errors = {};
-
-        if (!form.name) {
-            errors.name = 'O campo Nome é obrigatório';
-        } else if (/\d/.test(form.name)) {
-            errors.name = 'O Nome não pode conter números';
-        }
-
-        const cpfRegex = /^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/;
-        if (!form.cpf.match(cpfRegex)) {
-            errors.cpf = 'Digite um CPF válido';
-        }
-
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!form.email || !form.email.match(emailRegex)) {
-            errors.email = 'Digite um Email válido';
-        }
-
-        if (form.email !== form.confEmail) {
-            errors.confEmail = 'Os Emails devem ser iguais';
-        }
-
-        if (!form.password || form.password.length < 8) {
-            errors.password = 'A Senha deve ter no mínimo 8 caracteres';
-        }
-
-        if (!form.confPassword) {
-            errors.confPassword = 'Confirmar Senha é obrigatório';
-        } else if (form.password !== form.confPassword) {
-            errors.confPassword = 'As Senhas devem ser iguais';
-        }
-
-        setErrors(errors);
-
-        if (Object.keys(errors).length === 0) {
-            delete formattedForm.confPassword;
-            delete formattedForm.confEmail;
-            onCadastroSuccess(formattedForm);
-        }
+        onRegisterSuccess(formToSubmit);
     };
 
     const handleGoogleLogin = async () => {
@@ -109,6 +86,7 @@ export default function RegistrationForm({
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
     const toggleConfPasswordVisibility = () => {
         setShowConfPassword(!showConfPassword);
     };
@@ -134,7 +112,7 @@ export default function RegistrationForm({
                 <hr />
             </div>
 
-            <form className="registrationFormContent" onSubmit={handleSubmit}>
+            <form className="registrationFormContent" onSubmit={handleRegister}>
                 <h2>Crie sua Conta Lemnos</h2>
                 <div className="registrationFormFields">
                     <div className="registrationFormField">
@@ -199,7 +177,7 @@ export default function RegistrationForm({
                             label="Senha:"
                             id="password"
                             name="password"
-                            minLength={8}
+                            minLength={4}
                             maxLength={16}
                             value={form.password}
                             onChange={handleChange}
@@ -217,6 +195,7 @@ export default function RegistrationForm({
                             label="Confirme sua Senha:"
                             id="confPassword"
                             name="confPassword"
+                            minLength={4}
                             maxLength={16}
                             value={form.confPassword}
                             onChange={handleChange}

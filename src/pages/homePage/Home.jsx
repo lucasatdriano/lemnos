@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Slide from './components/carousel/Carousel';
-import Card from '../../components/card/Card';
 import BrandsList from './components/BrandsList';
-import OfferList from '../../components/lists/OfferList';
+import OfferList from '../../components/layout/lists/OfferList';
 import './home.scss';
 import kits from '../../assets/deps/imgKitUpgrade.svg';
 import videoGame from '../../assets/deps/imgVideoGame.svg';
@@ -12,6 +11,7 @@ import computador from '../../assets/deps/imgPcGamer.svg';
 import portatil from '../../assets/deps/imgNotebookPortatil.svg';
 import perifericos from '../../assets/deps/imgPerifericos.svg';
 import { listarProdutosFiltrados } from '../../services/UsuarioProdutoService';
+import CardProduct from '../../components/cards/cardProduct/CardProduct';
 
 export default function Home() {
     const [produtos, setProdutos] = useState([]);
@@ -38,12 +38,12 @@ export default function Home() {
                 <Slide />
 
                 <section className="brands">
-                    <h2 className='subTitle'>Principais Marcas</h2>
+                    <h2 className="subTitle">Principais Marcas</h2>
                     <BrandsList />
                 </section>
 
                 <section className="mainDep">
-                    <h2 className='subTitle'>Principais Departamentos</h2>
+                    <h2 className="subTitle">Principais Departamentos</h2>
 
                     <div className="containerDeps">
                         <Link
@@ -108,16 +108,16 @@ export default function Home() {
                     </div>
                 </section>
 
-                <h2 className='subTitle'>Ofertas</h2>
+                <h2 className="subTitle">Ofertas</h2>
                 <section className="offers">
                     <OfferList onlyOnSale />
                 </section>
 
                 <section className="mainProds">
-                    <h2 className='subTitle'>Principais Produtos</h2>
+                    <h2 className="subTitle">Principais Produtos</h2>
                     <div className="productsList">
                         {produtos.map((produto) => (
-                            <Card key={produto.id} produto={produto} />
+                            <CardProduct key={produto.id} produto={produto} />
                         ))}
                     </div>
                 </section>

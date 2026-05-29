@@ -18,7 +18,7 @@ import {
     setSelectedPaymentMethod,
 } from '../../store/actions/paymentActions';
 import './payment.scss';
-import Loading from '../../components/loading/Loading';
+import Loading from '../../components/layout/loading/Loading';
 import { useNavigate } from 'react-router-dom';
 
 const BRL = new Intl.NumberFormat('pt-BR', {
@@ -106,14 +106,10 @@ export default function PaymentPage() {
             const success = await updateCliente(usuario);
             if (success) {
                 setIsCpfRegistered(true);
-                toast.success('CPF cadastrado!', {
-                    position: "bottom-right"
-                });
+                toast.success('CPF cadastrado!');
             }
         } catch (error) {
-            toast.error('Erro ao cadastrar CPF.', {
-                position: "bottom-right"
-            });
+            toast.error('Erro ao cadastrar CPF.');
         }
     };
 
@@ -148,23 +144,17 @@ export default function PaymentPage() {
 
     const handleConfirmOrder = async () => {
         if (!isCpfRegistered) {
-            toast.warning('Por favor, cadastre seu CPF antes de continuar.', {
-                position: "bottom-right"
-            });
+            toast.warning('Por favor, cadastre seu CPF antes de continuar.');
             return;
         }
 
         if (!selectedPaymentMethod) {
-            toast.warning('Por favor, selecione um método de pagamento.', {
-                position: "bottom-right"
-            });
+            toast.warning('Por favor, selecione um método de pagamento.');
             return;
         }
 
         if (!selectedAddress.cep) {
-            toast.warning('Por favor, selecione um endereço de entrega.', {
-                position: "bottom-right"
-            });
+            toast.warning('Por favor, selecione um endereço de entrega.');
             return;
         }
 

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import './product.scss';
-import Loading from '../../components/loading/Loading';
-import OfferList from '../../components/lists/OfferList';
+import Loading from '../../components/layout/loading/Loading';
+import OfferList from '../../components/layout/lists/OfferList';
 import iconAddCart from '../../assets/icons/iconAddCart.svg';
 import AuthService from '../../services/AuthService';
 import { toast } from 'react-toastify';

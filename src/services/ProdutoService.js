@@ -61,13 +61,9 @@ export async function listarProdutosComDesconto() {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error, {
-                position: 'bottom-right',
-            });
+            toast.error(error.response.data.error);
         } else {
-            toast.error('Erro ao listar produtos.', {
-                position: 'bottom-right',
-            });
+            toast.error('Erro ao listar produtos.');
         }
         throw error;
     }
@@ -85,9 +81,9 @@ export async function cadastrarProduto(produto) {
             },
             data: {
                 nome: produto.nome,
-                valor: produto.valor,
+                valor: produto.preco,
                 descricao: produto.descricao,
-                desconto: produto.desconto,
+                desconto: produto.desconto?.toString() || '0',
                 cor: produto.cor,
                 modelo: produto.modelo,
                 imagemPrincipal: produto.imagemPrincipal,
@@ -103,13 +99,19 @@ export async function cadastrarProduto(produto) {
             timeout: 10000,
         });
 
-        if (response.status != 201) {
-            throw new Error(response);
+        if (response.status !== 201) {
+            return false;
         }
 
         return true;
     } catch (error) {
-        console.error(error);
+        console.error('Erro ao cadastrar produto:', error);
+        if (error.response?.data?.error) {
+            toast.error(error.response.data.error);
+        } else {
+            toast.error('Erro ao cadastrar produto.');
+        }
+        return false;
     }
 }
 
@@ -125,15 +127,26 @@ export async function updateProduto(produto, id) {
             },
             data: {
                 nome: produto.nome,
-                valor: produto.preco,
                 descricao: produto.descricao,
-                desconto: produto.desconto,
+                valor: produto.preco,
+                desconto: produto.desconto?.toString() || '0',
+                cor: produto.cor,
+                modelo: produto.modelo,
+                imagemPrincipal: produto.imagemPrincipal,
+                imagens: produto.imagens,
+                categoria: produto.categoria,
+                subCategoria: produto.subCategoria,
+                fabricante: produto.fabricante,
+                altura: produto.altura,
+                comprimento: produto.comprimento,
+                largura: produto.largura,
+                peso: produto.peso,
                 fornecedor: produto.fornecedor,
             },
             timeout: 10000,
         });
 
-        if (response.status != 200 && response.status != 204) {
+        if (response.status !== 200 && response.status !== 204) {
             return false;
         }
 

@@ -73,6 +73,26 @@ export default function CustomInput({
         return '';
     };
 
+    const formatPreco = (value) => {
+        let cleanedValue = value.replace(/\D/g, '');
+
+        if (cleanedValue === '') return '';
+
+        while (cleanedValue.length < 3) {
+            cleanedValue = '0' + cleanedValue;
+        }
+
+        let reais = cleanedValue.slice(0, -2);
+        let centavos = cleanedValue.slice(-2);
+
+        reais = reais.replace(/^0+/, '');
+        if (reais === '') reais = '0';
+
+        reais = reais.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        return `${reais},${centavos}`;
+    };
+
     const handleChange = (e) => {
         let formattedValue = e.target.value;
 
@@ -86,6 +106,10 @@ export default function CustomInput({
             formattedValue = formatTelefone(formattedValue);
         } else if (mask === 'DATA') {
             formattedValue = formatData(formattedValue);
+        } else if (mask === 'PRECO') {
+            formattedValue = formatPreco(formattedValue);
+        } else if (mask === 'NUMBERS') {
+            formattedValue = formattedValue.replace(/\D/g, '');
         }
 
         onChange({ target: { name, value: formattedValue } });

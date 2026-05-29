@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
 
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { MdLogout } from 'react-icons/md';
-import { FaRegEdit } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 import AuthService from '../../services/AuthService';
@@ -23,39 +21,38 @@ import { excluirEndereco } from '../../services/EnderecoService';
 
 import { setUserImg } from '../../store/actions/userActions';
 
-import { formatCep, formatCpf } from '../../utils/formatters';
+import { formatCpf } from '../../utils/formatters';
 
 import UserImg from '../../assets/imgLemnos/imgUser.svg';
 
-import ToolTip from '../../components/tooltip/ToolTip';
-import CustomInput from '../../components/inputs/customInput/Inputs';
-
-import EnderecoModal from './components/modals/EnderecoModal';
-import HistoricoCompras from './components/order/Order';
-
-import AddProdutoModal from './components/modals/admin/AddProductModal';
-import AddFornecedorModal from './components/modals/admin/AddFornModal';
-import AddFuncionarioModal from './components/modals/admin/AddFuncModal';
+import OrderHistoryList from './components/orderHistory/OrderHistoryList';
+import UnifiedModals from '../../components/modals/UnifiedModals';
 
 import './user.scss';
+import UserProfileHeader from './components/profile/UserProfileHeader';
+import UserProfileForm from './components/profile/UserProfileForm';
+import UserNavigation from './components/navigation/UserNavigation';
+import AdminSection from './components/admin/AdminSection';
+import AddressList from './components/address/AddressList';
 
 const User = ({ onLogout, userImg, setUserImg }) => {
     const navigate = useNavigate();
 
     const role = AuthService.getRole();
-
     const isCliente = role === 'ROLE_CLIENTE';
     const isAdmin = role === 'ROLE_ADMIN';
 
     const [username, setUsername] = useState('');
 
-    const [view, setView] = useState('endereco');
-
+    const [view, setView] = useState(isAdmin ? 'fornecedores' : 'endereco');
     const [editing, setEditing] = useState(false);
-
     const [selectedEndereco, setSelectedEndereco] = useState(null);
 
-    const [activeModal, setActiveModal] = useState(null);
+    const [modalState, setModalState] = useState({
+        type: null,
+        mode: null,
+        item: null,
+    });
 
     const [form, setForm] = useState({
         nome: '',
@@ -73,7 +70,7 @@ const User = ({ onLogout, userImg, setUserImg }) => {
 
         const handleKeyDown = (event) => {
             if (event.key === 'Escape') {
-                closeModal();
+                closeAllModals();
             }
         };
 
@@ -87,8 +84,8 @@ const User = ({ onLogout, userImg, setUserImg }) => {
     useEffect(() => {
         document
             .querySelector('html')
-            ?.classList.toggle('modalOpen', !!activeModal);
-    }, [activeModal]);
+            ?.classList.toggle('modalOpen', !!modalState.type);
+    }, [modalState.type]);
 
     async function fetchUsuario() {
         try {
@@ -174,13 +171,21 @@ const User = ({ onLogout, userImg, setUserImg }) => {
         }
     }
 
-    function openModal(modal) {
-        setActiveModal(modal);
-    }
+    const openModal = (type, mode, item = null) => {
+        setModalState({ type, mode, item });
+    };
 
-    function closeModal() {
-        setActiveModal(null);
-    }
+    const closeAllModals = () => {
+        setModalState({ type: null, mode: null, item: null });
+    };
+
+    const handleSelectFromList = (type, item) => {
+        setModalState({ type, mode: 'edit', item });
+    };
+
+    const openPedidoModal = (pedido) => {
+        setModalState({ type: 'pedido', mode: 'view', item: pedido });
+    };
 
     function handleSelectEndereco(index) {
         setSelectedEndereco((prev) => (prev === index ? null : index));
@@ -189,17 +194,13 @@ const User = ({ onLogout, userImg, setUserImg }) => {
     async function handleDeleteEndereco() {
         if (selectedEndereco === null) {
             toast.warn('Nenhum endereço selecionado.');
-
             return;
         }
 
         try {
             const tokenList = AuthService.getToken().split('.');
-
             const json = JSON.parse(atob(tokenList[1]));
-
             const cep = form.enderecos[selectedEndereco]?.cep;
-
             const response = await excluirEndereco(json.sub, cep, role);
 
             if (!response) return;
@@ -212,263 +213,98 @@ const User = ({ onLogout, userImg, setUserImg }) => {
             }));
 
             setSelectedEndereco(null);
-
             toast.success('Endereço apagado!');
         } catch (error) {
             console.error(error);
-
             toast.error('Erro ao apagar o endereço.');
         }
     }
 
-    function renderEnderecos() {
-        if (!form.enderecos.length) {
-            return (
-                <div className="allEnderecos">
-                    <h3>Nenhum endereço cadastrado</h3>
-                    <p>Adicione um endereço para facilitar suas compras!</p>
-                    <button
-                        type="button"
-                        className="addEnderecoBtn"
-                        onClick={() => openModal('endereco')}
-                    >
-                        Adicionar Endereço
-                    </button>
-                </div>
-            );
-        }
-
-        return (
-            <div className="allEnderecos">
-                {form.enderecos.map((endereco, index) => (
-                    <div
-                        key={index}
-                        className={`dataEnd ${
-                            selectedEndereco === index ? 'selected' : ''
-                        }`}
-                        onClick={() => handleSelectEndereco(index)}
-                    >
-                        <p>
-                            <strong>Logradouro:</strong> {endereco.logradouro},{' '}
-                            {endereco.numero}
-                        </p>
-
-                        {endereco.complemento && (
-                            <p>
-                                <strong>Complemento:</strong>{' '}
-                                {endereco.complemento}
-                            </p>
-                        )}
-
-                        <p>
-                            <strong>CEP:</strong> {formatCep(endereco.cep)}
-                        </p>
-
-                        <p>
-                            <strong>Cidade/Estado:</strong> {endereco.cidade} -{' '}
-                            {endereco.estado}
-                        </p>
-                    </div>
-                ))}
-
-                <div className="buttons">
-                    {selectedEndereco !== null && (
-                        <button
-                            type="button"
-                            className="deleteEnderecoBtn"
-                            onClick={handleDeleteEndereco}
-                        >
-                            Apagar Endereço
-                        </button>
-                    )}
-
-                    {form.enderecos.length < 3 && (
-                        <button
-                            type="button"
-                            className="addEnderecoBtn"
-                            onClick={() => openModal('endereco')}
-                        >
-                            Adicionar Outro Endereço
-                        </button>
-                    )}
-                </div>
-            </div>
-        );
-    }
-
     return (
         <section className="userContainer">
-            <section>
-                <div className="userData">
-                    <div className="user">
-                        <img src={userImg} alt="user" />
-
-                        <h3>{username}</h3>
-                    </div>
-
-                    <div className="configUser">
-                        <ToolTip message="Editar Perfil">
-                            <FaRegEdit
-                                className="icon"
-                                onClick={() => setEditing(!editing)}
-                            />
-                        </ToolTip>
-
-                        <ToolTip message="Sair da Conta">
-                            <MdLogout className="icon" onClick={onLogout} />
-                        </ToolTip>
-                    </div>
-                </div>
-
-                <div className="updateInfos">
-                    <div className="updateInputs">
-                        <CustomInput
-                            type="text"
-                            label="Nome Completo:"
-                            id="nome"
-                            name="nome"
-                            maxLength={40}
-                            minLength={5}
-                            value={form.nome}
-                            onChange={handleChange}
-                            disabled={!editing}
-                        />
-
-                        <CustomInput
-                            type="text"
-                            label="Email:"
-                            id="emailUser"
-                            name="email"
-                            value={form.email}
-                            disabled
-                        />
-
-                        <CustomInput
-                            type="text"
-                            label="CPF:"
-                            id="cpfUser"
-                            name="cpf"
-                            value={form.cpf}
-                            disabled
-                        />
-                    </div>
-
-                    <div className="containerButtons">
-                        <div className="updateButtons">
-                            <button
-                                type="button"
-                                disabled={!editing}
-                                onClick={handleSaveChanges}
-                            >
-                                Salvar Alterações
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                {!isAdmin && (
-                    <div className="selectBtn">
-                        <button
-                            type="button"
-                            className={`btnView ${
-                                view === 'endereco' ? 'selected' : ''
-                            }`}
-                            onClick={() => setView('endereco')}
-                        >
-                            Endereços
-                        </button>
-
-                        <button
-                            type="button"
-                            className={`btnView ${
-                                view !== 'endereco' ? 'selected' : ''
-                            }`}
-                            onClick={() =>
-                                setView(isCliente ? 'pedidos' : 'admin')
-                            }
-                        >
-                            {isCliente ? 'Pedidos' : 'Administração'}
-                        </button>
-                    </div>
-                )}
-
-                {isAdmin ? (
-                    <div className="adminPage">
-                        <hr className="hrFuncionario" />
-
-                        <button
-                            type="button"
-                            onClick={() => openModal('addProduto')}
-                        >
-                            Adicionar Produto
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => openModal('addFuncionario')}
-                        >
-                            Adicionar Funcionário
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => openModal('addFornecedor')}
-                        >
-                            Adicionar Fornecedor
-                        </button>
-                    </div>
-                ) : view === 'endereco' ? (
-                    renderEnderecos()
-                ) : isCliente ? (
-                    <div className="historyOrders">
-                        <HistoricoCompras />
-                    </div>
-                ) : (
-                    <>
-                        <h2>Administrar Produtos</h2>
-
-                        <button
-                            type="button"
-                            onClick={() => openModal('addProduto')}
-                        >
-                            Adicionar Produto
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => openModal('addFornecedor')}
-                        >
-                            Adicionar Fornecedor
-                        </button>
-                    </>
-                )}
-            </section>
-
-            {activeModal === 'endereco' && (
-                <EnderecoModal onClose={closeModal} />
-            )}
-
-            {activeModal === 'addProduto' && (
-                <AddProdutoModal onClose={closeModal} />
-            )}
-
-            {activeModal === 'addFuncionario' && (
-                <AddFuncionarioModal
-                    tipoEntidade="funcionario"
-                    onClose={closeModal}
+            <div className="userContent">
+                <UserProfileHeader
+                    userImg={userImg}
+                    username={username}
+                    editing={editing}
+                    onToggleEdit={() => setEditing(!editing)}
+                    onLogout={onLogout}
                 />
-            )}
 
-            {activeModal === 'addFornecedor' && (
-                <AddFornecedorModal
-                    tipoEntidade="fornecedor"
-                    onClose={closeModal}
+                <UserProfileForm
+                    form={form}
+                    editing={editing}
+                    onChange={handleChange}
+                    onSave={handleSaveChanges}
+                />
+            </div>
+
+            <div className="userContent">
+                <UserNavigation
+                    view={view}
+                    setView={setView}
+                    isAdmin={isAdmin}
+                    isCliente={isCliente}
+                />
+
+                {view === 'endereco' ? (
+                    <AddressList
+                        enderecos={form.enderecos}
+                        selectedEndereco={selectedEndereco}
+                        onSelectEndereco={handleSelectEndereco}
+                        onDeleteEndereco={handleDeleteEndereco}
+                        onAddEndereco={() => openModal('endereco', 'add')}
+                        isCliente={isCliente}
+                    />
+                ) : isCliente ? (
+                    <OrderHistoryList onOpenPedidoModal={openPedidoModal} />
+                ) : view === 'produtos' ? (
+                    <AdminSection
+                        title="Gerenciar Produtos"
+                        description="Gerenciamento de produtos (Adicione, Visualize, Edite ou Remova)."
+                        addLabel="Adicionar Produto"
+                        listLabel="Ver Lista de Produtos"
+                        onAdd={() => openModal('produto', 'add')}
+                        onList={() => openModal('produto', 'list')}
+                    />
+                ) : view === 'fornecedores' ? (
+                    <AdminSection
+                        title="Gerenciar Fornecedores"
+                        description="Cadastre os fornecedores para vincular aos seus produtos."
+                        addLabel="Adicionar Fornecedor"
+                        listLabel="Ver Lista de Fornecedores"
+                        onAdd={() => openModal('fornecedor', 'add')}
+                        onList={() => openModal('fornecedor', 'list')}
+                    />
+                ) : view === 'funcionarios' && isAdmin ? (
+                    <AdminSection
+                        title="Gerenciar Funcionários"
+                        description="Gerenciamento de funcionários (Adicione, Visualize, Edite ou Desative)."
+                        addLabel="Adicionar Funcionário"
+                        listLabel="Ver Lista de Funcionários"
+                        onAdd={() => openModal('funcionario', 'add')}
+                        onList={() => openModal('funcionario', 'list')}
+                    />
+                ) : null}
+            </div>
+
+            {modalState.type && (
+                <UnifiedModals
+                    openModalType={modalState.type}
+                    modalMode={modalState.mode}
+                    onClose={closeAllModals}
+                    externalSelectedItem={modalState.item}
+                    onSelectFromList={handleSelectFromList}
                 />
             )}
         </section>
     );
+};
+
+User.propTypes = {
+    onLogout: PropTypes.func.isRequired,
+    userImg: PropTypes.string,
+    setUserImg: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

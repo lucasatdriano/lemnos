@@ -4,13 +4,17 @@ import { IoList } from 'react-icons/io5';
 import { HiSquares2X2 } from 'react-icons/hi2';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import DoubleInputRange from '../../components/inputs/doubleInput/DoubleInput';
-import Loading from '../../components/loading/Loading';
+import Loading from '../../components/layout/loading/Loading';
 import AuthService from '../../services/AuthService';
-import Card from '../../components/card/Card';
 import './productFilter.scss';
 import { listarProdutosFiltrados } from '../../services/UsuarioProdutoService';
+import CardProduct from '../../components/cards/cardProduct/CardProduct';
 
-import { BRANDS, CATEGORIES, SUBCATEGORIES} from '../../constants/filters';
+import {
+    FILTER_BRANDS,
+    FILTER_CATEGORIES,
+    FILTER_SUBCATEGORIES,
+} from '../../constants/filters';
 
 export default function ProductFilter() {
     const navigate = useNavigate();
@@ -24,25 +28,31 @@ export default function ProductFilter() {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0);
     const search = new URLSearchParams(location.search).get('search') || '';
-    
+
     const [filters, setFilters] = useState({
-        brand: localStorage.getItem('brand') || '',
-        evaluation: localStorage.getItem('evaluation') || '',
+        searchTerm: localStorage.getItem('searchTerm') || search || '',
         category: localStorage.getItem('category') || category || '',
         subCategory: localStorage.getItem('subCategory') || '',
+        brand: localStorage.getItem('brand') || '',
         minPrice: parseInt(localStorage.getItem('minPrice')) || 0,
         maxPrice: parseInt(localStorage.getItem('maxPrice')) || 50000,
-        searchTerm: localStorage.getItem('searchTerm') || search || '',
+        evaluation: localStorage.getItem('evaluation') || '',
     });
 
-    const [calculatedMaxPrice, setCalculatedMaxPrice] = useState(filters.maxPrice);
+    const [calculatedMaxPrice, setCalculatedMaxPrice] = useState(
+        filters.maxPrice
+    );
 
     const saveFiltersToLocalStorage = () => {
-        Object.entries(filters).forEach(([key, value]) => localStorage.setItem(key, value.toString()));
+        Object.entries(filters).forEach(([key, value]) =>
+            localStorage.setItem(key, value.toString())
+        );
     };
 
     const clearFiltersFromLocalStorage = () => {
-        Object.entries(filters).forEach(([key]) => localStorage.removeItem(key));
+        Object.entries(filters).forEach(([key]) =>
+            localStorage.removeItem(key)
+        );
     };
 
     const calculateMaxPrice = async () => {
@@ -58,24 +68,34 @@ export default function ProductFilter() {
                     ? parseInt(filters.evaluation, 10)
                     : null,
             };
-    
-            const produtosFiltrados = await listarProdutosFiltrados(filtro, 0, 1000);
-            
-            const novoMaxPrice = produtosFiltrados.reduce((max, produto) => 
-                produto.valorComDesconto > max ? produto.valorComDesconto : max
-            , 0);
-    
-            setCalculatedMaxPrice(novoMaxPrice);
-    
-            setFilters(prev => ({
+
+            const produtosFiltrados = await listarProdutosFiltrados(
+                filtro,
+                0,
+                1000
+            );
+
+            const novoMaxPrice = produtosFiltrados.reduce(
+                (max, produto) =>
+                    produto.valorComDesconto > max
+                        ? produto.valorComDesconto
+                        : max,
+                0
+            );
+
+            const safeMaxPrice = novoMaxPrice <= 0 ? 100 : novoMaxPrice;
+
+            setCalculatedMaxPrice(safeMaxPrice);
+
+            setFilters((prev) => ({
                 ...prev,
-                maxPrice: novoMaxPrice
+                maxPrice: safeMaxPrice,
             }));
         } catch (error) {
             console.error('Erro ao calcular o maior preço:', error);
         }
     };
-    
+
     const applyFilters = async (pageToLoad = 0) => {
         setLoading(true);
         saveFiltersToLocalStorage();
@@ -92,9 +112,17 @@ export default function ProductFilter() {
                     : null,
             };
 
-            const produtosFiltrados = await listarProdutosFiltrados(filtro, pageToLoad, 24);
+            const produtosFiltrados = await listarProdutosFiltrados(
+                filtro,
+                pageToLoad,
+                24
+            );
 
-            setFilteredData(prevData => (pageToLoad === 0) ? produtosFiltrados : [...prevData, ...produtosFiltrados])
+            setFilteredData((prevData) =>
+                pageToLoad === 0
+                    ? produtosFiltrados
+                    : [...prevData, ...produtosFiltrados]
+            );
             setHasMore(produtosFiltrados.length === 24);
         } catch (error) {
             console.error('Erro ao aplicar filtros:', error);
@@ -106,11 +134,11 @@ export default function ProductFilter() {
     useEffect(() => {
         calculateMaxPrice();
     }, [
-        filters.selectedBrand,
+        filters.brand,
         filters.category,
-        filters.selectedSubCategory,
+        filters.subCategory,
         filters.searchTerm,
-        filters.selectedEvaluation,
+        filters.evaluation,
     ]);
 
     useEffect(() => {
@@ -152,7 +180,7 @@ export default function ProductFilter() {
     }, [page]);
 
     const handleClearFilters = () => {
-        setFilters(prev => ({
+        setFilters((prev) => ({
             ...prev,
             brand: '',
             subCategory: '',
@@ -160,7 +188,7 @@ export default function ProductFilter() {
             maxPrice: 50000,
             evaluation: 0,
             searchTerm: '',
-            category: ''
+            category: '',
         }));
         setPage(0);
         setHasMore(true);
@@ -170,11 +198,18 @@ export default function ProductFilter() {
 
     const handleCategoryChange = (e) => {
         const newCategory = e.target.value;
-        setFilters(prev => ({...prev, category: newCategory}));
+        setFilters((prev) => ({
+            ...prev,
+            category: newCategory,
+            subCategory: '',
+        }));
         setPage(0);
-        
-        const searchTerm = new URLSearchParams(location.search).get('search') || '';
-    
+
+        localStorage.removeItem('subCategory');
+
+        const searchTerm =
+            new URLSearchParams(location.search).get('search') || '';
+
         setTimeout(() => {
             navigate(
                 `/productFilter/${newCategory}${searchTerm ? `?search=${searchTerm}` : ''}`
@@ -183,7 +218,10 @@ export default function ProductFilter() {
     };
 
     const handleProductRating = (rating) => {
-        setFilters(prev => ({...prev, evaluation: (rating === prev.evaluation) ? '' : rating}));
+        setFilters((prev) => ({
+            ...prev,
+            evaluation: rating === prev.evaluation ? '' : rating,
+        }));
         setPage(0);
     };
 
@@ -224,22 +262,48 @@ export default function ProductFilter() {
                     </p>
                 </div>
 
-                <select value={filters.category} onChange={handleCategoryChange}>
+                <select
+                    value={filters.category}
+                    onChange={handleCategoryChange}
+                >
                     <option value="">Todas as Categorias</option>
-                    {CATEGORIES.map((categoria) => (<option key={categoria} value={categoria}>{categoria}</option>))}
+                    {FILTER_CATEGORIES.map((categoria) => (
+                        <option key={categoria} value={categoria}>
+                            {categoria}
+                        </option>
+                    ))}
                 </select>
 
-                <select value={filters.subCategory} onChange={(e) => setFilters(prev => ({...prev, subCategory: e.target.value}))}>
+                <select
+                    value={filters.subCategory}
+                    onChange={(e) =>
+                        setFilters((prev) => ({
+                            ...prev,
+                            subCategory: e.target.value,
+                        }))
+                    }
+                >
                     <option value="">Todas as SubCategorias</option>
-                    {SUBCATEGORIES[filters.category]?.map((subcategoria) => (<option key={subcategoria} value={subcategoria}>{subcategoria}</option>))}
+                    {FILTER_SUBCATEGORIES[filters.category]?.map(
+                        (subcategoria) => (
+                            <option key={subcategoria} value={subcategoria}>
+                                {subcategoria}
+                            </option>
+                        )
+                    )}
                 </select>
 
                 <select
                     value={filters.brand}
-                    onChange={(e) => setFilters(prev => ({...prev, brand: e.target.value}))}
+                    onChange={(e) =>
+                        setFilters((prev) => ({
+                            ...prev,
+                            brand: e.target.value,
+                        }))
+                    }
                 >
                     <option value="">Todas as Marcas</option>
-                    {BRANDS.map((brand) => (
+                    {FILTER_BRANDS.map((brand) => (
                         <option key={brand} value={brand}>
                             {brand}
                         </option>
@@ -250,8 +314,12 @@ export default function ProductFilter() {
                     key={filters.maxPrice}
                     minValue={filters.minPrice}
                     maxValue={filters.maxPrice}
-                    setMinValue={(minPrice) => setFilters(prev => ({ ...prev, minPrice }))}
-                    setMaxValue={(maxPrice) => setFilters(prev => ({ ...prev, maxPrice }))}
+                    setMinValue={(minPrice) =>
+                        setFilters((prev) => ({ ...prev, minPrice }))
+                    }
+                    setMaxValue={(maxPrice) =>
+                        setFilters((prev) => ({ ...prev, maxPrice }))
+                    }
                     maxPrice={calculatedMaxPrice}
                 />
 
@@ -312,7 +380,7 @@ export default function ProductFilter() {
                                     className={`productsList ${cardList ? 'cardList' : ''}`}
                                 >
                                     {filteredData.map((produto) => (
-                                        <Card
+                                        <CardProduct
                                             key={produto.id}
                                             produto={produto}
                                         />

@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthService from '../../../../services/AuthService';
 import PasswordToggle from '../../../../components/inputs/passwordToggle/PasswordToggle';
 import InputError from '../../../../components/inputs/inputError/InputError';
+import { validateLogin } from '../../../../validations/loginValidator';
 
 export default function LoginForm({ onLogin, onCadastroClick }) {
     const navigate = useNavigate();
@@ -28,43 +29,34 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
             ...prevState,
             [name]: value,
         }));
+
+        if (errors[name]) {
+            setErrors((prev) => ({ ...prev, [name]: '' }));
+        }
     };
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        let newErrors = {};
+        const { isValid, errors: validationErrors } = validateLogin(form);
 
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!form.email || !form.email.match(emailRegex)) {
-            newErrors.email = 'Digite um Email válido';
-        }
-        if (!form.password) {
-            newErrors.password = 'A Senha é obrigatória';
+        if (!isValid) {
+            setErrors(validationErrors);
+            return;
         }
 
-        setErrors(newErrors);
+        try {
+            const loginSuccess = await login(form, navigate);
 
-        if (Object.keys(newErrors).length === 0) {
-            try {
-                const loginSuccess = await login(form, navigate);
-
-                if (loginSuccess) {
-                    onLogin();
-                    toast.success('Usuário logado', {
-                        position: "bottom-right"
-                    });
-                } else {
-                    toast.warning('Usuário não cadastrado.', {
-                        position: "bottom-right"
-                    });
-                }
-            } catch (error) {
-                console.error('Error during login:', error.code, error.message);
-                toast.error('Erro ao fazer login, tente novamente.', {
-                    position: "bottom-right"
-                });
+            if (loginSuccess) {
+                onLogin();
+                toast.success('Usuário logado');
+            } else {
+                toast.warning('Usuário não cadastrado.');
             }
+        } catch (error) {
+            console.error('Error during login:', error.code, error.message);
+            toast.error('Erro ao fazer login, tente novamente.');
         }
     };
 
@@ -79,9 +71,7 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
             console.log(result.user);
             if (AuthService.isLoggedIn() && loginSuccess) {
                 onLogin();
-                toast.success('Usuário logado', {
-                    position: "bottom-right"
-                });
+                toast.success('Usuário logado');
             }
         } catch (error) {
             console.error(error);
@@ -139,6 +129,7 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
                             label="Senha:"
                             id="password"
                             name="password"
+                            minLength={4}
                             maxLength={16}
                             value={form.password}
                             onChange={handleChange}

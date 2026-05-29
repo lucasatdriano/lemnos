@@ -46,9 +46,7 @@ export async function getEnderecoFromCep(cep) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error, {
-                position: "bottom-right"
-            });
+            toast.error(error.response.data.error);
         }
         return false;
     }
@@ -67,7 +65,7 @@ export async function cadastrarEndereco(emailEntidade, endereco, tipoEntidade) {
             data: {
                 email: emailEntidade,
                 cep: endereco.cep,
-                numeroLogradouro: endereco.nLogradouro,
+                numeroLogradouro: endereco.numeroLogradouro,
                 complemento: endereco.complemento,
                 entidade: tipoEntidade,
             },
@@ -85,9 +83,7 @@ export async function cadastrarEndereco(emailEntidade, endereco, tipoEntidade) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error, {
-                position: "bottom-right"
-            });
+            toast.error(error.response.data.error);
         }
         return false;
     }
@@ -106,7 +102,7 @@ export async function updateEndereco(emailEntidade, endereco, TipoEntidade) {
             data: {
                 email: emailEntidade,
                 cep: endereco.cep,
-                numeroLogradouro: endereco.numLogradouro,
+                numeroLogradouro: endereco.numeroLogradouro,
                 complemento: endereco.complemento,
                 entidade: TipoEntidade,
             },
@@ -124,9 +120,7 @@ export async function updateEndereco(emailEntidade, endereco, TipoEntidade) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error, {
-                position: "bottom-right"
-            });
+            toast.error(error.response.data.error);
         }
         console.error(error);
         return false;
@@ -146,7 +140,7 @@ export async function excluirEndereco(email, cep, entidade) {
             params: {
                 email: email,
                 cep: cep,
-                e: entidade.replace("ROLE_", "").toLowerCase(),
+                e: entidade.replace('ROLE_', '').toLowerCase(),
             },
             timeout: 10000,
         });
@@ -162,9 +156,7 @@ export async function excluirEndereco(email, cep, entidade) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error, {
-                position: "bottom-right"
-            });
+            toast.error(error.response.data.error);
         }
         return false;
     }

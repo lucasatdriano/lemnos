@@ -21,9 +21,7 @@ export async function getFuncionarioByToken() {
         }
         return response.data;
     } catch (error) {
-        toast.error(error, {
-            position: "bottom-right"
-        });
+        toast.error(error);
     }
 }
 
@@ -44,9 +42,7 @@ export async function getFuncionarioByEmail(email) {
         }
         return response.data;
     } catch (error) {
-        toast.error(error, {
-            position: "bottom-right"
-        });
+        toast.error(error);
     }
 }
 
@@ -72,9 +68,7 @@ export async function getFuncionarioByNome(nome) {
 
         return response.data;
     } catch (error) {
-        toast.error(error, {
-            position: "bottom-right"
-        });
+        toast.error(error);
     }
 }
 
@@ -95,14 +89,14 @@ export async function getFuncionarios() {
         }
         return response.data;
     } catch (error) {
-        toast.error(error, {
-            position: "bottom-right"
-        });
+        toast.error(error);
     }
 }
 
 export async function cadastrarFuncionario(funcionario, tipoEntidade) {
     try {
+        console.log(funcionario);
+
         const response = await axios({
             baseURL: baseUri,
             method: 'POST',
@@ -118,7 +112,7 @@ export async function cadastrarFuncionario(funcionario, tipoEntidade) {
                 dataNascimento: funcionario.dataNasc,
                 dataAdmissao: funcionario.dataAdmissao,
                 email: funcionario.email,
-                senha: funcionario.senha,
+                senha: funcionario.password,
             },
             timeout: 10000,
         });
@@ -126,9 +120,7 @@ export async function cadastrarFuncionario(funcionario, tipoEntidade) {
         if (response.status != 201) {
             return false;
         }
-        toast.success('Funcionário cadastrado', {
-            position: "bottom-right"
-        });
+        toast.success('Funcionário cadastrado');
 
         return true;
     } catch (error) {
@@ -137,9 +129,7 @@ export async function cadastrarFuncionario(funcionario, tipoEntidade) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error, {
-                position: "bottom-right"
-            });
+            toast.error(error.response.data.error);
         }
         return false;
     }
@@ -147,6 +137,8 @@ export async function cadastrarFuncionario(funcionario, tipoEntidade) {
 
 export async function updateFuncionario(funcionario) {
     try {
+        console.log(funcionario);
+
         const response = await axios({
             baseURL: baseUri,
             method: 'PUT',
@@ -157,10 +149,12 @@ export async function updateFuncionario(funcionario) {
             },
             data: {
                 nome: funcionario.nome,
+                cpf: funcionario.cpf,
                 telefone: funcionario.telefone,
                 dataNascimento: funcionario.dataNasc,
                 dataAdmissao: funcionario.dataAdmissao,
-                senha: funcionario.senha,
+                email: funcionario.email,
+                senha: funcionario.password,
             },
             params: {
                 email: funcionario.email,
@@ -179,7 +173,33 @@ export async function updateFuncionario(funcionario) {
     }
 }
 
-export async function excluirFuncionario(email) {
+export async function toggleFuncionarioStatus(email) {
+    try {
+        const response = await axios({
+            baseURL: baseUri,
+            method: 'PUT',
+            url: `/funcionario/situacao`,
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                Authorization: AuthService.getToken(),
+            },
+            data: [email],
+        });
+
+        return response.status === 200;
+    } catch (error) {
+        if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+        ) {
+            toast.error(error.response.data.error);
+        }
+        return false;
+    }
+}
+
+export async function DisableFuncionario(email) {
     try {
         const response = await axios({
             baseURL: baseUri,
@@ -205,9 +225,7 @@ export async function excluirFuncionario(email) {
             error.response.data &&
             error.response.data.error
         ) {
-            toast.error(error.response.data.error, {
-                position: "bottom-right"
-            });
+            toast.error(error.response.data.error);
         }
         return false;
     }

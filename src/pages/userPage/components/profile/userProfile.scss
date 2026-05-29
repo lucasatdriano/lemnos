@@ -1,0 +1,116 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #0d977e;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgDark: #2d2d2d;
+$color-bgLight: #f9fbfb;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.userContent {
+    .userData {
+        flex: 1;
+        padding: 0 2em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid $color-primaryLight;
+
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            padding: 0.5em 0;
+            font-size: 1.8rem;
+
+            img {
+                object-fit: contain;
+                border: 1px solid $color-primaryLight;
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+            }
+        }
+
+        .userConfig {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+
+            .profileIcon {
+                height: 32px;
+                width: 32px;
+                color: $color-primaryLight;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .updateInfos {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2em;
+        padding: 2em;
+
+        .updateInputs {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            gap: 2em;
+            width: 100%;
+        }
+
+        .containerButtons {
+            display: flex;
+            align-items: center;
+            flex-direction: column-reverse;
+            gap: 1em;
+            width: 100%;
+            justify-content: space-evenly;
+
+            .updateButtons {
+                display: flex;
+                flex-direction: column;
+                gap: 2em;
+
+                button {
+                    font-size: 1.8rem;
+                }
+            }
+        }
+    }
+}
+
+.dark {
+    .userContent {
+        .userData {
+            border-bottom: 2px solid $color-primaryDark;
+
+            .user {
+                img {
+                    border: 1px solid $color-primaryDark;
+                }
+            }
+
+            .userConfig {
+                .profileIcon {
+                    color: $color-fontDark;
+                }
+            }
+        }
+    }
+}

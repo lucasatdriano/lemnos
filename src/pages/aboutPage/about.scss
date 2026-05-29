@@ -13,8 +13,7 @@ $color-card: #f6fefd4d;
 $font-title: 'Merriweather Sans', sans-serif;
 
 main {
-    .aboutContent,
-    .mascotContent {
+    .aboutContent {
         word-spacing: 5px;
         width: auto;
         margin: 0 auto;
@@ -113,8 +112,7 @@ main {
 }
 
 .dark {
-    .aboutContent,
-    .mascotContent {
+    .aboutContent {
         .title {
             hr {
                 border: 2px solid $color-primaryLight;
@@ -144,8 +142,7 @@ main {
 
 @media only screen and (max-width: 1024px) {
     main {
-        .aboutContent,
-        .mascotContent {
+        .aboutContent {
             .title {
                 h2 {
                     font-size: 2.6rem;
