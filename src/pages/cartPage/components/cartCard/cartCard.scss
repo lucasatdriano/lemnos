@@ -1,0 +1,197 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.cartCard {
+    width: 100%;
+    background-color: $color-secundaryLight;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px $color-shadow;
+    color: $color-fontDark;
+    font-family: $font-items;
+
+    .labels {
+        display: grid;
+        grid-template-columns: 1.8fr 0.6fr 0.6fr 60px;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        font-size: clamp(1.6rem, 0.7vw, 1.8rem);
+        font-weight: 500;
+        border-bottom: 2px solid $color-primaryLight;
+
+        p:nth-child(2),
+        p:nth-child(3) {
+            text-align: center;
+        }
+    }
+
+    .productDesc {
+        display: grid;
+        grid-template-columns:
+            minmax(100px, 150px)
+            minmax(180px, 1fr)
+            minmax(120px, 160px)
+            minmax(120px, 160px)
+            minmax(40px, 60px);
+
+        align-items: center;
+        gap: 1em;
+        padding: 1em;
+
+        img {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 0.5em;
+        }
+
+        .nameProduct {
+            font-size: clamp(1.4rem, 0.9vw, 1.7rem);
+            cursor: pointer;
+            transition: 0.2s ease;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .amount {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+
+            .buttonQtd {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: clamp(16px, 2vw, 30px);
+                border: none;
+                background: transparent;
+                color: $color-fontDark;
+                cursor: pointer;
+                font-size: clamp(1.4rem, 1vw, 1.8rem);
+                transition: 0.2s ease;
+
+                &:hover {
+                    transform: scale(1.1);
+                    color: $color-primaryLight;
+                }
+            }
+
+            span {
+                min-width: 24px;
+                text-align: center;
+                font-size: clamp(1.6rem, 1vw, 2rem);
+                font-weight: 500;
+            }
+        }
+
+        .priceProduct {
+            text-align: center;
+            font-size: clamp(1.6rem, 1vw, 2rem);
+            font-weight: 600;
+        }
+
+        .btnRemove {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+            color: $color-fontDark;
+            font-size: clamp(2.8rem, 2vw, 3.4rem);
+            cursor: pointer;
+            transition: 0.2s ease;
+
+            &:hover {
+                color: #ff5c5c;
+                transform: scale(1.05);
+            }
+        }
+    }
+}
+
+.dark {
+    .cartCard {
+        background-color: $color-secundaryDark;
+        box-shadow: 0 0 15px #141414a8;
+
+        .hrLabels {
+            border-top: 2px solid $color-primaryDark;
+        }
+
+        .buttonQtd:hover {
+            color: $color-primaryDark;
+        }
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .cartCard {
+        .labels {
+            display: none;
+        }
+
+        .productDesc {
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-areas:
+                'img img img'
+                'name name name'
+                'amount price remove';
+            place-items: center;
+
+            * {
+                width: 100%;
+            }
+
+            img {
+                grid-area: img;
+                max-width: 250px;
+            }
+
+            .nameProduct {
+                text-align: center;
+                grid-area: name;
+            }
+
+            .amount {
+                gap: 0;
+                grid-area: amount;
+            }
+
+            .priceProduct {
+                grid-area: price;
+            }
+
+            .btnRemove {
+                grid-area: remove;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 650px) {
+}

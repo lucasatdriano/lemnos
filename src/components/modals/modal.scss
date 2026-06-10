@@ -190,6 +190,30 @@ $font-items: 'Poppins', Helvetica;
             grid-column: span 2;
         }
     }
+
+    [class$='Button'] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        font-size: 1.8rem;
+        min-width: 12em;
+        padding: 0.5em 1em;
+        border: none;
+        border-radius: 5px;
+        color: $color-fontDark;
+        background: $color-primaryLight;
+        box-shadow: 2px 2px 8px $color-shadow;
+        font-family: $font-web;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: 0.5s ease;
+
+        &:hover {
+            filter: brightness(1.05);
+            box-shadow: 0 0 10px $color-primaryLight;
+        }
+    }
 }
 
 .dark {

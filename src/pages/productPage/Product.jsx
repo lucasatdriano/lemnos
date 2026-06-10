@@ -1,13 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import './product.scss';
-import Loading from '../../components/layout/loading/Loading';
-import OfferList from '../../components/layout/lists/OfferList';
-import iconAddCart from '../../assets/icons/iconAddCart.svg';
-import AuthService from '../../services/AuthService';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import AuthService from '../../services/AuthService';
 import { getProdutoById } from '../../services/ProdutoService';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 import {
     adicionarFavorito,
     adicionarProdutoCarrinho,
@@ -15,15 +11,17 @@ import {
     desfavoritarProduto,
     listarProdutosFavoritos,
 } from '../../services/UsuarioProdutoService';
-import React, { useState, useEffect } from 'react';
+import Loading from '../../components/layout/loading/Loading';
+import OfferList from '../../components/layout/lists/OfferList';
+import ProductInfos from './components/ProductInfos';
+import ProductImages from './components/ProductImages';
+import ProductBreadcrumb from './components/ProductBreadcrumb';
+import ProductDetails from './components/ProductDetails';
+import './product.scss';
 
 export default function Product() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const BRL = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    });
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(false);
     const [mainImage, setMainImage] = useState('');
@@ -163,201 +161,30 @@ export default function Product() {
                 </div>
             ) : (
                 <section className="containerProductMain">
-                    <div className="breadcrumb">
-                        <Link to="/" className="breadcrumbLink">
-                            Home
-                        </Link>
-                        <span className="separator">/</span>
-                        <Link
-                            to={`/productFilter/${product.categoria}`}
-                            className="breadcrumbLink"
-                        >
-                            {product.categoria}
-                        </Link>
-                        <span className="separator">/</span>
-                        <Link
-                            to={`/productFilter/${product.subCategoria}`}
-                            className="breadcrumbLink"
-                        >
-                            {product.subCategoria}
-                        </Link>
-                        <span className="separator">/</span>
-                        <Link
-                            to={`/productFilter/${product.fabricante}`}
-                            className="breadcrumbLink"
-                        >
-                            {product.fabricante}
-                        </Link>
-                        <span className="separator">/</span>
-                        <span className="breadcrumbCurrent">
-                            {product.nome}
-                        </span>
-                    </div>
+                    <ProductBreadcrumb product={product} />
+
                     <section className="productMain">
-                        <div className="containerImages">
-                            <div className="optionsImages">
-                                <img
-                                    src={product.imagemPrincipal}
-                                    alt={product.nome}
-                                    className={`optionImage ${mainImage === product.imagemPrincipal ? 'selected' : ''}`}
-                                    onClick={() =>
-                                        handleImageClick(
-                                            product.imagemPrincipal
-                                        )
-                                    }
-                                />
-                                {product.imagens &&
-                                    product.imagens.map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={image}
-                                            alt={`img${index}`}
-                                            className={`optionImage ${mainImage === image ? 'selected' : ''}`}
-                                            onClick={() =>
-                                                handleImageClick(image)
-                                            }
-                                        />
-                                    ))}
-                            </div>
-                            <img
-                                src={mainImage}
-                                alt={product.nome}
-                                className="imageMain"
-                            />
-                            {hasDiscount && (
-                                <p className="offerDescont">
-                                    {product.desconto}%
-                                </p>
-                            )}
-                        </div>
-                        <div className="containerInfos">
-                            <div className="sectionIcons">
-                                <div className="rating">
-                                    <p className="productNote">
-                                        ({Math.ceil(product.avaliacao)})
-                                    </p>
-                                    {[1, 2, 3, 4, 5].reverse().map((index) => (
-                                        <React.Fragment key={index}>
-                                            <input
-                                                type="radio"
-                                                id={`star-${index}`}
-                                                name={`star-rating-${id}`}
-                                                value={index}
-                                                checked={
-                                                    index ===
-                                                    Math.ceil(productRating)
-                                                }
-                                                onChange={() =>
-                                                    handleProductRating(index)
-                                                }
-                                            />
-                                            <label htmlFor={`star-${index}`}>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24"
-                                                    className={
-                                                        index <=
-                                                        Math.ceil(productRating)
-                                                            ? 'filled'
-                                                            : ''
-                                                    }
-                                                >
-                                                    <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path>
-                                                </svg>
-                                            </label>
-                                        </React.Fragment>
-                                    ))}
-                                </div>
-                                {isFavorite ? (
-                                    <MdFavorite
-                                        className="iconFav"
-                                        onClick={handleRemoveToFavorites}
-                                    />
-                                ) : (
-                                    <MdFavoriteBorder
-                                        className="iconFav"
-                                        onClick={handleAddToFavorites}
-                                    />
-                                )}
-                            </div>
-                            <h3 className="productName">{product.nome}</h3>
-                            {hasDiscount && (
-                                <p className="priceOrigin">
-                                    De{' '}
-                                    <span>
-                                        {BRL.format(product.valorTotal)}
-                                    </span>{' '}
-                                    por:
-                                </p>
-                            )}
-                            <p className="productPrice">
-                                À vista <br />
-                                <span>
-                                    {BRL.format(product.valorComDesconto)}
-                                </span>{' '}
-                                <br />E no PIX com 15% de desconto
-                            </p>
-                            <p className="priceFees">
-                                Ou no Cartão <br />
-                                Em até 12x de{' '}
-                                <span>
-                                    {BRL.format(product.valorComDesconto / 12)}
-                                </span>{' '}
-                                sem juros
-                            </p>
-                            <button
-                                className="addCart"
-                                onClick={handleAddToCart}
-                            >
-                                <img
-                                    src={iconAddCart}
-                                    alt="icon add Cart"
-                                    className="iconAdd"
-                                />
-                                Adicionar ao Carrinho
-                            </button>
-                        </div>
+                        <ProductImages
+                            product={product}
+                            mainImage={mainImage}
+                            handleImageClick={handleImageClick}
+                            hasDiscount={hasDiscount}
+                        />
+
+                        <ProductInfos
+                            id={id}
+                            product={product}
+                            productRating={productRating}
+                            handleProductRating={handleProductRating}
+                            isFavorite={isFavorite}
+                            handleAddToFavorites={handleAddToFavorites}
+                            handleRemoveToFavorites={handleRemoveToFavorites}
+                            handleAddToCart={handleAddToCart}
+                            hasDiscount={hasDiscount}
+                        />
                     </section>
-                    <section className="containerDetails">
-                        <div className="containerDescription">
-                            <h3>Descrição do Produto</h3>
-                            <p>{product.descricao}</p>
-                        </div>
-                        <div className="containerSpecifications">
-                            <p className="specification">
-                                <strong>Nome:</strong>
-                                {product.nome}
-                            </p>
-                            <p className="specification">
-                                <strong>Marca:</strong>
-                                {product.fabricante}
-                            </p>
-                            <p className="specification">
-                                <strong>Categoria:</strong>
-                                {product.categoria}
-                            </p>
-                            <p className="specification">
-                                <strong>SubCategoria:</strong>
-                                {product.subCategoria}
-                            </p>
-                            <p className="specification">
-                                <strong>Comprimento:</strong>
-                                {product.comprimento} cm
-                            </p>
-                            <p className="specification">
-                                <strong>Altura:</strong>
-                                {product.altura} cm
-                            </p>
-                            <p className="specification">
-                                <strong>Largura:</strong>
-                                {product.largura} cm
-                            </p>
-                            <p className="specification">
-                                <strong>Peso:</strong>
-                                {product.peso} kg
-                            </p>
-                        </div>
-                    </section>
+
+                    <ProductDetails product={product} />
                 </section>
             )}
             <section className="offers">

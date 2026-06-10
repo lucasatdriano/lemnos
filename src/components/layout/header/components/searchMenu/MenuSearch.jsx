@@ -4,16 +4,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import './menuSearch.scss';
 import { RiSearch2Line } from 'react-icons/ri';
 import { listarProdutosFiltrados } from '../../../../../services/UsuarioProdutoService';
+import { formatPreco } from '../../../../../utils/formatters';
 
 export default function MenuSearch() {
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [produtos, setProdutos] = useState([]);
     const [showResults, setShowResults] = useState(false);
-    const BRL = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    });
 
     const inputRef = useRef(null);
     const searchProducts = useRef(null);
@@ -113,7 +110,7 @@ export default function MenuSearch() {
                                 />
                                 <h4>{product.nome}</h4>
                             </div>
-                            <p>{BRL.format(product.valorComDesconto)}</p>
+                            <p>{formatPreco(product.valorComDesconto)}</p>
                         </Link>
                     ))}
                 </ul>

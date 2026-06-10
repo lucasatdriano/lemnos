@@ -1,0 +1,193 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.delivery {
+    font-family: $font-items;
+    color: $color-fontDark;
+    background-color: $color-secundaryLight;
+    border-radius: 10px;
+    padding: 15px 0 10px;
+    box-shadow: 4px 4px 10px $color-shadow;
+
+    h4 {
+        font-family: $font-title;
+        font-size: clamp(1.6rem, 1vw, 2rem);
+        padding: 0 1em 0.5em;
+        border-bottom: 2px solid $color-primaryLight;
+    }
+
+    .containerCep {
+        position: relative;
+        padding: clamp(1em, 1.5vw, 2em) clamp(1em, 1.5vw, 2em) 0;
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+
+        .inputCepFormField {
+            position: relative;
+            width: 100%;
+
+            input {
+                height: 2em;
+                width: 100%;
+                border-radius: 5px;
+                text-indent: 10px;
+                font-size: clamp(1.4rem, 0.9vw, 1.8rem);
+                padding: 1em 0;
+                font-weight: 600;
+                font-family: $font-items;
+                background: $color-bgLight;
+                color: $color-fontLight;
+                border: 1px solid $color-primaryLight;
+            }
+
+            .calcDelivery {
+                display: flex;
+                align-items: center;
+                gap: 0.5em;
+                position: absolute;
+                height: 100%;
+                right: 0;
+                top: 0;
+                font-size: clamp(1.2rem, 0.9vw, 1.8rem);
+                padding: 1em;
+                border: 1px solid $color-primaryLight;
+                background-color: $color-primaryLight;
+                color: $color-fontLight;
+                font-family: $font-items;
+                font-weight: 600;
+                border-radius: 0 5px 5px 0;
+                cursor: pointer;
+                transition: 0.5s ease;
+
+                &:hover {
+                    filter: brightness(0.95);
+                    box-shadow: 0 0 10px #4e8581;
+                }
+
+                .icon {
+                    font-size: clamp(1.6rem, 1.5vw, 2.6rem);
+                }
+            }
+        }
+
+        .SearchCep {
+            font-size: clamp(1rem, 0.8vw, 1.4rem);
+            margin: 0.5em 1em;
+            color: $color-primaryLight;
+            transition: all 9s ease;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+
+            &:hover {
+                border-bottom-color: $color-primaryLight;
+            }
+        }
+    }
+
+    .deliveryOption {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5em;
+        padding: 0.5em clamp(1em, 1.5vw, 2em);
+        font-size: clamp(1.2rem, 0.9vw, 1.6rem);
+
+        .deliveryOptionInfo {
+            display: flex;
+            gap: 1em;
+            align-items: center;
+
+            .inputRadioCep {
+                appearance: none;
+                width: clamp(12px, 1vw, 16px);
+                height: clamp(12px, 1vw, 16px);
+                aspect-ratio: 1/1;
+                border-radius: 50%;
+                background-color: $color-bgLight;
+                border: clamp(1.5px, 0.08vw, 2px) solid $color-primaryLight;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:checked {
+                    background-color: $color-primaryLight;
+                    border: clamp(1.5px, 0.08vw, 2px) solid $color-bgLight;
+                    box-shadow: 0 0 0 clamp(1px, 0.08vw, 2px)
+                        $color-primaryLight;
+                }
+            }
+        }
+    }
+}
+
+.dark {
+    .delivery {
+        box-shadow: 0 0 15px #141414a8;
+        background-color: $color-secundaryDark;
+
+        h4 {
+            border-bottom: 2px solid $color-primaryDark;
+        }
+
+        .containerCep {
+            input {
+                border: 1px solid $color-primaryDark;
+            }
+
+            .calcDelivery {
+                border: 1px solid $color-primaryDark;
+                background-color: $color-primaryDark;
+
+                &:hover {
+                    box-shadow: 0 0 10px #3e706d;
+                }
+            }
+
+            .SearchCep {
+                color: $color-primaryDark;
+
+                &:hover {
+                    border-bottom-color: $color-primaryDark;
+                }
+            }
+        }
+
+        .deliveryOption {
+            .deliveryOptionInfo {
+                .inputRadioCep {
+                    border: clamp(1.5px, 0.08vw, 2px) solid $color-primaryDark;
+
+                    &:checked {
+                        background-color: $color-primaryDark;
+                        border: clamp(1.5px, 0.08vw, 2px) solid $color-bgLight;
+                        box-shadow: 0 0 0 clamp(1px, 0.08vw, 2px)
+                            $color-primaryDark;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+}

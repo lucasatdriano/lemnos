@@ -39,11 +39,14 @@ export default function UserProfileForm({ form, editing, onChange, onSave }) {
             </div>
 
             <div className="containerButtons">
-                <div className="updateButtons">
-                    <button type="button" disabled={!editing} onClick={onSave}>
-                        Salvar Alterações
-                    </button>
-                </div>
+                <button
+                    type="button"
+                    className="updateButton"
+                    disabled={!editing}
+                    onClick={onSave}
+                >
+                    Salvar Alterações
+                </button>
             </div>
         </div>
     );

@@ -21,332 +21,105 @@ $font-web: 'Roboto Flex', Arial;
 $font-items: 'Poppins', Helvetica;
 
 main {
-    .titleContainers {
-        display: flex;
-        align-items: center;
-        gap: 1em;
-        padding: 0.5em 1em;
-
-        .iconOrder {
-            width: 42px;
-            height: 42px;
-        }
-
-        h3 {
-            font-size: 2.6rem;
-            font-family: $font-title;
-        }
-    }
-
-    .hrTitle {
-        width: 100%;
-        border: 2px solid $color-primaryLight;
-    }
-
-    .statusPay {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1em;
-        width: calc(90vw);
-        height: 3em;
-        gap: 1em;
-        background: transparent;
-
-        .status {
-            display: flex;
-            align-items: center;
-            gap: 0.5em;
-
-            .iconStatus {
-                width: 24px;
-                height: 24px;
-                color: $color-primaryLight;
-            }
-
-            p {
-                font-size: 2rem;
-                color: $color-primaryLight;
-            }
-        }
-
-        span {
-            height: 3px;
-            width: 3em;
-            background: $color-primaryLight;
-        }
-
-        .waitingStatus {
-            display: flex;
-            align-items: center;
-            gap: 0.5em;
-
-            .iconStatus {
-                width: 24px;
-                height: 24px;
-                color: gray;
-            }
-
-            p {
-                font-size: 2rem;
-                color: gray;
-            }
-        }
-
-        .spanWaiting {
-            height: 3px;
-            width: 3em;
-            background: #acaaaa;
-        }
-    }
-
     .sectionPayment {
+        flex: 2;
         display: flex;
         justify-content: center;
-        width: 100%;
-        gap: 3em;
+        gap: 2em;
 
         .containerOptionsPay {
-            max-height: 35em;
+            flex: 2;
+            width: 75%;
+            max-height: 75svh;
             display: flex;
+            flex-direction: column;
             background: $color-bgLight;
-            box-shadow: 0 0 10px $color-shadow;
-            padding: 3em 2em 2em;
+            box-shadow: 0 0 5px $color-shadow;
+            padding: 1em;
             border-radius: 15px;
             position: relative;
-            gap: 2em;
+            gap: 1em;
             text-align: center;
 
             .titlePay {
-                white-space: nowrap;
                 font-family: $font-title;
-                position: absolute;
-                top: 10px;
-                left: 50%;
-                transform: translateX(-50%);
                 font-size: 2rem;
+                font-weight: 500;
             }
 
-            .optionPay {
-                width: 15vw;
-                height: 30em;
+            .optionsContainer {
+                display: flex;
+                height: 100%;
+                justify-content: center;
+                gap: 1em;
+                flex-wrap: wrap;
+            }
+        }
+
+        .paymentSidebar {
+            flex: 1;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1em;
+
+            .registrationCPF {
+                margin-top: 1em;
+                padding: 1em 0;
                 background: $color-bgLight;
                 border-radius: 15px;
-                position: relative;
+                box-shadow: 0 0 10px $color-shadow;
 
-                input[type='radio'] {
-                    appearance: none;
-
-                    &:checked ~ label {
-                        box-shadow: 0 0 10px $color-primaryLight;
-                        border: 1px solid $color-primaryLight;
-                    }
+                h4 {
+                    padding: 0 1em;
+                    font-size: 2.6rem;
                 }
 
-                label {
-                    font-family: $font-items;
+                .hrCPF {
+                    border: 2px solid $color-primaryLight;
+                }
+
+                .inputCpf {
                     display: flex;
-                    align-items: center;
                     flex-direction: column;
-                    gap: 2em;
-                    padding: 2em;
-                    width: 100%;
-                    height: 100%;
-                    border-radius: 15px;
-                    position: absolute;
-                    box-shadow: 0 0 10px $color-shadow;
-                    left: 50%;
-                    top: 0;
-                    transform: translateX(-50%);
-                    transition: 0.2s ease;
-                    cursor: pointer;
+                    gap: 1em;
+                    align-items: center;
+                    margin: 1.5em auto 0;
+                    width: clamp(15em, 50% + 50%, 90%);
 
-                    .iconPayment {
+                    input {
+                        height: 2.5em;
                         width: 100%;
-                        height: 50%;
-                        max-width: 196px;
-                        max-height: 196px;
-                    }
-
-                    h3 {
-                        font-size: 3rem;
-                    }
-
-                    p {
+                        border-radius: 10px;
+                        text-indent: 10px;
                         font-size: 2rem;
+                        font-weight: 600;
+                        font-family: $font-items;
+                        background: $color-bgLight;
+                        color: $color-fontLight;
+                        box-shadow: 0 0 10px $color-shadow;
+                    }
 
-                        span {
-                            font-weight: 600;
-                            color: $color-primaryLight;
-                            font-size: 2.8rem;
+                    .saveCpf {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5em;
+                        font-size: clamp(2rem, 1rem + 1vw, 2.2rem);
+                        padding: 0.5em 1em;
+                        border: 1px solid $color-primaryLight;
+                        background-color: $color-primaryLight;
+                        color: $color-fontLight;
+                        font-family: $font-items;
+                        font-weight: 600;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        transition: 0.3s ease;
+
+                        &:hover {
+                            filter: brightness(0.95);
+                            box-shadow: 0 0 10px #4e8581;
                         }
                     }
-                }
-            }
-        }
-
-        .orderSummary {
-            width: 25vw;
-            min-width: 28em;
-            height: 30em;
-            position: relative;
-            background: $color-bgLight;
-            box-shadow: 4px 4px 15px $color-shadow;
-            border-radius: 15px;
-            display: flex;
-            font-family: $font-items;
-            flex-direction: column;
-
-            .lineOrder {
-                padding: 0.5em 1em;
-                font-size: 2.4rem;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-
-                .discount {
-                    color: $color-detailsLight;
-                }
-            }
-
-            h2 {
-                position: absolute;
-                top: 70%;
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 4rem;
-                color: $color-primaryLight;
-            }
-
-            .confirmOrder {
-                font-family: $font-title;
-                position: absolute;
-                text-transform: uppercase;
-                font-weight: 600;
-                font-size: 2.4rem;
-                bottom: 0;
-                border: none;
-                outline: none;
-                font-size: 2rem;
-                margin-top: 1em;
-                width: 100%;
-                flex-grow: 1;
-                padding: 1em;
-                border-radius: 0 0 15px 15px;
-                cursor: pointer;
-                background: $color-primaryLight;
-                transition: 0.3s ease;
-
-                &:hover {
-                    filter: brightness(0.95);
-                    box-shadow: 0 0 10px #4e8581;
-                }
-            }
-        }
-
-        .registrationCPF {
-            margin-top: 1em;
-            padding: 1em 0;
-            background: $color-bgLight;
-            border-radius: 15px;
-            box-shadow: 0 0 10px $color-shadow;
-
-            h4 {
-                padding: 0 1em;
-                font-size: 2.6rem;
-            }
-
-            .hrCPF {
-                border: 2px solid $color-primaryLight;
-            }
-
-            .inputCpf {
-                display: flex;
-                flex-direction: column;
-                gap: 1em;
-                align-items: center;
-                margin: 1.5em auto 0;
-                width: clamp(15em, 50% + 50%, 90%);
-
-                input {
-                    height: 2.5em;
-                    width: 100%;
-                    border-radius: 10px;
-                    text-indent: 10px;
-                    font-size: 2rem;
-                    font-weight: 600;
-                    font-family: $font-items;
-                    background: $color-bgLight;
-                    color: $color-fontLight;
-                    box-shadow: 0 0 10px $color-shadow;
-                }
-
-                .saveCpf {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5em;
-                    font-size: clamp(2rem, 1rem + 1vw, 2.2rem);
-                    padding: 0.5em 1em;
-                    border: 1px solid $color-primaryLight;
-                    background-color: $color-primaryLight;
-                    color: $color-fontLight;
-                    font-family: $font-items;
-                    font-weight: 600;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    transition: 0.3s ease;
-
-                    &:hover {
-                        filter: brightness(0.95);
-                        box-shadow: 0 0 10px #4e8581;
-                    }
-                }
-            }
-        }
-
-        .containerAddress {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 1em;
-            padding: 2em 0;
-            background: $color-bgLight;
-            border-radius: 15px;
-            box-shadow: 0 0 10px $color-shadow;
-
-            .textAddress {
-                font-size: 2rem;
-            }
-
-            select {
-                font-family: $font-items;
-                cursor: pointer;
-                margin: 1em 0;
-                width: 15em;
-                padding: 0.5em;
-                max-width: 20vw;
-                max-height: 2.75em;
-                box-shadow: 2px 2px 10px $color-shadow;
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                font-size: 1.8rem;
-                background-color: $color-fontDark;
-                transition: border-color 0.3s ease;
-
-                &:hover {
-                    border-color: #888;
-                }
-
-                &:focus {
-                    outline: none;
-                    border-color: #555;
-                }
-
-                option {
-                    cursor: pointer;
-                    background-color: $color-fontDark;
-                    font-size: 1.8rem;
                 }
             }
         }
@@ -359,51 +132,10 @@ main {
             border: 2px solid $color-primaryDark;
         }
 
-        .statusPay {
-            .status {
-                .iconStatus {
-                    color: $color-primaryDark;
-                }
-
-                p {
-                    color: $color-primaryDark;
-                }
-            }
-
-            span {
-                background: $color-primaryDark;
-            }
-
-            .spanWaiting {
-                background: #8d8a8a;
-            }
-        }
-
         .sectionPayment {
             .containerOptionsPay {
                 background: #72757478;
                 box-shadow: 0 0 15px #141414a8;
-
-                .optionPay {
-                    background-color: #72757478;
-
-                    input[type='radio'] {
-                        &:checked ~ label {
-                            box-shadow: 0 0 10px $color-primaryDark;
-                            border: 1px solid $color-primaryDark;
-                        }
-                    }
-
-                    label {
-                        box-shadow: 0 0 1px #141414a8;
-
-                        p {
-                            span {
-                                color: $color-primaryDark;
-                            }
-                        }
-                    }
-                }
             }
 
             .orderSummary {
@@ -458,11 +190,11 @@ main {
             .containerAddress {
                 background-color: #72757478;
                 box-shadow: 0 0 15px #141414a8;
-    
+
                 select {
                     box-shadow: 0 0 15px #141414a8;
                     border: 1px solid #ccc;
-    
+
                     option {
                         cursor: pointer;
                         background-color: $color-fontDark;
@@ -473,108 +205,122 @@ main {
     }
 }
 
-@media only screen and (max-width: 1320px) {
+@media only screen and (max-width: 1100px) {
+    main {
+        .sectionPayment {
+            .containerOptionsPay {
+                flex: 1.5;
+                width: 100%;
+                max-height: fit-content;
+
+                .optionsContainer {
+                    flex-direction: column;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 900px) {
     main {
         .sectionPayment {
             flex-direction: column;
             align-items: center;
-            gap: 2em;
+            gap: 1em;
 
-            .containerOptionsPay {
-                .optionPay {
-                    min-width: 15em;
-                }
+            .paymentSidebar {
+                flex-direction: row;
             }
         }
     }
 }
 
-@media only screen and (max-width: 850px) {
-    main {
-        .sectionPayment {
-            .containerOptionsPay {
-                width: 90vw;
-                flex-direction: column;
+// @media only screen and (max-width: 850px) {
+//     main {
+//         .sectionPayment {
+//             .containerOptionsPay {
+//                 width: 90vw;
+//                 flex-direction: column;
 
-                .optionPay {
-                    width: 100%;
+//                 .optionPay {
+//                     width: 100%;
 
-                    label {
-                        flex-direction: row;
-                        justify-content: space-between;
+//                     label {
+//                         flex-direction: row;
+//                         justify-content: space-between;
 
-                        .iconPayment {
-                            width: 100%;
-                            height: 100%;
-                            max-width: 100px;
-                            max-height: 100px;
-                        }
+//                         .iconPayment {
+//                             width: 100%;
+//                             height: 100%;
+//                             max-width: 100px;
+//                             max-height: 100px;
+//                         }
 
-                        h3 {
-                            font-size: 2.6rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+//                         h3 {
+//                             font-size: 2.6rem;
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
 
-@media only screen and (max-width: 550px) {
-    main {
-        .statusPay {
-            display: none;
-        }
+// @media only screen and (max-width: 550px) {
+//     main {
+//         .statusPay {
+//             display: none;
+//         }
 
-        .sectionPayment {
-            .containerOptionsPay {
-                max-height: 200svh;
-                padding: 5em 2em 2em;
+//         .sectionPayment {
+//             .containerOptionsPay {
+//                 max-height: 200svh;
+//                 padding: 5em 2em 2em;
 
-                .titlePay {
-                    white-space: wrap;
-                    width: 300px;
-                }
+//                 .titlePay {
+//                     white-space: wrap;
+//                     width: 300px;
+//                 }
 
-                .optionPay {
-                    width: 100%;
-                    height: 25em;
+//                 .optionPay {
+//                     width: 100%;
+//                     height: 25em;
 
-                    label {
-                        flex-direction: column;
+//                     label {
+//                         flex-direction: column;
 
-                        .iconPayment {
-                            width: 100%;
-                            height: 100%;
-                            min-width: 100px;
-                            min-height: 100px;
-                        }
-                    }
-                }
-            }
+//                         .iconPayment {
+//                             width: 100%;
+//                             height: 100%;
+//                             min-width: 100px;
+//                             min-height: 100px;
+//                         }
+//                     }
+//                 }
+//             }
 
-            .orderSummary {
-                width: 90vw;
-                min-width: 0;
+//             .orderSummary {
+//                 width: 90vw;
+//                 min-width: 0;
 
-                .lineOrder {
-                    font-size: clamp(2.2rem, 1rem + 1vw, 2.4rem);
-                }
-            }
-        }
-    }
-}
+//                 .lineOrder {
+//                     font-size: clamp(2.2rem, 1rem + 1vw, 2.4rem);
+//                 }
+//             }
+//         }
+//     }
+// }
 
-@media only screen and (max-width: 380px) {
-    main {
-        .sectionPayment {
-            .orderSummary {
-                height: 35em;
+// @media only screen and (max-width: 380px) {
+//     main {
+//         .sectionPayment {
+//             .orderSummary {
+//                 height: 35em;
 
-                h2 {
-                    top: 70%;
-                }
-            }
-        }
-    }
-}
+//                 h2 {
+//                     top: 70%;
+//                 }
+//             }
+//         }
+//     }
+// }

@@ -22,11 +22,10 @@ main {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: -1em auto 0;
 
             h2 {
                 font-family: $font-title;
-                font-size: 3.2rem;
+                font-size: clamp(2.4rem, 2vw, 2.8rem);
                 padding: 0 10px;
             }
 
@@ -143,12 +142,6 @@ main {
 @media only screen and (max-width: 1024px) {
     main {
         .aboutContent {
-            .title {
-                h2 {
-                    font-size: 2.6rem;
-                }
-            }
-
             .content {
                 flex-direction: column-reverse;
                 gap: 1em;

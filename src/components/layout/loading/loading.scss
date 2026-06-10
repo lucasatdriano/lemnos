@@ -133,6 +133,19 @@ $font-items: 'Poppins', Helvetica;
     }
 }
 
+@keyframes pulseLoad {
+    0%,
+    100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 .dark {
     .loadingIndicator {
         box-shadow: 0 0 10px #141414a8;

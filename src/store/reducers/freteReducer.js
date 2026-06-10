@@ -5,6 +5,7 @@ const initialState = {
     custo: 0,
     dataEstimadaEnvio: '',
     prazoEntrega: 0,
+    cep: '',
 };
 
 const freteReducer = (state = initialState, action) => {

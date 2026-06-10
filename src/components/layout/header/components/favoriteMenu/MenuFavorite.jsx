@@ -16,13 +16,10 @@ import { useState, useEffect } from 'react';
 import iconAddCart from '../../../../../assets/icons/iconAddCart.svg';
 import Loading from '../../../loading/Loading';
 import AuthService from '../../../../../services/AuthService';
+import { formatPreco } from '../../../../../utils/formatters';
 
 export default function MenuFavorite({ onClose }) {
     const navigate = useNavigate();
-    const BRL = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    });
     const [favorites, setFavorites] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -155,7 +152,7 @@ export default function MenuFavorite({ onClose }) {
                                             </h2>
                                             {hasDiscount && (
                                                 <p className="offerPrice">
-                                                    {BRL.format(
+                                                    {formatPreco(
                                                         favorite.valorTotal
                                                     )}
                                                 </p>
@@ -163,7 +160,7 @@ export default function MenuFavorite({ onClose }) {
                                             <p className="productPrice">
                                                 À vista <br />
                                                 <span>
-                                                    {BRL.format(
+                                                    {formatPreco(
                                                         favorite.valorComDesconto
                                                     )}
                                                 </span>{' '}

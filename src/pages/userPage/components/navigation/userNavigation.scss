@@ -25,7 +25,7 @@ $font-items: 'Poppins', Helvetica;
         flex: 1;
         display: flex;
 
-        button {
+        .viewButton {
             flex: 1;
             box-shadow: none;
             font-size: 2rem;
@@ -52,7 +52,7 @@ $font-items: 'Poppins', Helvetica;
 .dark {
     .userContent {
         .selectButtons {
-            button {
+            .viewButton {
                 &:last-child {
                     border-left: 2px solid #4e504f;
                 }
@@ -64,7 +64,7 @@ $font-items: 'Poppins', Helvetica;
 @media only screen and (max-width: 900px) {
     .userContainer {
         .selectButtons {
-            button {
+            .viewButton {
                 font-size: 1.8rem;
 
                 &:last-child {
@@ -80,7 +80,7 @@ $font-items: 'Poppins', Helvetica;
         .selectButtons {
             flex-direction: column;
 
-            button {
+            .viewButton {
                 border-bottom: 2px solid #f3faf9de;
                 border-left: none;
 

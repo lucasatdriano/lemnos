@@ -1,0 +1,100 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.statusPay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.5em, 1vw, 1rem);
+    padding-bottom: 1em;
+    background: transparent;
+
+    .statusItem {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        .iconStatus {
+            width: clamp(18px, 1.5vw, 24px);
+            height: clamp(18px, 1.5vw, 24px);
+            color: $color-primaryLight;
+        }
+
+        p {
+            font-size: clamp(1.4rem, 1.5vw, 2rem);
+            color: $color-primaryLight;
+        }
+
+        &.waiting {
+            .iconStatus {
+                color: gray;
+            }
+
+            p {
+                color: gray;
+            }
+        }
+    }
+
+    .line {
+        height: clamp(2px, 0.2vw, 3px);
+        width: clamp(2em, 4vw, 3em);
+        border-radius: 10px;
+        background: $color-primaryLight;
+
+        &.waiting {
+            background: gray;
+        }
+    }
+}
+
+.dark {
+    .statusPay {
+        .statusItem {
+            .iconStatus {
+                color: $color-primaryDark;
+            }
+
+            p {
+                color: $color-primaryDark;
+            }
+
+            &.waiting {
+                .iconStatus {
+                    color: #aaa;
+                }
+
+                p {
+                    color: #aaa;
+                }
+            }
+        }
+
+        .line {
+            background: $color-primaryDark;
+
+            &.waiting {
+                background: #aaa;
+            }
+        }
+    }
+}

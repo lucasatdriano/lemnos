@@ -1,0 +1,76 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.personalData {
+    background: $color-bgLight;
+    box-shadow: 4px 4px 15px $color-shadow;
+    border-radius: 15px;
+    overflow: hidden;
+
+    .dataContainer {
+        display: flex;
+
+        .personalContainer,
+        .enderecoContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            padding: 0.5em 1.5em 1.5em;
+            font-size: 1.6rem;
+
+            .titleData {
+                text-indent: 1.5em;
+                font-size: 1.8rem;
+            }
+
+            .dataPerson,
+            .dataEnd {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5em;
+                height: fit-content;
+
+                p {
+                    flex: 1 1 calc(50% - 1em);
+                    min-width: 200px;
+                }
+            }
+
+            &:not(:last-child) {
+                border-right: 2px solid $color-primaryLight;
+            }
+        }
+    }
+}
+
+.dark {
+    .personalData {
+        background-color: #72757478;
+        box-shadow: 0 0 15px #141414a8;
+
+        .dataContainer {
+            &:not(:last-child) {
+                border-right: 2px solid $color-primaryDark;
+            }
+        }
+    }
+}

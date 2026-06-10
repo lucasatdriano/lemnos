@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import './admin.scss';
 
 export default function AdminSection({
     title,

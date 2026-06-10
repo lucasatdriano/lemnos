@@ -109,8 +109,10 @@ header {
                 position: absolute;
                 right: 2px;
                 top: -5px;
+                width: 20px;
+                height: 20px;
+                aspect-ratio: 1/1;
                 font-size: 1.4rem;
-                padding: 1px 6px;
                 font-weight: 600;
                 background-color: $color-primaryLight;
                 border-radius: 50%;
@@ -165,7 +167,7 @@ header {
             }
 
             .menuDesktop {
-                gap: 0;
+                gap: 0.5em;
 
                 .favIcon,
                 .userIcon {
@@ -215,9 +217,9 @@ header {
 
                 .spanCarrinhoLength {
                     font-size: 1.2rem;
-                    padding: 1px 6px;
+                    width: 18px;
+                    height: 18px;
                     right: -6px;
-                    top: -5px;
                 }
 
                 .userImg {
@@ -266,31 +268,11 @@ header {
 
         &.shrink {
             .menuDesktop {
+                gap: 0.25em;
+
                 .cartIcon {
                     height: 24px;
                     width: 24px;
-                }
-
-                .spanCarrinhoLength {
-                    font-size: 1.2rem;
-                    width: 18px;
-                    height: 18px;
-                    right: -6px;
-                    top: -6px;
-                }
-            }
-        }
-    }
-}
-
-@media only screen and (max-width: 450px) {
-    header {
-        &.shrink {
-            .searchContainer {
-                .searchResults {
-                    top: 95%;
-                    transform: translateX(-52%);
-                    min-width: 90svw;
                 }
             }
         }

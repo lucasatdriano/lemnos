@@ -1,0 +1,144 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.resumeBuy {
+    font-family: $font-items;
+    color: $color-fontDark;
+    background-color: $color-secundaryLight;
+    border-radius: 10px;
+    padding: clamp(6px, 2vw, 10px) 0 clamp(2.5em, 4vw, 4em);
+    position: relative;
+    box-shadow: 4px 4px 10px $color-shadow;
+
+    h3 {
+        font-family: $font-title;
+        text-align: center;
+        font-size: clamp(1.8rem, 1.2vw, 2.4rem);
+        padding-bottom: 0.1em;
+        border-bottom: 2px solid $color-primaryLight;
+    }
+
+    .values {
+        display: flex;
+        justify-content: space-between;
+        font-size: clamp(1.6rem, 1.2vw, 2rem);
+        padding: 0.5em 2em;
+
+        &:nth-child(3) {
+            border-bottom: 1px solid $color-bgLight;
+        }
+
+        &:nth-child(4) {
+            border-bottom: 2px solid $color-primaryLight;
+        }
+    }
+
+    .paymentOptions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        padding: 15px;
+        font-size: clamp(1.2rem, 1.2vw, 1.8rem);
+
+        .options {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+
+            .icon {
+                min-width: 28px;
+                font-size: clamp(2.4rem, 2.5vw, 3rem);
+            }
+
+            p {
+                strong {
+                    font-size: clamp(1.6rem, 1.2vw, 2rem);
+                    color: $color-primaryLight;
+                }
+
+                span {
+                    color: $color-primaryLight;
+                }
+            }
+        }
+    }
+
+    .endOrder {
+        text-transform: uppercase;
+        font-weight: 600;
+
+        width: 100%;
+        font-size: clamp(1.6rem, 1vw, 2rem);
+        padding: 0.75em;
+        border-radius: 0 0 10px 10px;
+        border: none;
+        position: absolute;
+        bottom: 0;
+        font-family: $font-title;
+        background: $color-primaryLight;
+        cursor: pointer;
+        transition: 0.5s ease;
+
+        &:hover {
+            filter: brightness(0.95);
+            box-shadow: 0 0 10px #4e8581;
+        }
+    }
+}
+
+.dark {
+    .resumeBuy {
+        box-shadow: 0 0 15px #141414a8;
+        background-color: $color-secundaryDark;
+
+        h3 {
+            border-bottom: 2px solid $color-primaryDark;
+        }
+
+        .values {
+            &:nth-child(4) {
+                border-bottom: 2px solid $color-primaryDark;
+            }
+        }
+
+        .paymentOptions {
+            .options {
+                p {
+                    strong {
+                        color: $color-primaryDark;
+                    }
+                    span {
+                        color: $color-primaryDark;
+                    }
+                }
+            }
+        }
+
+        .endOrder {
+            background: $color-primaryDark;
+
+            &:hover {
+                box-shadow: 0 0 10px #3e706d;
+            }
+        }
+    }
+}

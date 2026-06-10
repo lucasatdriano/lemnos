@@ -1,20 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from 'react';
-import { IoList } from 'react-icons/io5';
-import { HiSquares2X2 } from 'react-icons/hi2';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import DoubleInputRange from '../../components/inputs/doubleInput/DoubleInput';
 import Loading from '../../components/layout/loading/Loading';
 import AuthService from '../../services/AuthService';
-import './productFilter.scss';
 import { listarProdutosFiltrados } from '../../services/UsuarioProdutoService';
 import CardProduct from '../../components/cards/cardProduct/CardProduct';
-
-import {
-    FILTER_BRANDS,
-    FILTER_CATEGORIES,
-    FILTER_SUBCATEGORIES,
-} from '../../constants/filters';
+import FiltersProducts from './components/filtersProducts/FiltersProducts';
+import './productFilter.scss';
 
 export default function ProductFilter() {
     const navigate = useNavigate();
@@ -233,126 +225,17 @@ export default function ProductFilter() {
 
     return (
         <section className="mainFilters">
-            <section className="product-filter-container">
-                <div className="containerAlterFilter">
-                    <p className="containerChecked">
-                        <input
-                            type="radio"
-                            id="listView"
-                            name="view"
-                            checked={cardList}
-                            onChange={() => handleAlterCardsView(true)}
-                        />
-                        <label htmlFor="listView" className="labelIcon">
-                            <IoList className="iconAlter" />
-                        </label>
-                    </p>
+            <FiltersProducts
+                cardList={cardList}
+                handleAlterCardsView={handleAlterCardsView}
+                filters={filters}
+                handleCategoryChange={handleCategoryChange}
+                setFilters={setFilters}
+                calculatedMaxPrice={calculatedMaxPrice}
+                handleProductRating={handleProductRating}
+            />
 
-                    <p className="containerChecked">
-                        <input
-                            type="radio"
-                            id="gridView"
-                            name="view"
-                            checked={!cardList}
-                            onChange={() => handleAlterCardsView(false)}
-                        />
-                        <label htmlFor="gridView" className="labelIcon">
-                            <HiSquares2X2 className="iconAlter" />
-                        </label>
-                    </p>
-                </div>
-
-                <select
-                    value={filters.category}
-                    onChange={handleCategoryChange}
-                >
-                    <option value="">Todas as Categorias</option>
-                    {FILTER_CATEGORIES.map((categoria) => (
-                        <option key={categoria} value={categoria}>
-                            {categoria}
-                        </option>
-                    ))}
-                </select>
-
-                <select
-                    value={filters.subCategory}
-                    onChange={(e) =>
-                        setFilters((prev) => ({
-                            ...prev,
-                            subCategory: e.target.value,
-                        }))
-                    }
-                >
-                    <option value="">Todas as SubCategorias</option>
-                    {FILTER_SUBCATEGORIES[filters.category]?.map(
-                        (subcategoria) => (
-                            <option key={subcategoria} value={subcategoria}>
-                                {subcategoria}
-                            </option>
-                        )
-                    )}
-                </select>
-
-                <select
-                    value={filters.brand}
-                    onChange={(e) =>
-                        setFilters((prev) => ({
-                            ...prev,
-                            brand: e.target.value,
-                        }))
-                    }
-                >
-                    <option value="">Todas as Marcas</option>
-                    {FILTER_BRANDS.map((brand) => (
-                        <option key={brand} value={brand}>
-                            {brand}
-                        </option>
-                    ))}
-                </select>
-
-                <DoubleInputRange
-                    key={filters.maxPrice}
-                    minValue={filters.minPrice}
-                    maxValue={filters.maxPrice}
-                    setMinValue={(minPrice) =>
-                        setFilters((prev) => ({ ...prev, minPrice }))
-                    }
-                    setMaxValue={(maxPrice) =>
-                        setFilters((prev) => ({ ...prev, maxPrice }))
-                    }
-                    maxPrice={calculatedMaxPrice}
-                />
-
-                <div className="ratingFilter">
-                    {[5, 4, 3, 2, 1].map((index) => (
-                        <React.Fragment key={index}>
-                            <input
-                                type="radio"
-                                id={`star-${index}`}
-                                name="star-rating"
-                                value={index}
-                                checked={index === filters.evaluation}
-                                onChange={() => handleProductRating(index)}
-                            />
-                            <label htmlFor={`star-${index}`}>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    className={
-                                        index <= filters.evaluation
-                                            ? 'filled'
-                                            : ''
-                                    }
-                                >
-                                    <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path>
-                                </svg>
-                            </label>
-                        </React.Fragment>
-                    ))}
-                </div>
-            </section>
-
-            <section className="filtered-data-container">
+            <section className="filteredDataContainer">
                 {loading && page === 0 ? (
                     <Loading />
                 ) : (

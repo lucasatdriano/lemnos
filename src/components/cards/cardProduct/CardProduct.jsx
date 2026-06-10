@@ -14,13 +14,11 @@ import {
     desfavoritarProduto,
     listarProdutosFavoritos,
 } from '../../../services/UsuarioProdutoService';
+import { formatPreco } from '../../../utils/formatters';
 
 export default function CardProduct({ produto }) {
     const navigate = useNavigate();
-    const BRL = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    });
+
     const [isFavorite, setIsFavorite] = useState(false);
 
     useEffect(() => {
@@ -142,17 +140,17 @@ export default function CardProduct({ produto }) {
                             <>
                                 {hasDiscount && (
                                     <p className="offerPrice">
-                                        {BRL.format(produto.valorTotal)}
+                                        {formatPreco(produto.valorTotal)}
                                     </p>
                                 )}
                                 <p className="productPrice">
                                     À vista <br />
                                     <span>
                                         {hasDiscount
-                                            ? BRL.format(
+                                            ? formatPreco(
                                                   produto.valorComDesconto
                                               )
-                                            : BRL.format(produto.valorTotal)}
+                                            : formatPreco(produto.valorTotal)}
                                     </span>
                                     <br />
                                     no PIX com 15% de desconto

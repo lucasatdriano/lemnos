@@ -95,8 +95,6 @@ export async function getFuncionarios() {
 
 export async function cadastrarFuncionario(funcionario, tipoEntidade) {
     try {
-        console.log(funcionario);
-
         const response = await axios({
             baseURL: baseUri,
             method: 'POST',
@@ -137,8 +135,6 @@ export async function cadastrarFuncionario(funcionario, tipoEntidade) {
 
 export async function updateFuncionario(funcionario) {
     try {
-        console.log(funcionario);
-
         const response = await axios({
             baseURL: baseUri,
             method: 'PUT',

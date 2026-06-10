@@ -81,16 +81,6 @@ $font-items: 'Poppins', Helvetica;
             gap: 1em;
             width: 100%;
             justify-content: space-evenly;
-
-            .updateButtons {
-                display: flex;
-                flex-direction: column;
-                gap: 2em;
-
-                button {
-                    font-size: 1.8rem;
-                }
-            }
         }
     }
 }

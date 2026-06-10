@@ -334,10 +334,13 @@ $font-items: 'Poppins', Helvetica;
                 background: rgba(0, 0, 0, 0.05);
                 padding: 1em;
                 border-radius: 15px;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5em;
 
                 .specification {
                     display: flex;
-                    gap: 1em;
+                    gap: 0.5em;
                     font-size: clamp(1.3rem, 1.5vw, 1.5rem);
                     flex-wrap: wrap;
                 }

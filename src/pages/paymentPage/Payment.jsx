@@ -1,12 +1,8 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoCart } from 'react-icons/io5';
-import { FaCreditCard, FaRegCreditCard, FaBarcode } from 'react-icons/fa6';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaRegCreditCard, FaBarcode } from 'react-icons/fa6';
 import { BsQrCodeScan } from 'react-icons/bs';
-import { PiFileMagnifyingGlass } from 'react-icons/pi';
 import { toast } from 'react-toastify';
 import { listarCarrinho } from '../../services/UsuarioProdutoService';
 import { getCliente, updateCliente } from '../../services/ClienteService';
@@ -17,14 +13,16 @@ import {
     setDesconto,
     setSelectedPaymentMethod,
 } from '../../store/actions/paymentActions';
+import { setFreteInfo } from '../../store/actions/freteActions';
 import './payment.scss';
 import Loading from '../../components/layout/loading/Loading';
 import { useNavigate } from 'react-router-dom';
-
-const BRL = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-});
+import CheckoutSteps from '../../components/layout/checkoutSteps/CheckoutSteps';
+import OrderSummary from '../../components/layout/orderSummary/OrderSummary';
+import AddressSelector from './components/addressSelector/AddressSelector';
+import PaymentMethodCard from './components/paymentMethodCard/PaymentMethodCard';
+import UnifiedModals from '../../components/modals/UnifiedModals';
+import { formatPreco } from '../../utils/formatters';
 
 export default function PaymentPage() {
     const navigate = useNavigate();
@@ -34,10 +32,16 @@ export default function PaymentPage() {
     const [isCpfRegistered, setIsCpfRegistered] = useState(false);
     const [paymentMethodName, setPaymentMethodName] = useState('');
     const [valorCompra, setValorCompra] = useState(0);
-    const [cliente, setCliente] = useState([]);
+    const [, setCliente] = useState([]);
     const [clienteEndereco, setClienteEndereco] = useState([]);
     const [desconto, setDescontoLocal] = useState(0);
     const [loading, setLoading] = useState(false);
+
+    const [modalState, setModalState] = useState({
+        type: null,
+        mode: null,
+        item: null,
+    });
 
     const selectedAddress = useSelector(
         (state) => state.payment.selectedAddress
@@ -46,6 +50,37 @@ export default function PaymentPage() {
         (state) => state.payment.selectedPaymentMethod
     );
     const Custofrete = useSelector((state) => state.frete.custo);
+    const frete = useSelector((state) => state.frete);
+
+    useEffect(() => {
+        if (!modalState.type && modalState.type === null) {
+            const reloadEnderecos = async () => {
+                try {
+                    const clienteResponse = await getCliente();
+                    setClienteEndereco(clienteResponse.enderecos);
+
+                    if (
+                        clienteResponse.enderecos.length > 0 &&
+                        !selectedAddress?.cep
+                    ) {
+                        dispatch(
+                            setSelectedAddress(clienteResponse.enderecos[0])
+                        );
+                        dispatch(
+                            setFreteInfo({
+                                ...frete,
+                                cep: clienteResponse.enderecos[0].cep,
+                            })
+                        );
+                    }
+                } catch (error) {
+                    console.error('Erro ao recarregar endereços:', error);
+                }
+            };
+
+            reloadEnderecos();
+        }
+    }, [modalState.type]);
 
     async function fetchPagamento() {
         setLoading(true);
@@ -64,6 +99,12 @@ export default function PaymentPage() {
                 setClienteEndereco(clienteResponse.enderecos);
                 if (clienteResponse.enderecos.length > 0) {
                     dispatch(setSelectedAddress(clienteResponse.enderecos[0]));
+                    dispatch(
+                        setFreteInfo({
+                            ...frete,
+                            cep: clienteResponse.enderecos[0].cep,
+                        })
+                    );
                 }
             }
         } catch (error) {
@@ -121,7 +162,7 @@ export default function PaymentPage() {
 
         switch (method) {
             case 'PIX':
-                discount = (valorCompra / 100) * 15;
+                discount = valorCompra * 0.15;
                 methodName = 'PIX';
                 break;
             case 'Crédito':
@@ -129,7 +170,7 @@ export default function PaymentPage() {
                 methodName = 'Crédito';
                 break;
             case 'Boleto':
-                discount = (valorCompra / 100) * 5;
+                discount = valorCompra * 0.05;
                 methodName = 'Boleto';
                 break;
             default:
@@ -153,7 +194,7 @@ export default function PaymentPage() {
             return;
         }
 
-        if (!selectedAddress.cep) {
+        if (!selectedAddress?.cep) {
             toast.warning('Por favor, selecione um endereço de entrega.');
             return;
         }
@@ -167,7 +208,55 @@ export default function PaymentPage() {
             (endereco) => endereco.cep === e.target.value
         );
         dispatch(setSelectedAddress(enderecoSelecionado));
+
+        dispatch(
+            setFreteInfo({
+                ...frete,
+                cep: enderecoSelecionado.cep,
+            })
+        );
     };
+
+    const openModal = (type, mode, item = null) => {
+        setModalState({ type, mode, item });
+    };
+
+    const closeModal = () => {
+        setModalState({ type: null, mode: null, item: null });
+    };
+
+    const handleSelectFromList = async (type, endereco) => {
+        if (type === 'endereco' && endereco) {
+            try {
+                const clienteResponse = await getCliente();
+                setClienteEndereco(clienteResponse.enderecos);
+
+                dispatch(setSelectedAddress(endereco));
+
+                dispatch(
+                    setFreteInfo({
+                        ...frete,
+                        cep: endereco.cep,
+                    })
+                );
+
+                toast.success('Endereço selecionado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao atualizar endereços:', error);
+                toast.error('Erro ao selecionar endereço');
+            }
+        }
+        closeModal();
+    };
+
+    const getTotalComFrete = (discountPercent) => {
+        const valorComDesconto = valorCompra - valorCompra * discountPercent;
+        return valorComDesconto + Custofrete;
+    };
+
+    const totalPix = getTotalComFrete(0.15);
+    const totalCredito = valorCompra + Custofrete;
+    const totalBoleto = getTotalComFrete(0.05);
 
     return (
         <main>
@@ -175,136 +264,72 @@ export default function PaymentPage() {
                 <Loading />
             ) : (
                 <>
-                    <div className="statusPay">
-                        <div className="status">
-                            <IoCart className="iconStatus" />
-                            <p>Carrinho</p>
-                        </div>
-                        <span></span>
-                        <div className="status">
-                            <FaCreditCard className="iconStatus" />
-                            <p>Pagamento</p>
-                        </div>
-                        <span className="spanWaiting"></span>
-                        <div className="waitingStatus">
-                            <FaCheckCircle className="iconStatus" />
-                            <p>Confirmação</p>
-                        </div>
-                    </div>
+                    <CheckoutSteps currentStep="pagamento" />
+
                     <section className="sectionPayment">
                         <div className="containerOptionsPay">
                             <p className="titlePay">
                                 Selecione um método de pagamento:
                             </p>
-                            <div key="pix" className="optionPay">
-                                <input
-                                    type="radio"
-                                    name="cbPay"
+
+                            <div className="optionsContainer">
+                                <PaymentMethodCard
                                     id="cbPix"
                                     value="PIX"
+                                    title="Pagar no PIX"
+                                    icon={BsQrCodeScan}
+                                    total={totalPix}
+                                    productValue={
+                                        valorCompra - valorCompra * 0.15
+                                    }
+                                    freight={Custofrete}
+                                    badge="15% de desconto no produto"
                                     onChange={handlePaymentSelection}
                                 />
-                                <label htmlFor="cbPix" className="labelPay">
-                                    <BsQrCodeScan className="iconPayment" />
-                                    <h3>Pagar no PIX</h3>
-                                    <p>
-                                        <span>
-                                            {BRL.format(
-                                                valorCompra -
-                                                    (valorCompra / 100) * 15
-                                            )}
-                                        </span>
-                                        <br />
-                                        Em até 15% de desconto
-                                    </p>
-                                </label>
-                            </div>
-                            <div key="credito" className="optionPay">
-                                <input
-                                    type="radio"
-                                    name="cbPay"
+
+                                <PaymentMethodCard
                                     id="cbCredito"
                                     value="Crédito"
+                                    title="Pagar no Crédito"
+                                    icon={FaRegCreditCard}
+                                    total={totalCredito}
+                                    productValue={valorCompra}
+                                    freight={Custofrete}
+                                    installment={`12x de ${formatPreco(totalCredito / 12)} sem juros`}
                                     onChange={handlePaymentSelection}
                                 />
-                                <label htmlFor="cbCredito" className="labelPay">
-                                    <FaRegCreditCard className="iconPayment" />
-                                    <h3>Pagar no Crédito</h3>
-                                    <p>
-                                        <span>{BRL.format(valorCompra)}</span>{' '}
-                                        <br />
-                                        Em até 12x sem juros
-                                    </p>
-                                </label>
-                            </div>
-                            <div key="boleto" className="optionPay">
-                                <input
-                                    type="radio"
-                                    name="cbPay"
+
+                                <PaymentMethodCard
                                     id="cbBoleto"
                                     value="Boleto"
+                                    title="Pagar no Boleto"
+                                    icon={FaBarcode}
+                                    total={totalBoleto}
+                                    productValue={
+                                        valorCompra - valorCompra * 0.05
+                                    }
+                                    freight={Custofrete}
+                                    badge="5% de desconto no produto"
                                     onChange={handlePaymentSelection}
                                 />
-                                <label htmlFor="cbBoleto" className="labelPay">
-                                    <FaBarcode className="iconPayment" />
-                                    <h3>Pagar no Boleto</h3>
-                                    <p>
-                                        <span>
-                                            {BRL.format(
-                                                valorCompra -
-                                                    (valorCompra / 100) * 5
-                                            )}
-                                        </span>
-                                        <br />
-                                        Em até 5% de desconto
-                                    </p>
-                                </label>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="orderSummary">
-                                <div className="titleContainers">
-                                    <PiFileMagnifyingGlass className="iconOrder" />
-                                    <h3>Resumo</h3>
-                                </div>
-                                <hr className="hrTitle" />
-                                <div className="dataResume">
-                                    <div className="lineOrder">
-                                        <p>Valor do Produto:</p>
-                                        <p>{BRL.format(valorCompra)}</p>
-                                    </div>
-                                    <hr className="hrResume" />
-                                    <div className="lineOrder">
-                                        <p>Desconto:</p>
-                                        <p className="discount">
-                                            -{BRL.format(desconto)}
-                                        </p>
-                                    </div>
-                                    <hr className="hrResume" />
-                                    <div className="lineOrder">
-                                        <p>Frete:</p>
-                                        <p>{BRL.format(Custofrete)}</p>
-                                    </div>
-                                    <hr className="hrResume" />
-                                    <div className="lineOrder">
-                                        <p>Forma de Pagamento:</p>
-                                        <p>{paymentMethodName}</p>
-                                    </div>
-                                    <hr className="hrResume" />
-                                    <h2>
-                                        {BRL.format(
-                                            valorCompra - desconto + Custofrete
-                                        )}
-                                    </h2>
-                                    <button
-                                        className="confirmOrder"
-                                        onClick={handleConfirmOrder}
-                                    >
-                                        Finalizar Pedido
-                                    </button>
-                                </div>
-                            </div>
+                        <div className="paymentSidebar">
+                            <OrderSummary
+                                valorCompra={valorCompra}
+                                desconto={desconto}
+                                frete={Custofrete}
+                                paymentMethodName={paymentMethodName}
+                                onConfirm={handleConfirmOrder}
+                            />
+
+                            <AddressSelector
+                                addresses={clienteEndereco}
+                                selectedAddress={selectedAddress}
+                                onChange={handleAddressChange}
+                                onOpenModal={() => openModal('endereco', 'add')}
+                            />
 
                             {!isCpfRegistered && (
                                 <div className="registrationCPF">
@@ -330,37 +355,19 @@ export default function PaymentPage() {
                                     </div>
                                 </div>
                             )}
-
-                            <div className="containerAddress">
-                                {clienteEndereco.length === 0 ? (
-                                    <p className="textAddress">
-                                        Nenhum endereço cadastrado
-                                    </p>
-                                ) : (
-                                    <>
-                                        <p className="textAddress">
-                                            Selecione o Endereço de Entrega
-                                        </p>
-                                        <select
-                                            value={selectedAddress.cep}
-                                            onChange={handleAddressChange}
-                                        >
-                                            {clienteEndereco.map(
-                                                (endereco, index) => (
-                                                    <option
-                                                        key={index}
-                                                        value={endereco.cep}
-                                                    >
-                                                        {`${endereco.cep} - ${endereco.logradouro}, ${endereco.numeroLogradouro} - ${endereco.bairro}, ${endereco.cidade} - ${endereco.uf}`}
-                                                    </option>
-                                                )
-                                            )}
-                                        </select>
-                                    </>
-                                )}
-                            </div>
                         </div>
                     </section>
+
+                    {modalState.type && (
+                        <UnifiedModals
+                            openModalType={modalState.type}
+                            modalMode={modalState.mode}
+                            onClose={closeModal}
+                            externalSelectedItem={modalState.item}
+                            onSelectFromList={handleSelectFromList}
+                            externalInicialCep={frete?.cep}
+                        />
+                    )}
                 </>
             )}
         </main>

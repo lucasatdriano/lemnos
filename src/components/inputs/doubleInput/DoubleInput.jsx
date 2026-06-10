@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Range, getTrackBackground } from 'react-range';
 import { toast, ToastContainer } from 'react-toastify';
 import './doubleInput.scss';
+import { formatPreco } from '../../../utils/formatters';
 
 const STEP = 50;
 const MIN = 0;
@@ -14,11 +15,6 @@ export default function DoubleInputRange({
     setMaxValue,
     maxPrice,
 }) {
-    const BRL = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    });
-
     const [values, setValues] = useState([minValue, maxValue]);
 
     useEffect(() => {
@@ -88,7 +84,7 @@ export default function DoubleInputRange({
 
         if (isNaN(maxVal) || maxVal > maxPrice) {
             toast.warning(
-                `O valor máximo não pode ser maior que ${BRL.format(maxPrice)}.`
+                `O valor máximo não pode ser maior que ${formatPreco(maxPrice)}.`
             );
             maxVal = maxPrice;
         } else if (maxVal < minVal) {
@@ -152,7 +148,7 @@ export default function DoubleInputRange({
                             <input
                                 type="text"
                                 className="inputField minInput"
-                                value={BRL.format(values[0])}
+                                value={formatPreco(values[0])}
                                 onChange={handleMinInputChange}
                                 onBlur={handleMinInputBlur}
                                 inputMode="numeric"
@@ -165,7 +161,7 @@ export default function DoubleInputRange({
                             <input
                                 type="text"
                                 className="inputField maxInput"
-                                value={BRL.format(values[1])}
+                                value={formatPreco(values[1])}
                                 onChange={handleMaxInputChange}
                                 onBlur={handleMaxInputBlur}
                                 inputMode="numeric"

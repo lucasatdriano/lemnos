@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import CustomInput from '../../inputs/customInput/Inputs';
 import { IoClose } from 'react-icons/io5';
 import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
@@ -11,9 +11,9 @@ import {
 import AuthService from '../../../services/AuthService';
 import InputError from '../../inputs/inputError/InputError';
 
-export default function EnderecoModal({ onClose }) {
+export default function EnderecoModal({ onClose, initialCep }) {
     const [form, setForm] = useState({
-        cep: '',
+        cep: initialCep || '',
         logradouro: '',
         numeroLogradouro: '',
         complemento: '',
@@ -230,10 +230,19 @@ export default function EnderecoModal({ onClose }) {
                         <InputError error={errors.complemento} />
                     </div>
                 </div>
-                <button type="button" onClick={handleSave}>
+                <button
+                    type="button"
+                    className="addEnderecoButton"
+                    onClick={handleSave}
+                >
                     Salvar
                 </button>
             </div>
         </div>
     );
 }
+
+EnderecoModal.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    initialCep: PropTypes.string,
+};

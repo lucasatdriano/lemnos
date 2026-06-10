@@ -1,0 +1,48 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.shippingInfo {
+    background-color: $color-bgLight;
+    height: fit-content;
+    box-shadow: 4px 4px 15px $color-shadow;
+    border-radius: 15px;
+
+    .shippingContent {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1em;
+        font-size: clamp(1.4rem, 1rem + 1vw, 1.8rem);
+
+        span {
+            color: $color-detailsLight;
+        }
+
+        .shippingTerm {
+            text-indent: 1.5em;
+        }
+
+        .shippingValue {
+            font-weight: 500;
+        }
+    }
+}

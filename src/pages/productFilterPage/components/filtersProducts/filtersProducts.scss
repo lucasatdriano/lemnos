@@ -1,0 +1,195 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.mainFilters {
+    .productFilterContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+        padding: 0 2em;
+        width: auto;
+        max-width: 25em;
+
+        .containerAlterFilter {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+
+            .containerChecked {
+                position: relative;
+                margin-bottom: 2em;
+
+                [id*='View'] {
+                    position: absolute;
+                    opacity: 0;
+                    top: 0;
+                    left: 0;
+                }
+
+                #listView:checked + .labelIcon > .iconAlter {
+                    color: $color-primaryLight;
+                }
+
+                #gridView:checked + .labelIcon > .iconAlter {
+                    color: $color-primaryLight;
+                }
+
+                .iconAlter {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 42px;
+                    height: 42px;
+                    cursor: pointer;
+                    filter: drop-shadow(2px 2px 5px $color-shadow);
+                    transition: 0.2s ease;
+
+                    &:hover {
+                        filter: drop-shadow(2px 2px 10px $color-shadow);
+                    }
+                }
+            }
+        }
+
+        select {
+            font-family: $font-items;
+            cursor: pointer;
+            padding: 0.5em;
+            max-height: 2.75em;
+            box-shadow: 2px 2px 10px $color-shadow;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.6rem;
+            background-color: $color-fontDark;
+            transition: all 0.3s ease;
+
+            &:hover {
+                border-color: #888;
+            }
+
+            &:focus {
+                outline: none;
+                border-color: #555;
+            }
+
+            option {
+                cursor: pointer;
+                background-color: $color-fontDark;
+                font-size: 1.8rem;
+            }
+        }
+
+        .ratingFilter {
+            filter: drop-shadow(2px 2px 8px $color-shadow);
+            display: flex;
+            justify-content: center;
+            flex-direction: row-reverse;
+            gap: 0.3rem;
+            --stroke: #666;
+
+            input {
+                appearance: none;
+            }
+
+            label {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            svg {
+                width: 32px;
+                height: 32px;
+                overflow: visible;
+                fill: transparent;
+                stroke: var(--stroke);
+                stroke-linejoin: bevel;
+                transition:
+                    stroke 0.2s,
+                    fill 0.5s;
+            }
+
+            label:hover svg {
+                stroke: $color-primaryLight;
+            }
+
+            input:checked ~ label svg {
+                transition: 0s;
+                animation:
+                    idle 4s linear infinite,
+                    yippee 0.75s backwards;
+                fill: $color-primaryLight;
+                stroke: $color-primaryLight;
+                stroke-opacity: 0;
+                stroke-dasharray: 0;
+                stroke-linejoin: miter;
+                stroke-width: 8px;
+            }
+        }
+    }
+}
+
+.dark {
+    .mainFilters {
+        .productFilterContainer {
+            select {
+                box-shadow: 0 0 15px #14141454;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .mainFilters {
+        .productFilterContainer {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            padding: 0;
+            padding-bottom: 3em;
+            max-width: 100%;
+            gap: 2em;
+
+            .containerAlterFilter,
+            .ratingFilter {
+                grid-column: span 2;
+            }
+
+            select {
+                flex: 1;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 860px) {
+    .mainFilters {
+        .productFilterContainer {
+            grid-template-columns: 1fr;
+
+            .containerAlterFilter,
+            .ratingFilter {
+                grid-column: span 1;
+            }
+        }
+    }
+}

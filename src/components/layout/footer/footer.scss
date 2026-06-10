@@ -46,14 +46,14 @@ footer {
             gap: 5em;
 
             h3 {
-                font-size: 2rem;
+                font-size: clamp(1.6rem, 1rem + 1vw, 2rem);
                 text-transform: uppercase;
             }
 
             li {
                 a {
                     color: #f6fefd9f;
-                    font-size: clamp(1.6rem, 1rem + 1vw, 1.8rem);
+                    font-size: clamp(1.4rem, 0.8rem + 1vw, 1.8rem);
                     margin: 0 0 2px 5px;
                     transition: 0.2s ease;
 
@@ -142,7 +142,7 @@ footer {
 
 @media only screen and (max-width: 800px) {
     footer {
-        padding-top: 5em;
+        padding-top: 3em;
 
         #footerContent {
             .navLinks {
@@ -160,7 +160,7 @@ footer {
 
 @media only screen and (max-width: 500px) {
     footer {
-        padding-top: 9em;
+        padding-top: 5em;
         margin-top: 2em;
 
         #footerContent {

@@ -15,8 +15,7 @@ $color-fontLight: #121717;
 
 $color-shadow: #12171740;
 
-// $font-title: 'Merriweather Sans', sans-serif;
-$font-title: "Audiowide", serif;
+$font-title: 'Merriweather Sans', sans-serif;
 $font-web: 'Roboto Flex', Arial;
 $font-items: 'Poppins', Helvetica;
 
@@ -84,11 +83,8 @@ $font-items: 'Poppins', Helvetica;
         }
 
         .logoMenu {
-            width: 100%;
-            max-width: 7.5em;
+            max-width: 10em;
             height: 100%;
-            padding: 15% 0;
-            scale: 1.5;
             filter: drop-shadow(4px 4px 4px $color-shadow);
         }
 
@@ -114,7 +110,6 @@ $font-items: 'Poppins', Helvetica;
             .filterDeps {
                 padding-inline: 10px 5em;
                 display: flex;
-                justify-content: center;
                 width: 100%;
                 padding-block: 8px;
                 color: $color-fontDark;
@@ -142,7 +137,6 @@ $font-items: 'Poppins', Helvetica;
 
                 .link {
                     display: flex;
-                    justify-content: center;
                     gap: 0.5em;
                     align-items: center;
                     padding: 10px 10px 5px;
@@ -252,8 +246,7 @@ $font-items: 'Poppins', Helvetica;
     .menuCat {
         .menu {
             .logoMenu {
-                width: clamp(4em, 4em + 10vw, 4.5em);
-                height: clamp(4em, 4em + 10vh, 4.5em);
+                max-width: 8em;
             }
         }
     }

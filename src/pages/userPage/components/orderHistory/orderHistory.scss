@@ -79,7 +79,8 @@ $font-items: 'Poppins', Helvetica;
 
             .orderDetails {
                 display: flex;
-                justify-content: space-evenly;
+                justify-content: space-between;
+                padding-inline: 1.5em;
                 text-align: center;
 
                 p {

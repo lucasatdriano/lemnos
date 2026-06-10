@@ -7,9 +7,9 @@ export default function UserNavigation({ view, setView, isAdmin, isCliente }) {
             {!isAdmin && (
                 <button
                     type="button"
-                    className={`btnView ${
+                    className={`${
                         view === 'endereco' ? 'selected' : ''
-                    }`}
+                    } viewButton`}
                     onClick={() => setView('endereco')}
                 >
                     Endereços
@@ -18,9 +18,9 @@ export default function UserNavigation({ view, setView, isAdmin, isCliente }) {
 
             <button
                 type="button"
-                className={`btnView ${
+                className={`${
                     view === 'fornecedores' ? 'selected' : ''
-                }`}
+                } viewButton`}
                 onClick={() => setView(isCliente ? 'pedidos' : 'fornecedores')}
             >
                 {isCliente ? 'Pedidos' : 'Fornecedores'}
@@ -29,9 +29,9 @@ export default function UserNavigation({ view, setView, isAdmin, isCliente }) {
             {isAdmin && (
                 <button
                     type="button"
-                    className={`btnView ${
+                    className={`${
                         view === 'funcionarios' ? 'selected' : ''
-                    }`}
+                    } viewButton`}
                     onClick={() => setView('funcionarios')}
                 >
                     Funcionários
@@ -41,9 +41,9 @@ export default function UserNavigation({ view, setView, isAdmin, isCliente }) {
             {!isCliente && (
                 <button
                     type="button"
-                    className={`btnView ${
+                    className={`${
                         view === 'produtos' ? 'selected' : ''
-                    }`}
+                    } viewButton`}
                     onClick={() => setView('produtos')}
                 >
                     Produtos

@@ -1,0 +1,69 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.loadingOrder {
+    height: auto;
+    padding: clamp(1.5em, 2vw, 2.5em);
+    background: $color-bgLight;
+    border-radius: 15px;
+    box-shadow: 4px 4px 15px $color-shadow;
+
+    .loadingBackground {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        gap: clamp(1em, 2vw, 2em);
+        height: 100%;
+
+        .loadingOrderContent {
+            display: grid;
+            place-items: center;
+            gap: clamp(0.5em, 1vw, 1em);
+
+            .iconLoadingOrder {
+                width: clamp(28px, 2vw, 38px);
+                height: clamp(28px, 2vw, 38px);
+            }
+
+            .statusLoadingOrder {
+                font-weight: 600;
+                font-size: clamp(1.4rem, 1vw, 1.6rem);
+            }
+        }
+    }
+}
+
+.dark {
+    .loadingOrder {
+        background-color: #72757478;
+        box-shadow: 0 0 15px #141414a8;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .loadingOrder {
+        .loadingBackground {
+            flex-direction: column;
+        }
+    }
+}

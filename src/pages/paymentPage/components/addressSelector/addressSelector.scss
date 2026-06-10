@@ -1,0 +1,177 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.containerAddress {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: start;
+    background: $color-bgLight;
+    border-radius: 15px;
+    box-shadow: 0 0 10px $color-shadow;
+    padding-block: 1em;
+    gap: 1em;
+
+    .noAddressContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1em;
+
+        .addAddressButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5em;
+            font-size: 1.8rem;
+            min-width: 12em;
+            padding: 0.5em 1em;
+            border: none;
+            border-radius: 5px;
+            color: $color-fontDark;
+            background: $color-primaryLight;
+            box-shadow: 2px 2px 8px $color-shadow;
+            font-family: $font-web;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.5s ease;
+
+            &:hover {
+                filter: brightness(1.05);
+                box-shadow: 0 0 10px $color-primaryLight;
+            }
+        }
+    }
+
+    .textAddress {
+        padding: 0 1em 0.5em;
+        font-size: clamp(1.6rem, 1vw, 2rem);
+        font-weight: 500;
+        width: 100%;
+        font-family: $font-items;
+        color: $color-fontLight;
+        border-bottom: 2px solid $color-primaryLight;
+    }
+
+    .addressOptionsContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        padding-inline: 1em;
+
+        .addressCard {
+            position: relative;
+            width: 100%;
+
+            input[type='radio'] {
+                position: absolute;
+                opacity: 0;
+                width: 0;
+                height: 0;
+
+                &:checked ~ .addressLabel {
+                    box-shadow: 0 0 10px $color-primaryLight;
+                    border: 1px solid $color-primaryLight;
+                    background-color: rgba(54, 206, 196, 0.05);
+                }
+            }
+
+            .addressLabel {
+                display: block;
+                padding: 1em;
+                background: $color-bgLight;
+                border: 1px solid #e0e0e0;
+                border-radius: 15px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 5px $color-shadow;
+                font-family: $font-items;
+
+                &:hover {
+                    border-color: $color-primaryLight;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 10px $color-shadow;
+                }
+
+                .addressInfo {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5em;
+
+                    .addressMainInfo {
+                        display: flex;
+                        align-items: baseline;
+                        gap: clamp(0.5em, 1vw, 1em);
+                        flex-wrap: wrap;
+
+                        .addressCep {
+                            font-weight: 600;
+                            color: $color-primaryLight;
+                            font-size: clamp(1.4rem, 0.9vw, 1.6rem);
+                            background: rgba(54, 206, 196, 0.1);
+                            padding: 0 0.5em;
+                            border-radius: 8px;
+                            font-family: $font-items;
+                        }
+
+                        .addressStreet {
+                            font-weight: 500;
+                            color: $color-fontLight;
+                            font-size: clamp(1.4rem, 0.9vw, 1.6rem);
+                            font-family: $font-items;
+                        }
+                    }
+
+                    .addressSecondaryInfo {
+                        display: flex;
+                        gap: 0.5em;
+                        flex-wrap: wrap;
+                        font-size: clamp(1.2rem, 0.8vw, 1.4rem);
+                        color: #666;
+                        font-family: $font-items;
+
+                        .addressNeighborhood {
+                            &::after {
+                                content: '•';
+                                margin-left: 0.5em;
+                            }
+                        }
+                    }
+
+                    .addressComplement {
+                        font-size: clamp(1.2rem, 0.8vw, 1.4rem);
+                        color: #666;
+                        font-style: italic;
+                        font-family: $font-items;
+                        margin-top: 0.25em;
+                        padding-top: 0.25em;
+                        border-top: 1px dashed #808080;
+                    }
+                }
+            }
+        }
+    }
+}

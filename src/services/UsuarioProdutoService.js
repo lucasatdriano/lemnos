@@ -227,7 +227,7 @@ export async function getQuantidadeCarrinho() {
 
         if (response.status == 401) {
             AuthService.logout();
-            return
+            return;
         }
         if (response.status !== 200) {
             throw new Error(
@@ -246,7 +246,7 @@ export async function adicionarProdutoCarrinho(produto, qntd) {
         const response = await axios({
             baseURL: baseUri,
             method: 'POST',
-            url: '/carrinho',
+            url: '/carrinho/adicionar',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
                 Authorization: AuthService.getToken(),
@@ -280,8 +280,8 @@ export async function removerProdutoCarrinho(produto, qntd) {
     try {
         const response = await axios({
             baseURL: baseUri,
-            method: 'DELETE',
-            url: '/carrinho',
+            method: 'POST',
+            url: '/carrinho/remover',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
                 Authorization: AuthService.getToken(),

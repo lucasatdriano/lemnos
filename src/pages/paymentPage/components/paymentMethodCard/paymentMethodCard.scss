@@ -1,0 +1,257 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.optionPay {
+    flex: 1;
+    background: $color-bgLight;
+    border-radius: 15px;
+    position: relative;
+    transition: all 0.5s ease;
+
+    input[type='radio'] {
+        appearance: none;
+
+        &:checked ~ label {
+            box-shadow: 0 0 10px $color-primaryLight;
+            border: 1px solid $color-primaryLight;
+        }
+    }
+
+    label {
+        font-family: $font-items;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 1.5em;
+        padding: 1.5em;
+        width: 100%;
+        height: 100%;
+        border-radius: 15px;
+        position: absolute;
+        box-shadow: 0 0 10px $color-shadow;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        transition: 0.2s ease;
+        cursor: pointer;
+
+        .iconPayment {
+            width: 100%;
+            height: auto;
+            max-width: clamp(50px, 8vw, 120px);
+            max-height: clamp(50px, 8vw, 120px);
+        }
+
+        .paymentInfo {
+            text-align: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+
+            h3 {
+                font-size: clamp(1.8rem, 1.5vw, 2.4rem);
+            }
+
+            .paymentValues {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1em;
+
+                .mainValue {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    flex-direction: column;
+
+                    .discountValue {
+                        font-weight: 600;
+                        color: $color-primaryLight;
+                        font-size: clamp(1.8rem, 1.4vw, 2.8rem);
+                    }
+
+                    .normalValue {
+                        font-weight: 600;
+                        color: $color-primaryLight;
+                        font-size: clamp(1.8rem, 1.4vw, 2.8rem);
+                    }
+
+                    .freteInfo {
+                        font-size: clamp(1.4rem, 1.2vw, 1.6rem);
+                        color: #666;
+                    }
+                }
+
+                .subValue {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1em;
+
+                    .totalValue {
+                        font-size: clamp(1.6rem, 1.5vw, 2rem);
+                        color: $color-fontLight;
+                        margin-bottom: 0.5rem;
+                        font-weight: 500;
+                    }
+
+                    .discountBadge {
+                        font-size: clamp(1.2rem, 1.2vw, 1.4rem);
+                        color: #2e7d32;
+                        background: #e8f5e9;
+                        padding: 0.5em 1em;
+                        border-radius: 20px;
+                        display: inline-block;
+                    }
+
+                    .installmentInfo {
+                        font-size: clamp(1.2rem, 1.2vw, 1.4rem);
+                        color: #1565c0;
+                        background: #e3f2fd;
+                        padding: 0.5em 1em;
+                        border-radius: 20px;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+
+    &:hover {
+        border-color: $color-primaryLight;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px $color-shadow;
+    }
+}
+
+.dark {
+    .optionPay {
+        background-color: #72757478;
+
+        input[type='radio'] {
+            &:checked ~ label {
+                box-shadow: 0 0 10px $color-primaryDark;
+                border: 1px solid $color-primaryDark;
+            }
+        }
+
+        label {
+            box-shadow: 0 0 1px #141414a8;
+
+            .paymentInfo {
+                .paymentValues {
+                    .mainValue {
+                        .discountValue {
+                            color: $color-primaryDark;
+                        }
+
+                        .normalValue {
+                            color: $color-primaryDark;
+                        }
+
+                        .freteInfo {
+                            color: #ddd;
+                        }
+                    }
+
+                    .subValue {
+                        .totalValue {
+                            color: $color-fontDark;
+                        }
+
+                        .discountBadge {
+                            color: #006f06;
+                            background: #c1ffc6;
+                        }
+
+                        .installmentInfo {
+                            color: #003878;
+                            background: #acdcff;
+                        }
+                    }
+                }
+            }
+        }
+
+        &:hover {
+            border-color: $color-primaryDark;
+            box-shadow: 0 4px 10px #141414a8;
+        }
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .optionPay {
+        min-height: 150px;
+
+        label {
+            flex-direction: row;
+            align-items: center;
+            gap: 1em;
+            padding: 1em;
+
+            .paymentInfo {
+                flex: 1;
+                text-align: left;
+                gap: 0.5em;
+
+                .paymentValues {
+                    gap: 0.5em;
+                    flex-direction: row;
+                    justify-content: space-between;
+
+                    .mainValue {
+                        align-items: flex-start;
+                    }
+
+                    .subValue {
+                        gap: 0.5em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 610px) {
+    .optionPay {
+        min-height: 250px;
+
+        label {
+            flex-direction: column;
+
+            .paymentInfo {
+                text-align: center;
+
+                .paymentValues {
+                    flex-direction: column;
+                    justify-content: center;
+
+                    .mainValue {
+                        align-items: center;
+                    }
+                }
+            }
+        }
+    }
+}

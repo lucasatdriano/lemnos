@@ -67,8 +67,6 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
 
             const loginSuccess = await loginFirebase(googleToken);
 
-            console.log(await result.user.getIdToken());
-            console.log(result.user);
             if (AuthService.isLoggedIn() && loginSuccess) {
                 onLogin();
                 toast.success('Usuário logado');

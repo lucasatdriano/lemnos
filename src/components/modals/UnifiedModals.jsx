@@ -17,6 +17,7 @@ const UnifiedModals = ({
     onClose,
     externalSelectedItem,
     onSelectFromList,
+    externalInicialCep,
 }) => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [currentMode, setCurrentMode] = useState(modalMode);
@@ -95,7 +96,12 @@ const UnifiedModals = ({
                     />
                 );
             case 'endereco':
-                return <EnderecoModal {...commonProps} />;
+                return (
+                    <EnderecoModal
+                        {...commonProps}
+                        initialCep={externalInicialCep}
+                    />
+                );
             default:
                 return null;
         }
@@ -169,6 +175,7 @@ UnifiedModals.propTypes = {
     onClose: PropTypes.func.isRequired,
     externalSelectedItem: PropTypes.object,
     onSelectFromList: PropTypes.func,
+    externalInicialCep: PropTypes.string,
 };
 
 export default UnifiedModals;

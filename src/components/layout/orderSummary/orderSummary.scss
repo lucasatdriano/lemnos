@@ -1,0 +1,98 @@
+$color-primaryLight: #36cec4;
+$color-secundaryLight: #415352;
+$color-terciaryLight: #4aded6;
+$color-detailsLight: #850e5d;
+
+$color-primaryDark: #10a88d;
+$color-secundaryDark: #2d3a3a;
+$color-terciaryDark: #f6fefdcc;
+$color-detailsDark: #c75ea3;
+
+$color-bgLight: #f9fbfb;
+$color-bgDark: #2d2d2d;
+$color-fontDark: #f6fefd;
+$color-fontLight: #121717;
+
+$color-shadow: #12171740;
+$color-card: #f6fefd4d;
+
+$font-title: 'Merriweather Sans', sans-serif;
+$font-web: 'Roboto Flex', Arial;
+$font-items: 'Poppins', Helvetica;
+
+.orderSummary {
+    flex: 1;
+    height: fit-content;
+    position: relative;
+    background: $color-bgLight;
+    box-shadow: 4px 4px 15px $color-shadow;
+    border-radius: 15px;
+    display: flex;
+    font-family: $font-items;
+    flex-direction: column;
+
+    .titleContainers {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        padding: 0.5em 1em;
+        border-bottom: 2px solid $color-primaryLight;
+
+        .iconOrder {
+            width: clamp(32px, 4vw, 36px);
+            height: clamp(32px, 4vw, 36px);
+        }
+
+        h3 {
+            font-weight: 500;
+            font-size: clamp(1.8rem, 1.4vw, 2.2rem);
+            font-family: $font-title;
+        }
+    }
+
+    .lineOrder {
+        padding: 0.5em 1em;
+        font-size: clamp(1.6rem, 1vw, 2rem);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid $color-primaryLight;
+
+        .discount {
+            font-weight: 500;
+            color: $color-detailsLight;
+        }
+    }
+
+    .total {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-block: 1em;
+
+        h2 {
+            font-size: clamp(2rem, 2vw, 3rem);
+            color: $color-primaryLight;
+        }
+    }
+
+    .confirmOrder {
+        text-transform: uppercase;
+        font-family: $font-title;
+        font-weight: 600;
+        font-size: clamp(1.6rem, 1vw, 2rem);
+        border: none;
+        outline: none;
+        width: 100%;
+        padding: 1em;
+        border-radius: 0 0 15px 15px;
+        cursor: pointer;
+        background: $color-primaryLight;
+        transition: all 0.3s ease;
+
+        &:hover {
+            filter: brightness(0.95);
+            box-shadow: 0 0 10px #4e8581;
+        }
+    }
+}
