@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -95,6 +95,40 @@ $font-items: 'Poppins', Helvetica;
             &.waiting {
                 background: #aaa;
             }
+        }
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .statusPay {
+        flex-direction: column;
+        gap: 0.3em;
+        width: 100%;
+
+        .statusItem {
+            width: 100%;
+            padding: 0.6em 1em;
+            border-radius: 8px;
+            background: rgba(54, 206, 196, 0.05);
+            transition: background 0.3s;
+
+            &.waiting {
+                background: transparent;
+                opacity: 0.6;
+            }
+
+            .iconStatus {
+                width: 18px;
+                height: 18px;
+            }
+
+            p {
+                font-size: 0.95rem;
+            }
+        }
+
+        .line {
+            display: none;
         }
     }
 }

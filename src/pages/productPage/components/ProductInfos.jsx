@@ -83,8 +83,8 @@ export default function ProductInfos({
             <p className="priceFees">
                 Ou no Cartão <br />
                 Em até 12x de{' '}
-                <span>{formatPreco(product.valorComDesconto / 12)}</span>
-                sem juros
+                <span>{formatPreco(product.valorComDesconto / 12)}</span> sem
+                juros
             </p>
 
             <button className="addCart" onClick={handleAddToCart}>

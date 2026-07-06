@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #0d977e;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgDark: #2d2d2d;
 $color-bgLight: #f9fbfb;
@@ -29,14 +29,14 @@ $font-items: 'Poppins', Helvetica;
     box-shadow: 2px 2px 15px $color-shadow;
 
     h2 {
-        font-size: 2.8rem;
+        font-size: clamp(2rem, 1.4rem + 1vw, 2.8rem);
         font-family: $font-title;
         text-align: left;
         width: 9em;
     }
 
     .loginFormGoogleSection {
-        width: 35%;
+        width: 30%;
         display: flex;
         flex-direction: column;
         gap: 2.5em;
@@ -53,8 +53,8 @@ $font-items: 'Poppins', Helvetica;
                 justify-content: center;
                 gap: 1em;
                 width: 100%;
-                padding: 0.1em 0.5em;
-                font-size: 2rem;
+                padding: 0.75em;
+                font-size: clamp(1.6rem, 1rem + 0.7vw, 2rem);
                 font-family: $font-title;
                 font-weight: bold;
                 border-radius: 10px;
@@ -70,8 +70,8 @@ $font-items: 'Poppins', Helvetica;
                 }
 
                 .loginGoogleIcon {
-                    height: 62px;
-                    width: 36px;
+                    height: clamp(28px, 2vw, 36px);
+                    width: clamp(28px, 2vw, 36px);
                 }
             }
         }
@@ -96,7 +96,7 @@ $font-items: 'Poppins', Helvetica;
 
         h3 {
             font-family: $font-items;
-            font-size: 2rem;
+            font-size: clamp(1.6rem, 1rem + 0.5vw, 2rem);
         }
     }
 
@@ -120,7 +120,8 @@ $font-items: 'Poppins', Helvetica;
             gap: 3em;
 
             button {
-                font-size: 1.8rem;
+                font-size: clamp(1.6rem, 0.8rem + 1vw, 1.8rem);
+                white-space: nowrap;
                 padding: 0.5em 2em;
                 border-radius: 5px;
                 border: none;
@@ -129,10 +130,10 @@ $font-items: 'Poppins', Helvetica;
                 font-family: $font-title;
                 cursor: pointer;
                 box-shadow: 2px 2px 4px $color-shadow;
-                transition: 0.2s ease;
+                transition: 0.3s ease;
 
                 &:hover {
-                    filter: brightness(0.9);
+                    filter: brightness(0.95);
                     box-shadow: 0 0 10px $color-primaryLight;
                 }
 
@@ -184,7 +185,6 @@ $font-items: 'Poppins', Helvetica;
         padding: 0.5em 1em;
 
         h2 {
-            font-size: 2.4rem;
             width: auto;
             text-align: center;
         }

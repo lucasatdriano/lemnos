@@ -8,23 +8,25 @@ import MenuSearch from './components/searchMenu/MenuSearch';
 import MenuFavorite from './components/favoriteMenu/MenuFavorite';
 import AuthService from '../../../services/AuthService';
 import './header.scss';
-import { getQuantidadeCarrinho } from '../../../services/UsuarioProdutoService';
 import cartEventEmitter from '../../../services/configurations/events';
 
 export default function Header({ toggleTheme }) {
     const [shrinkHeader, setShrinkHeader] = useState(false);
     const [showFavoriteMenu, setShowFavoriteMenu] = useState(false);
-    const [carrinho, setCarrinho] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(
         AuthService.isLoggedIn() || AuthService.isLoggedInWithGoogle()
     );
 
-    useEffect(() => {
-        fetchCarrinho();
+    const cart = useSelector((state) => state.cart.items);
 
-        const handleUpdateCart = () => {
-            fetchCarrinho();
-        };
+    const userImg = useSelector(
+        (state) => state.user.userImg || AuthService.getGoogleProfilePhoto()
+    );
+
+    const quantidadeCarrinho = cart?.length || 0;
+
+    useEffect(() => {
+        const handleUpdateCart = () => {};
 
         cartEventEmitter.on('updateCart', handleUpdateCart);
 
@@ -33,20 +35,17 @@ export default function Header({ toggleTheme }) {
         };
     }, []);
 
-    const fetchCarrinho = async () => {
-        if (AuthService.isLoggedIn()) {
-            try {
-                const response = await getQuantidadeCarrinho();
-                setCarrinho(response > 0 ? response : null);
-            } catch (error) {
-                setCarrinho(null);
-            }
+    useEffect(() => {
+        if (showFavoriteMenu) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
         }
-    };
 
-    const userImg = useSelector(
-        (state) => state.user.userImg || AuthService.getGoogleProfilePhoto()
-    );
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [showFavoriteMenu]);
 
     const handleShowMenuFav = () => {
         setShowFavoriteMenu(true);
@@ -119,23 +118,20 @@ export default function Header({ toggleTheme }) {
                         )}
                     </Link>
                     <Link to="/cart" className="linkIcons">
-                        {isLoggedIn && carrinho !== null && carrinho > 0 ? (
-                            <>
-                                <span className="spanCarrinhoLength">
-                                    {carrinho}
-                                </span>
-                                <RiShoppingCartLine className="cartIcon" />
-                            </>
-                        ) : (
-                            <>
-                                <RiShoppingCartLine className="cartIcon" />
-                            </>
+                        {quantidadeCarrinho > 0 && (
+                            <span className="spanCarrinhoLength">
+                                {quantidadeCarrinho}
+                            </span>
                         )}
+                        <RiShoppingCartLine className="cartIcon" />
                     </Link>
                 </nav>
             </header>
 
-            {showFavoriteMenu && <MenuFavorite onClose={handleCloseMenuFav} />}
+            <MenuFavorite
+                onClose={handleCloseMenuFav}
+                isOpen={showFavoriteMenu}
+            />
         </>
     );
 }

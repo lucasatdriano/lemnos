@@ -111,7 +111,7 @@ export default function BuyPage() {
     return (
         <>
             <main>
-                <CheckoutSteps currentStep="confirmação" />
+                <CheckoutSteps currentStep="confirmacao" />
 
                 <section className="orderSection">
                     <OrderTracking pedidoStatus={pedidoStatus} />
@@ -137,7 +137,9 @@ export default function BuyPage() {
                                 frete={frete.custo}
                                 paymentMethodName={selectedPaymentMethod}
                                 onConfirm={handleConfirmOrder}
+                                onBack={() => window.history.back()}
                                 customButtonText="Confirmar Pedido"
+                                backButtonText="Revisar Pagamento"
                             />
                         </div>
                     </div>

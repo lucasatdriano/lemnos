@@ -28,6 +28,7 @@ import CartSummary from './components/cartSummary/CartSummary';
 import CartCard from './components/cartCard/CartCard';
 
 import './cart.scss';
+import { resetFrete } from '../../store/actions/freteActions';
 
 export default function Cart() {
     const navigate = useNavigate();
@@ -61,6 +62,7 @@ export default function Cart() {
 
                 if (!response || response.produtos.length === 0) {
                     dispatch(setCarrinho([]));
+                    dispatch(resetFrete());
                     return;
                 }
 
@@ -112,6 +114,7 @@ export default function Cart() {
             await apagarCarrinho();
 
             dispatch(setCarrinho([]));
+            dispatch(resetFrete());
         } catch (error) {
             console.error('Erro ao apagar carrinho:', error);
         }
@@ -132,6 +135,14 @@ export default function Cart() {
             if (!frete?.metodo) {
                 toast.warning('Por favor, selecione uma opção de entrega.');
 
+                return;
+            }
+
+            if (!AuthService.isLoggedIn()) {
+                toast.warning(
+                    'Por favor, faça login para continuar com o pedido.'
+                );
+                navigate('/auth');
                 return;
             }
 

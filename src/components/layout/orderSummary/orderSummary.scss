@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #95156a;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -39,8 +39,8 @@ $font-items: 'Poppins', Helvetica;
         border-bottom: 2px solid $color-primaryLight;
 
         .iconOrder {
-            width: clamp(32px, 4vw, 36px);
-            height: clamp(32px, 4vw, 36px);
+            width: clamp(28px, 4vw, 36px);
+            height: clamp(28px, 4vw, 36px);
         }
 
         h3 {
@@ -76,23 +76,96 @@ $font-items: 'Poppins', Helvetica;
         }
     }
 
-    .confirmOrder {
-        text-transform: uppercase;
-        font-family: $font-title;
-        font-weight: 600;
-        font-size: clamp(1.6rem, 1vw, 2rem);
-        border: none;
-        outline: none;
-        width: 100%;
-        padding: 1em;
-        border-radius: 0 0 15px 15px;
-        cursor: pointer;
-        background: $color-primaryLight;
-        transition: all 0.3s ease;
+    .buttonsContainer {
+        .backButton {
+            font-family: $font-title;
+            font-weight: 400;
+            font-size: clamp(1.4rem, 1vw, 1.8rem);
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 0.5em;
+            cursor: pointer;
+            border-radius: 0 0 15px 15px;
+            background: $color-bgLight;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25em;
+            transition: all 0.3s ease;
 
-        &:hover {
-            filter: brightness(0.95);
-            box-shadow: 0 0 10px #4e8581;
+            .backIcon {
+                font-size: clamp(1.4rem, 1vw, 1.8rem);
+                transition: transform 0.3s ease;
+            }
+
+            &:hover {
+                filter: brightness(0.95);
+                box-shadow: 0 0 10px #dcdcdc;
+
+                .backIcon {
+                    transform: translateX(-3px);
+                }
+            }
+        }
+
+        .confirmOrder {
+            text-transform: uppercase;
+            font-family: $font-title;
+            font-weight: 600;
+            font-size: clamp(1.6rem, 1vw, 2rem);
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 1em;
+            cursor: pointer;
+            background: $color-primaryLight;
+            transition: all 0.3s ease;
+
+            &:hover {
+                filter: brightness(0.95);
+                box-shadow: 0 0 10px #4e8581;
+            }
+        }
+    }
+}
+
+.dark {
+    .orderSummary {
+        background: #72757478;
+
+        .titleContainers {
+            border-bottom: 2px solid $color-primaryDark;
+        }
+
+        .lineOrder {
+            border-bottom: 1px solid $color-primaryDark;
+
+            .discount {
+                color: $color-detailsDark;
+            }
+        }
+
+        .total {
+            h2 {
+                color: $color-primaryDark;
+            }
+        }
+
+        .buttonsContainer {
+            .backButton {
+                background: #72757478;
+                color: $color-fontDark;
+
+                &:hover {
+                    box-shadow: 0 0 10px #6b6b6b;
+                }
+            }
+
+            .confirmOrder {
+                background: $color-primaryDark;
+            }
         }
     }
 }

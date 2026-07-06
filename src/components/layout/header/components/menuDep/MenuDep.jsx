@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import LogoHorizontal from '../../../../../assets/imgLemnos/logoHorizontalClaro.svg';
-import './menuDep.scss';
 import { AiOutlineTeam } from 'react-icons/ai';
 import {
     RiMenuUnfoldLine,
@@ -14,6 +13,7 @@ import {
     RiMoonLine,
 } from 'react-icons/ri';
 import AuthService from '../../../../../services/AuthService';
+import './menuDep.scss';
 
 export default function MenuDep({ toggleTheme, showMenuFav }) {
     const dropDownRef = useRef(null);
@@ -72,7 +72,7 @@ export default function MenuDep({ toggleTheme, showMenuFav }) {
 
             <div
                 onClick={handleCloseMenu}
-                className={`modal ${isActive ? 'active' : ''}`}
+                className={`modalDep ${isActive ? 'active' : ''}`}
             ></div>
 
             <nav
@@ -234,3 +234,8 @@ export default function MenuDep({ toggleTheme, showMenuFav }) {
         </nav>
     );
 }
+
+MenuDep.propTypes = {
+    toggleTheme: PropTypes.func.isRequired,
+    showMenuFav: PropTypes.func.isRequired,
+};

@@ -4,8 +4,10 @@ $color-terciaryLight: #4aded6;
 $color-detailsLight: #850e5d;
 
 $color-primaryDark: #0d977e;
-$color-secundaryDark: #2d3a3a;
-$color-terciaryDark: #f6fefdcc;
+$color-secundaryDarkA: #a0b4b3;
+// $color-secundaryDark: #2d3a3a;
+// $color-terciaryDark: #f6fefdcc;
+$color-terciaryDark: #22bfa2;
 $color-detailsDark: #b33e8c;
 
 $color-bgDark: #2d2d2d;
@@ -39,7 +41,7 @@ $font-items: 'Poppins', Helvetica;
 
         .breadcrumb {
             font-family: $font-items;
-            font-size: 1.4rem;
+            font-size: clamp(1.2rem, 1rem + 0.4vw, 1.4rem);
             display: flex;
             flex-wrap: wrap;
             align-items: center;
@@ -114,6 +116,7 @@ $font-items: 'Poppins', Helvetica;
                     width: 100%;
                     aspect-ratio: 1 / 1;
                     background: #fff;
+                    padding: 1em;
                     border-radius: 10px;
                     object-fit: contain;
                     box-shadow: 2px 2px 10px $color-shadow;
@@ -123,7 +126,7 @@ $font-items: 'Poppins', Helvetica;
                     background-color: $color-detailsLight;
                     padding: 1em 0.5em;
                     text-align: center;
-                    font-size: clamp(1.2rem, 2vw, 1.6rem);
+                    font-size: clamp(1.2rem, 0.9rem + 0.4vw, 1.6rem);
                     color: $color-fontDark;
                     border-radius: 5px;
                     position: absolute;
@@ -190,7 +193,7 @@ $font-items: 'Poppins', Helvetica;
 
                         .productNote {
                             color: #6e6b6b9c;
-                            font-size: clamp(1.4rem, 2vw, 1.8rem);
+                            font-size: clamp(1.4rem, 1.2rem + 0.4vw, 1.8rem);
                         }
 
                         input {
@@ -218,9 +221,6 @@ $font-items: 'Poppins', Helvetica;
                         }
 
                         input:checked ~ label svg {
-                            animation:
-                                idle 4s linear infinite,
-                                yippee 0.75s backwards;
                             fill: $color-primaryLight;
                             stroke-opacity: 0;
                         }
@@ -228,7 +228,10 @@ $font-items: 'Poppins', Helvetica;
 
                     .iconFav {
                         color: $color-primaryLight;
-                        font-size: clamp(2rem, 3vw, 3rem);
+                        width: clamp(28px, 2vw, 36px);
+                        height: clamp(28px, 2vw, 36px);
+                        font-size: clamp(2rem, 3vw, 8rem);
+                        border: 1px solid red;
                         cursor: pointer;
                         transition: all 0.3s;
 
@@ -240,14 +243,14 @@ $font-items: 'Poppins', Helvetica;
 
                 .productName {
                     font-family: $font-items;
-                    font-size: clamp(1.8rem, 2.5vw, 2.6rem);
+                    font-size: clamp(1.8rem, 1.4rem + 1vw, 2.6rem);
                     font-weight: 600;
                 }
 
                 .priceOrigin {
                     font-family: $font-items;
                     color: $color-detailsLight;
-                    font-size: clamp(1.4rem, 2vw, 1.8rem);
+                    font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.8rem);
                     font-weight: 700;
 
                     span {
@@ -256,20 +259,19 @@ $font-items: 'Poppins', Helvetica;
                 }
 
                 .productPrice {
-                    font-family: $font-title;
-
                     span {
                         font-family: $font-items;
                         color: $color-primaryLight;
                         font-weight: 700;
-                        font-size: clamp(2rem, 4vw, 3.6rem);
+                        font-size: clamp(2rem, 1.4rem + 2vw, 3.6rem);
                     }
                 }
 
                 .priceFees {
-                    font-size: clamp(1.2rem, 1.5vw, 1.6rem);
+                    font-size: clamp(1.2rem, 1rem + 0.5vw, 1.6rem);
 
                     span {
+                        font-family: $font-items;
                         color: $color-detailsLight;
                         font-weight: 600;
                     }
@@ -283,7 +285,7 @@ $font-items: 'Poppins', Helvetica;
                     gap: 0.5em;
                     border-radius: 10px;
                     border: none;
-                    font-size: clamp(1.6rem, 2vw, 1.8rem);
+                    font-size: clamp(1.6rem, 1.3rem + 0.5vw, 1.8rem);
                     padding-block: 0.75em;
                     background: $color-primaryLight;
                     color: $color-fontDark;
@@ -317,12 +319,12 @@ $font-items: 'Poppins', Helvetica;
 
                 h3 {
                     font-family: $font-title;
-                    font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+                    font-size: clamp(1.8rem, 1.5rem + 0.7vw, 2.2rem);
                 }
 
                 p {
                     text-align: justify;
-                    font-size: clamp(1.4rem, 1.8vw, 1.6rem);
+                    font-size: clamp(1.4rem, 1.2rem + 0.3vw, 1.6rem);
                     line-height: 1.5;
                 }
             }
@@ -331,7 +333,7 @@ $font-items: 'Poppins', Helvetica;
                 font-family: $font-items;
                 flex: 1;
                 min-width: 250px;
-                background: rgba(0, 0, 0, 0.05);
+                background: #00000025;
                 padding: 1em;
                 border-radius: 15px;
                 display: flex;
@@ -341,8 +343,123 @@ $font-items: 'Poppins', Helvetica;
                 .specification {
                     display: flex;
                     gap: 0.5em;
-                    font-size: clamp(1.3rem, 1.5vw, 1.5rem);
+                    font-size: clamp(1.4rem, 1.2rem + 0.4vw, 1.6rem);
                     flex-wrap: wrap;
+                }
+            }
+        }
+    }
+}
+
+.dark {
+    .productContainer {
+        hr {
+            border: 2px solid $color-primaryDark;
+        }
+
+        .containerProductMain {
+            .breadcrumb {
+                border-bottom: 1px solid rgba($color-primaryDark, 0.2);
+
+                .breadcrumbLink {
+                    color: $color-fontDark;
+
+                    &::before {
+                        background: $color-primaryDark;
+                    }
+
+                    &:hover {
+                        color: darken($color-primaryDark, 20%);
+                    }
+                }
+
+                .breadcrumbCurrent {
+                    color: $color-secundaryDarkA;
+                }
+
+                .separator {
+                    color: $color-primaryDark;
+                }
+            }
+
+            .productMain {
+                .containerImages {
+                    .offerDescont {
+                        background-color: $color-detailsDark;
+                    }
+
+                    .optionsImages {
+                        .optionImage {
+                            &:hover {
+                                border: 1px solid $color-primaryDark;
+                            }
+
+                            &.selected {
+                                border: 2px solid $color-primaryDark;
+                                box-shadow: 0 0 10px $color-primaryDark;
+                            }
+
+                            &:active {
+                                border: 2px solid $color-primaryDark;
+                            }
+                        }
+                    }
+                }
+
+                .containerInfos {
+                    .sectionIcons {
+                        .rating {
+                            --stroke: #ccc;
+
+                            .productNote {
+                                color: #cecbcb9c;
+                            }
+
+                            label:hover svg {
+                                stroke: $color-primaryDark;
+                            }
+
+                            input:checked ~ label svg {
+                                fill: $color-primaryDark;
+                            }
+                        }
+
+                        .iconFav {
+                            color: $color-primaryDark;
+                        }
+                    }
+
+                    .priceOrigin {
+                        color: $color-detailsDark;
+                    }
+
+                    .productPrice {
+                        span {
+                            color: $color-primaryDark;
+                        }
+                    }
+
+                    .priceFees {
+                        span {
+                            color: $color-detailsDark;
+                        }
+                    }
+
+                    .addCart {
+                        background: $color-primaryDark;
+
+                        &:hover {
+                            box-shadow: 0 0 10px $color-terciaryDark;
+                        }
+                    }
+                }
+            }
+
+            .containerDetails {
+                border-top: 2px solid $color-primaryDark;
+
+                .containerSpecifications {
+                    background: #ffffff25;
                 }
             }
         }
@@ -351,9 +468,6 @@ $font-items: 'Poppins', Helvetica;
 
 @media only screen and (max-width: 1024px) {
     .productContainer .containerProductMain {
-        .breadcrumb {
-            font-size: 1.2rem;
-        }
         .productMain {
             flex-direction: column;
             gap: 1em;

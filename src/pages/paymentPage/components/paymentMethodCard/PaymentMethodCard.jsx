@@ -6,6 +6,7 @@ import { formatPreco } from '../../../../utils/formatters';
 export default function PaymentMethodCard({
     id,
     value,
+    checked,
     title,
     icon: Icon,
     total,
@@ -23,6 +24,7 @@ export default function PaymentMethodCard({
                 id={id}
                 value={value}
                 onChange={onChange}
+                checked={checked}
             />
 
             <label htmlFor={id} className="labelPay">
@@ -71,6 +73,7 @@ export default function PaymentMethodCard({
 PaymentMethodCard.propTypes = {
     id: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
+    checked: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
     icon: PropTypes.elementType.isRequired,
     total: PropTypes.number.isRequired,

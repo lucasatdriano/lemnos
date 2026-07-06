@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgDark: #2d2d2d;
 $color-bgLight: #f9fbfb;
@@ -26,36 +26,46 @@ $font-items: 'Poppins', Helvetica;
 
     .inputSearch {
         position: relative;
+        width: 100%;
 
         #inputSearch {
             width: 100%;
-            height: 100%;
             border-radius: 20px;
+            text-indent: clamp(12px, 1.5vw, 20px);
+            padding-block: clamp(3px, 0.3vw, 6px);
+            padding-block: 6px;
             background-color: $color-bgLight;
             color: $color-fontLight;
             font-family: $font-items;
-            text-indent: 20px;
-            padding-block: 4px;
-            font-size: 1.8rem;
+            font-size: clamp(1.4rem, 1rem + 0.4vw, 1.8rem);
+            box-shadow: 2px 2px 8px $color-shadow;
+            display: block;
             position: relative;
             z-index: 10;
-            box-shadow: 2px 2px 8px $color-shadow;
+
+            &:focus {
+                border-color: $color-primaryLight;
+            }
         }
 
         button {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
             position: absolute;
             right: 10px;
             top: 50%;
+            border: none;
             transform: translateY(-50%);
+            background: transparent;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 11;
 
             .searchIcon {
                 color: $color-fontLight;
-                height: 24px;
-                width: 24px;
+                width: clamp(18px, 1.5vw, 24px);
+                height: clamp(18px, 1.5vw, 24px);
             }
         }
     }
@@ -108,7 +118,8 @@ $font-items: 'Poppins', Helvetica;
                     min-width: 100px;
                     max-width: 100px;
                     object-fit: contain;
-                    background: $color-card;
+                    background: #fff;
+                    border-radius: 5px;
                     padding: 0.25em;
                 }
 
@@ -128,6 +139,26 @@ $font-items: 'Poppins', Helvetica;
                 font-size: 1.8rem;
                 font-weight: 600;
                 color: $color-primaryLight;
+            }
+        }
+    }
+}
+
+.dark {
+    .searchContainer {
+        .searchResults {
+            background-color: $color-bgDark;
+
+            .itemSearch {
+                .containerVisual {
+                    h4 {
+                        color: $color-fontDark;
+                    }
+                }
+
+                p {
+                    color: $color-primaryDark;
+                }
             }
         }
     }

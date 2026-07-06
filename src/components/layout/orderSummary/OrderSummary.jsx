@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { PiFileMagnifyingGlass } from 'react-icons/pi';
 import './orderSummary.scss';
 import { formatPreco } from '../../../utils/formatters';
+import { IoArrowBack } from 'react-icons/io5';
 
 export default function OrderSummary({
     valorCompra,
@@ -9,7 +10,10 @@ export default function OrderSummary({
     frete,
     paymentMethodName,
     onConfirm,
+    onBack,
     customButtonText = 'Finalizar Pedido',
+    backButtonText = 'Voltar',
+    showBackButton = true,
 }) {
     const total = valorCompra - desconto + frete;
 
@@ -52,9 +56,18 @@ export default function OrderSummary({
                     <h2>{formatPreco(total)}</h2>
                 </div>
 
-                <button className="confirmOrder" onClick={onConfirm}>
-                    {customButtonText}
-                </button>
+                <div className="buttonsContainer">
+                    <button className="confirmOrder" onClick={onConfirm}>
+                        {customButtonText}
+                    </button>
+
+                    {showBackButton && (
+                        <button className="backButton" onClick={onBack}>
+                            <IoArrowBack className="backIcon" />
+                            {backButtonText}
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );
@@ -66,7 +79,8 @@ OrderSummary.propTypes = {
     frete: PropTypes.number.isRequired,
     paymentMethodName: PropTypes.string,
     onConfirm: PropTypes.func,
-    showPaymentMethod: PropTypes.bool,
+    onBack: PropTypes.func,
     customButtonText: PropTypes.string,
-    showButton: PropTypes.bool,
+    backButtonText: PropTypes.string,
+    showBackButton: PropTypes.bool,
 };

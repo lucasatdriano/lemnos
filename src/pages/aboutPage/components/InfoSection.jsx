@@ -8,6 +8,9 @@ export default function InfoSection({
     imageLight,
     imageClass,
 }) {
+    console.log(imageDark);
+    console.log(imageLight);
+
     return (
         <section className="aboutContent">
             <div className="title">

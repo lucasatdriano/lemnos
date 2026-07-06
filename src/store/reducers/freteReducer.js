@@ -1,4 +1,4 @@
-import { SET_FRETE_INFO } from '../actions/freteActions';
+import { SET_FRETE_INFO, RESET_FRETE } from '../actions/freteActions';
 
 const initialState = {
     metodo: '',
@@ -15,6 +15,8 @@ const freteReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
             };
+        case RESET_FRETE:
+            return initialState;
         default:
             return state;
     }

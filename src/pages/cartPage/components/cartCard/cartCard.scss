@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -139,12 +139,18 @@ $font-items: 'Poppins', Helvetica;
         background-color: $color-secundaryDark;
         box-shadow: 0 0 15px #141414a8;
 
-        .hrLabels {
-            border-top: 2px solid $color-primaryDark;
+        .labels {
+            border-bottom: 2px solid $color-primaryDark;
         }
 
-        .buttonQtd:hover {
-            color: $color-primaryDark;
+        .productDesc {
+            .amount {
+                .buttonQtd {
+                    &:hover {
+                        color: $color-primaryDark;
+                    }
+                }
+            }
         }
     }
 }

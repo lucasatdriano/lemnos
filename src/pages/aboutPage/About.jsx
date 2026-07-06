@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import ScrollReveal from 'scrollreveal';
 import './about.scss';
-import LogoHorizontalLight from '../../assets/imgLemnos/logoHorizontal.svg';
-import LogoHorizontalDark from '../../assets/imgLemnos/logoHorizontalClaro.svg';
+import LogoLight from '../../assets/imgLemnos/logoHorizontal.svg';
+import LogoDark from '../../assets/imgLemnos/logoHorizontalClaro.svg';
 import TechFesto from '../../assets/imgLemnos/imgMascote.svg';
 import InfoSection from './components/InfoSection';
 import InfoCard from './components/InfoCard';
@@ -12,17 +12,6 @@ export default function About() {
     useEffect(() => {
         ScrollReveal().reveal('.text', {
             origin: 'left',
-            distance: '100px',
-            duration: 1000,
-            delay: 0,
-            easing: 'ease-out',
-            opacity: 0,
-            scale: 1,
-            reset: false,
-        });
-
-        ScrollReveal().reveal('.logoDark, .logoLight, .imgMascot', {
-            origin: 'right',
             distance: '100px',
             duration: 1000,
             delay: 0,
@@ -48,8 +37,8 @@ export default function About() {
         <main>
             <InfoSection
                 title="Sobre"
-                imageDark={LogoHorizontalDark}
-                imageLight={LogoHorizontalLight}
+                imageDark={LogoDark}
+                imageLight={LogoLight}
                 paragraphs={[
                     'Desde sua fundação em 2023, a Lemnos vem se consolidando como uma referência no mercado tecnológico, guiada por uma visão inovadora e pelo compromisso constante com a evolução. Mais do que oferecer produtos, buscamos criar experiências que acompanhem o ritmo acelerado das transformações digitais, sempre atentos às necessidades de um público cada vez mais conectado e exigente.',
 
@@ -57,19 +46,7 @@ export default function About() {
 
                     'Na Lemnos, acreditamos que a tecnologia deve ser um elo entre pessoas, ideias e oportunidades. Por isso, cada detalhe da nossa plataforma é pensado para facilitar o acesso ao que há de mais avançado no mercado, transformando desafios em soluções práticas e contribuindo diretamente para o crescimento pessoal e profissional dos nossos clientes.',
                 ]}
-            >
-                <img
-                    className="logoDark"
-                    src={LogoHorizontalLight}
-                    alt="logo"
-                />
-
-                <img
-                    className="logoLight"
-                    src={LogoHorizontalDark}
-                    alt="logo"
-                />
-            </InfoSection>
+            />
 
             <section className="valuesContent">
                 <div className="content">

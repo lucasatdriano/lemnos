@@ -156,28 +156,24 @@ $font-items: 'Poppins', Helvetica;
 
             .enderecoSection {
                 .enderecoCard {
-                    background-color: #dce0e081;
+                    background-color: #adb4b481;
                     border: $color-primaryDark solid 3px;
                     border-left: $color-primaryDark solid 10px;
-                    color: $color-fontLight;
+                    color: $color-fontDark;
                     box-shadow: 0 0 5px #141414a8;
 
                     &.selected {
-                        background-color: #dce0e050;
-                        box-shadow: 2px 2px 25px #0d977e80;
+                        border: $color-secundaryDark solid 3px;
+                        border-left: $color-secundaryDark solid 10px;
+                        background-color: #dce0e08a;
+                        box-shadow: 2px 2px 25px #a3b3b080;
                     }
                 }
             }
         }
 
-        button {
+        [class$='Button'] {
             background: $color-primaryDark;
-
-            &:disabled {
-                &:hover {
-                    box-shadow: 2px 2px 8px $color-shadow;
-                }
-            }
 
             &:hover {
                 box-shadow: 0 0 10px $color-primaryDark;

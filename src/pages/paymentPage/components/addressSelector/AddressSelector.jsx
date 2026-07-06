@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import './addressSelector.scss';
 import { formatCep } from '../../../../utils/formatters';
+import { BsTruck } from 'react-icons/bs';
 
 export default function AddressSelector({
     addresses,
@@ -23,9 +24,12 @@ export default function AddressSelector({
                 </div>
             ) : (
                 <>
-                    <p className="textAddress">
-                        Selecione o Endereço de Entrega:
-                    </p>
+                    <div className="titleContainers">
+                        <BsTruck className="iconAddress" />
+                        <p className="textAddress">
+                            Selecione o Endereço de Entrega:
+                        </p>
+                    </div>
                     <div className="addressOptionsContainer">
                         {addresses.map((endereco, index) => (
                             <div key={index} className="addressCard">

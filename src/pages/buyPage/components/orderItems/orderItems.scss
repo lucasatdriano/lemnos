@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -27,13 +27,19 @@ $font-items: 'Poppins', Helvetica;
         text-align: center;
 
         thead {
-            font-size: 1.8rem;
+            font-size: clamp(1.4rem, 1.1rem + 0.6vw, 1.8rem);
             font-family: $font-title;
+
+            tr {
+                border: 1px solid $color-primaryLight;
+            }
         }
 
         tr {
+            border: 1px solid $color-primaryLight;
+
             td {
-                font-size: 1.6rem;
+                font-size: clamp(1.2rem, 1rem + 0.4vw, 1.6rem);
                 font-weight: 500;
 
                 p {
@@ -43,11 +49,98 @@ $font-items: 'Poppins', Helvetica;
                 img {
                     background-color: #fff;
                     border-radius: 5px;
+                    margin-right: 0.5em;
+                    padding: 0.5em;
                     object-fit: contain;
-                    width: 10em;
-                    height: 8em;
+                    width: clamp(7em, 8vw, 10em);
+                    height: clamp(5.5em, 6vw, 8em);
                     border: 1px solid $color-primaryLight;
                 }
+            }
+        }
+    }
+}
+
+.dark {
+    .cart {
+        .dataProduct {
+            tr {
+                td {
+                    img {
+                        border: 1px solid $color-primaryDark;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .cart {
+        .dataProduct {
+            thead {
+                display: none;
+            }
+
+            tbody,
+            tr,
+            td {
+                display: block;
+                width: 100%;
+            }
+
+            tr {
+                padding: 1em;
+                margin-bottom: 1em;
+                border-radius: 12px;
+                box-shadow: 0 0 8px $color-shadow;
+                background: rgba(0, 0, 0, 0.03);
+            }
+
+            td {
+                border: none;
+                padding: 0.3em 0;
+                text-align: center;
+            }
+
+            td:nth-child(1) {
+                display: flex;
+                justify-content: center;
+
+                img {
+                    width: 120px;
+                    height: 100px;
+                    margin: 0;
+                }
+            }
+
+            td:nth-child(2) {
+                margin-top: 0.8em;
+
+                p {
+                    text-align: center;
+                    font-size: 1.4rem;
+                    font-weight: 500;
+                }
+            }
+
+            td:nth-child(3),
+            td:nth-child(4) {
+                display: inline-block;
+                width: 50%;
+                margin-top: 1em;
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+
+            td:nth-child(3)::before {
+                content: 'Qtd: ';
+                font-weight: 700;
+            }
+
+            td:nth-child(4)::before {
+                content: 'Preço: ';
+                font-weight: 700;
             }
         }
     }

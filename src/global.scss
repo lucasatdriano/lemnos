@@ -78,8 +78,11 @@ html {
 
         main {
             margin: auto;
-            padding-top: 6em;
-            padding-bottom: 5em;
+            padding-block: 6em 5em;
+
+            @media only screen and (max-width: 900px) {
+                padding: 6.5em 1em 5em;
+            }
         }
 
         input {

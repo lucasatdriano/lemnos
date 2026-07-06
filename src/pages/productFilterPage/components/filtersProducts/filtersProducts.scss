@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -152,8 +152,29 @@ $font-items: 'Poppins', Helvetica;
 .dark {
     .mainFilters {
         .productFilterContainer {
-            select {
-                box-shadow: 0 0 15px #14141454;
+            .containerAlterFilter {
+                .containerChecked {
+                    #listView:checked + .labelIcon > .iconAlter {
+                        color: $color-primaryDark;
+                    }
+
+                    #gridView:checked + .labelIcon > .iconAlter {
+                        color: $color-primaryDark;
+                    }
+                }
+            }
+
+            .ratingFilter {
+                --stroke: #ccc;
+
+                label:hover svg {
+                    stroke: $color-primaryDark;
+                }
+
+                input:checked ~ label svg {
+                    fill: $color-primaryDark;
+                    stroke: $color-primaryDark;
+                }
             }
         }
     }

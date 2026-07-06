@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #7b1559;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -42,6 +42,7 @@ $font-items: 'Poppins', Helvetica;
         color: $color-detailsLight;
         text-decoration: line-through;
         font-size: 1.4rem;
+        font-weight: 600;
         opacity: 1;
         visibility: visible;
         line-height: 2;
@@ -72,6 +73,42 @@ $font-items: 'Poppins', Helvetica;
     }
 }
 
+.dark {
+    .descont {
+        position: relative;
+
+        .offerDescont {
+            background-color: $color-detailsDark;
+            padding: 10px 5px;
+            text-align: center;
+            z-index: 10;
+            color: $color-fontDark;
+            border-radius: 5px;
+            transition: 0.5s ease;
+            font-size: 1.4rem;
+
+            position: absolute;
+            top: 2px;
+            right: 2px;
+        }
+
+        .offerPrice {
+            color: $color-detailsDark;
+        }
+
+        &:hover {
+            .offerDescont {
+                opacity: 0;
+            }
+
+            .productDetails {
+                .offerPrice {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+}
 @media only screen and (max-width: 800px) {
     .descont {
         .offerDescont {

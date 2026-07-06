@@ -49,8 +49,44 @@ export default function PaymentPage() {
     const selectedPaymentMethod = useSelector(
         (state) => state.payment.selectedPaymentMethod
     );
+    const paymentDesconto = useSelector((state) => state.payment.desconto);
     const Custofrete = useSelector((state) => state.frete.custo);
     const frete = useSelector((state) => state.frete);
+
+    useEffect(() => {
+        if (selectedPaymentMethod) {
+            let discount = 0;
+            let methodName = '';
+
+            switch (selectedPaymentMethod) {
+                case 'PIX':
+                    discount = valorCompra * 0.15;
+                    methodName = 'PIX';
+                    break;
+                case 'Crédito':
+                    discount = 0;
+                    methodName = 'Crédito';
+                    break;
+                case 'Boleto':
+                    discount = valorCompra * 0.05;
+                    methodName = 'Boleto';
+                    break;
+                default:
+                    discount = 0;
+                    methodName = '';
+            }
+
+            setDescontoLocal(discount);
+            setPaymentMethodName(methodName);
+
+            if (paymentDesconto !== discount) {
+                setDescontoLocal(discount);
+                dispatch(setDesconto(discount));
+            }
+
+            setPaymentMethodName(methodName);
+        }
+    }, [selectedPaymentMethod, selectedAddress, valorCompra, paymentDesconto]);
 
     useEffect(() => {
         if (!modalState.type && modalState.type === null) {
@@ -97,7 +133,11 @@ export default function PaymentPage() {
                 }
 
                 setClienteEndereco(clienteResponse.enderecos);
-                if (clienteResponse.enderecos.length > 0) {
+
+                if (
+                    clienteResponse.enderecos.length > 0 &&
+                    !selectedAddress?.cep
+                ) {
                     dispatch(setSelectedAddress(clienteResponse.enderecos[0]));
                     dispatch(
                         setFreteInfo({
@@ -285,6 +325,7 @@ export default function PaymentPage() {
                                     freight={Custofrete}
                                     badge="15% de desconto no produto"
                                     onChange={handlePaymentSelection}
+                                    checked={selectedPaymentMethod === 'PIX'}
                                 />
 
                                 <PaymentMethodCard
@@ -297,6 +338,9 @@ export default function PaymentPage() {
                                     freight={Custofrete}
                                     installment={`12x de ${formatPreco(totalCredito / 12)} sem juros`}
                                     onChange={handlePaymentSelection}
+                                    checked={
+                                        selectedPaymentMethod === 'Crédito'
+                                    }
                                 />
 
                                 <PaymentMethodCard
@@ -311,6 +355,7 @@ export default function PaymentPage() {
                                     freight={Custofrete}
                                     badge="5% de desconto no produto"
                                     onChange={handlePaymentSelection}
+                                    checked={selectedPaymentMethod === 'Boleto'}
                                 />
                             </div>
                         </div>
@@ -322,6 +367,8 @@ export default function PaymentPage() {
                                 frete={Custofrete}
                                 paymentMethodName={paymentMethodName}
                                 onConfirm={handleConfirmOrder}
+                                onBack={() => window.history.back()}
+                                backButtonText="Revisar Carrinho"
                             />
 
                             <AddressSelector

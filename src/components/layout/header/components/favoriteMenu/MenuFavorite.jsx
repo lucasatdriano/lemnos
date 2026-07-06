@@ -1,57 +1,60 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
-import './menuFavorite.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { IoClose } from 'react-icons/io5';
 import { MdFavorite } from 'react-icons/md';
-import { getProdutoById } from '../../../../../services/ProdutoService';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getProdutoById } from '../../../../../services/ProdutoService';
 import {
     listarProdutosFavoritos,
     adicionarProdutoCarrinho,
     desfavoritarProduto,
 } from '../../../../../services/UsuarioProdutoService';
-import { useState, useEffect } from 'react';
 import iconAddCart from '../../../../../assets/icons/iconAddCart.svg';
 import Loading from '../../../loading/Loading';
 import AuthService from '../../../../../services/AuthService';
 import { formatPreco } from '../../../../../utils/formatters';
+import './menuFavorite.scss';
 
-export default function MenuFavorite({ onClose }) {
+export default function MenuFavorite({ onClose, isOpen }) {
     const navigate = useNavigate();
     const [favorites, setFavorites] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        if (!isOpen) return;
+
         setIsLoading(true);
         fetchFavorites();
-    }, []);
+    }, [isOpen]);
 
     const fetchFavorites = async () => {
-        if (AuthService.isLoggedIn() && AuthService.isClienteRole()) {
-            try {
-                const response = await listarProdutosFavoritos();
-                const favoritoDetalhado = await Promise.all(
-                    response.map(async (produto) => {
-                        const detalhesProduto = await getProdutoById(
-                            produto.id
-                        );
-                        return { ...produto, ...detalhesProduto };
-                    })
-                );
+        if (!AuthService.isLoggedIn() || !AuthService.isClienteRole()) {
+            setFavorites([]);
+            setIsLoading(false);
+            return;
+        }
 
-                if (!response) {
-                    navigate('/auth');
-                }
-                setFavorites(
-                    Array.isArray(favoritoDetalhado) ? favoritoDetalhado : []
-                );
-            } catch (error) {
-                console.error('Erro ao listar produtos favoritos:', error);
-            } finally {
-                setIsLoading(false);
+        try {
+            const response = await listarProdutosFavoritos();
+            const favoritoDetalhado = await Promise.all(
+                response.map(async (produto) => {
+                    const detalhesProduto = await getProdutoById(produto.id);
+                    return { ...produto, ...detalhesProduto };
+                })
+            );
+
+            if (!response) {
+                navigate('/auth');
             }
+            setFavorites(
+                Array.isArray(favoritoDetalhado) ? favoritoDetalhado : []
+            );
+        } catch (error) {
+            console.error('Erro ao listar produtos favoritos:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -89,8 +92,14 @@ export default function MenuFavorite({ onClose }) {
     };
 
     return (
-        <div onClick={handleCloseModal} className="modal">
-            <div className="menuFavorite" onClick={(e) => e.stopPropagation()}>
+        <div
+            onClick={handleCloseModal}
+            className={`modalFav ${isOpen ? 'active' : ''}`}
+        >
+            <div
+                className={`menuFavorite ${isOpen ? 'active' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+            >
                 <IoClose className="iconClose" onClick={handleCloseModal} />
                 <div className="title">
                     <hr />
@@ -150,23 +159,25 @@ export default function MenuFavorite({ onClose }) {
                                             <h2 className="productName">
                                                 {favorite.nome}
                                             </h2>
-                                            {hasDiscount && (
-                                                <p className="offerPrice">
-                                                    {formatPreco(
-                                                        favorite.valorTotal
-                                                    )}
+                                            <div className="pricingContainer">
+                                                {hasDiscount && (
+                                                    <p className="offerPrice">
+                                                        {formatPreco(
+                                                            favorite.valorTotal
+                                                        )}
+                                                    </p>
+                                                )}
+                                                <p className="productPrice">
+                                                    À vista <br />
+                                                    <span>
+                                                        {formatPreco(
+                                                            favorite.valorComDesconto
+                                                        )}
+                                                    </span>{' '}
+                                                    <br />
+                                                    no PIX com 15% de desconto
                                                 </p>
-                                            )}
-                                            <p className="productPrice">
-                                                À vista <br />
-                                                <span>
-                                                    {formatPreco(
-                                                        favorite.valorComDesconto
-                                                    )}
-                                                </span>{' '}
-                                                <br />
-                                                no PIX com 15% de desconto
-                                            </p>
+                                            </div>
                                         </div>
                                     </Link>
                                     <button
@@ -192,3 +203,8 @@ export default function MenuFavorite({ onClose }) {
         </div>
     );
 }
+
+MenuFavorite.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool.isRequired,
+};

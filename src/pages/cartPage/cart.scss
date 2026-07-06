@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -42,7 +42,7 @@ main {
 
     .containerMain {
         width: 100%;
-        margin: 2em auto;
+        margin: 1em auto;
         display: flex;
         justify-content: space-between;
         gap: 1em;
@@ -130,6 +130,13 @@ main {
             gap: 2em;
         }
     }
+
+    .offers {
+        h2 {
+            font-size: clamp(1.8rem, 2vw, 2.2rem);
+            padding-bottom: 0.5em;
+        }
+    }
 }
 
 .dark {
@@ -203,75 +210,14 @@ main {
             gap: 0;
 
             .containerCart {
+                width: 100%;
                 align-items: center;
             }
 
             .resume {
+                width: 100%;
                 gap: 1em;
             }
         }
     }
 }
-
-// @media only screen and (max-width: 500px) {
-//     section {
-//         .containerMain {
-//             .containerCart {
-//                 .emptyCartMessage {
-//                     width: clamp(23em, 90vw, 90em);
-//                 }
-
-//                 .listCart {
-//                     .cartCard {
-//                         .productDesc {
-//                             gap: 1em;
-//                             flex-wrap: wrap;
-
-//                             img {
-//                                 height: 8em;
-//                                 width: 45%;
-//                             }
-
-//                             .nameProduct {
-//                                 width: 50%;
-//                                 font-size: 1.6rem;
-//                             }
-
-//                             .amount {
-//                                 padding-left: 1em;
-//                                 width: 30%;
-
-//                                 .buttonQtd {
-//                                     font-size: 2.2rem;
-//                                 }
-
-//                                 h4 {
-//                                     font-size: 2.2rem;
-//                                 }
-//                             }
-
-//                             .priceProduct {
-//                                 width: 40%;
-//                                 font-size: 2rem;
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-
-//             .delivery {
-//                 width: clamp(23em, 90vw, 30em);
-
-//                 .inputCep {
-//                     max-width: clamp(21em, 20% + 50%, 30em);
-//                 }
-
-//                 .optionsDelivery {
-//                     .labelOp {
-//                         width: 10em;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }

@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -35,11 +35,11 @@ $font-items: 'Poppins', Helvetica;
             flex-direction: column;
             gap: 0.5em;
             padding: 0.5em 1.5em 1.5em;
-            font-size: 1.6rem;
+            font-size: clamp(1.4rem, 1rem + 0.4vw, 1.6rem);
 
             .titleData {
-                text-indent: 1.5em;
-                font-size: 1.8rem;
+                text-indent: clamp(0.8em, 0.5em + 0.8vw, 1.5em);
+                font-size: clamp(1.6rem, 1.2rem + 0.5vw, 1.8rem);
             }
 
             .dataPerson,
@@ -70,6 +70,28 @@ $font-items: 'Poppins', Helvetica;
         .dataContainer {
             &:not(:last-child) {
                 border-right: 2px solid $color-primaryDark;
+            }
+
+            @media only screen and (max-width: 900px) {
+                &:not(:last-child) {
+                    border-bottom: 2px solid $color-primaryDark;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .personalData {
+        .dataContainer {
+            flex-direction: column;
+
+            .personalContainer,
+            .enderecoContainer {
+                &:not(:last-child) {
+                    border-right: none;
+                    border-bottom: 2px solid $color-primaryLight;
+                }
             }
         }
     }

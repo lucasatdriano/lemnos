@@ -15,8 +15,6 @@ $font-title: 'Merriweather Sans', sans-serif;
 main {
     .aboutContent {
         word-spacing: 5px;
-        width: auto;
-        margin: 0 auto;
 
         .title {
             display: flex;
@@ -63,6 +61,10 @@ main {
             }
 
             .logoLight {
+                display: block;
+            }
+
+            .logoDark {
                 display: none;
             }
         }
@@ -114,18 +116,18 @@ main {
     .aboutContent {
         .title {
             hr {
-                border: 2px solid $color-primaryLight;
+                border: 2px solid $color-primaryDark;
             }
         }
 
         .content {
             .logoLight {
-                display: block;
-                filter: drop-shadow(0 0 15px #141414a8);
+                display: none;
             }
 
             .logoDark {
-                display: none;
+                display: block;
+                filter: drop-shadow(0 0 15px #141414a8);
             }
         }
     }

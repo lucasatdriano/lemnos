@@ -136,7 +136,7 @@ export default function CardProduct({ produto }) {
                             className={'productImage'}
                         />
                         <div className="productDetails">
-                            <h2 className="productName">{produto.nome}</h2>
+                            <p className="productName">{produto.nome}</p>
                             <>
                                 {hasDiscount && (
                                     <p className="offerPrice">

@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -89,12 +89,10 @@ $font-items: 'Poppins', Helvetica;
 .dark {
     .mainFilters {
         .filteredDataContainer {
+            border-left: 2px solid $color-primaryDark;
+
             .emptyFilterMessage {
                 box-shadow: 0 0 10px #141414a8;
-
-                .dot-spinner {
-                    --uib-color: #10a88d;
-                }
 
                 .btnBackFilter {
                     background: $color-primaryDark;

@@ -20,7 +20,7 @@ $font-title: 'Merriweather Sans', sans-serif;
 $font-web: 'Roboto Flex', Arial;
 $font-items: 'Poppins', Helvetica;
 
-.modal {
+.modalFav {
     display: grid;
     place-items: right;
     position: fixed;
@@ -30,30 +30,56 @@ $font-items: 'Poppins', Helvetica;
     height: 100vh;
     background-color: #12171780;
     z-index: 99;
-    animation: modal 0.2s ease-in forwards;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+
+    &.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
 
     .menuFavorite {
         background-color: $color-bgLight;
-        width: 45%;
+        width: 40%;
         height: 100vh;
         position: absolute;
         z-index: 999;
         border-radius: 10px 0 0 10px;
         top: 0;
-        right: -28em;
-        animation: menuFav 0.5s ease-in-out forwards;
+        right: 0;
+        transform: translateX(100%);
+        transition: transform 0.5s ease;
         overflow-y: auto;
         opacity: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
 
+        &.active {
+            transform: translateX(0);
+        }
+
         .iconClose {
             display: none;
-            right: 10%;
+            top: 15px;
+            right: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            background-color: $color-bgLight;
             position: absolute;
-            width: 48px;
-            height: 48px;
+            width: clamp(32px, 2.5vw, 42px);
+            height: clamp(32px, 2.5vw, 42px);
+            box-shadow: 0 0 8px $color-shadow;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: darken($color-bgLight, 5%);
+                box-shadow: 0 0 12px $color-shadow;
+                transform: scale(1.05);
+            }
         }
 
         .title {
@@ -66,7 +92,7 @@ $font-items: 'Poppins', Helvetica;
             h2 {
                 font-family: $font-title;
                 white-space: nowrap;
-                font-size: clamp(3rem, 0.2rem + 3vw, 4rem);
+                font-size: clamp(2rem, 1.8rem + 0.8vw, 2.8rem);
                 padding: 0 10px;
             }
 
@@ -84,7 +110,6 @@ $font-items: 'Poppins', Helvetica;
             flex-direction: column;
             text-align: center;
             background: $color-card;
-            margin: 3em auto;
             width: 90%;
             gap: 1em;
             padding: 2em 0;
@@ -93,39 +118,30 @@ $font-items: 'Poppins', Helvetica;
 
             .textEmpty {
                 font-family: $font-title;
-                font-size: 3.6rem;
-                font-size: clamp(2.6rem, 1rem + 1vw, 3.6rem);
+                font-size: clamp(1.8rem, 1.4rem + 0.8vw, 2.2rem);
             }
 
             .btnBack {
                 font-family: $font-items;
                 border: none;
-                padding: 0.75em 1.5em;
+                padding: 0.5em 1.5em;
                 border-radius: 10px;
                 background: $color-primaryLight;
-                box-shadow: 0 0 8px $color-shadow;
-                font-size: 2.4rem;
+                box-shadow: 2px 2px 8px $color-shadow;
+                font-size: clamp(1.6rem, 1.3rem + 0.5vw, 2rem);
                 cursor: pointer;
                 position: relative;
-                transition: 0.2s ease;
+                transition: 0.3s ease;
 
                 &:hover {
-                    filter: brightness(0.9);
-                    box-shadow: 5px 10px 5px $color-shadow;
-                    transform: rotateX(15deg);
-                    top: 0px;
-                }
-
-                &:active {
-                    transform: rotateX(15deg);
-                    top: 5px;
-                    box-shadow: 2px 5px 5px $color-shadow;
+                    filter: brightness(0.95);
+                    box-shadow: 5px 5px 30px $color-shadow;
                 }
             }
         }
 
         .listaFavoritos {
-            padding: 1em;
+            padding: 0 1em 1.5em;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -135,8 +151,8 @@ $font-items: 'Poppins', Helvetica;
 
             .itemFav {
                 width: 100%;
-                height: 17em;
-                padding: 0.25em;
+                height: 15em;
+                padding: 1em 3em 4em 1em;
                 position: relative;
                 display: flex;
                 background: $color-bgLight;
@@ -145,72 +161,84 @@ $font-items: 'Poppins', Helvetica;
 
                 .favLink {
                     display: flex;
-                    width: 85%;
+                    width: 100%;
+                    height: 100%;
+                    gap: 1em;
+
+                    .offerDescont {
+                        background-color: $color-detailsLight;
+                        padding: 10px 5px;
+                        font-size: clamp(1.2rem, 0.2rem + 1vw, 1.4rem);
+                        text-align: center;
+                        z-index: 10;
+                        color: $color-fontDark;
+                        border-radius: 5px;
+                        position: absolute;
+                        top: 5px;
+                        left: 5px;
+                    }
+
+                    .productImage {
+                        width: clamp(6em, 6vw, 8em);
+                        height: clamp(8em, 8vw, 10em);
+                        padding: 0.5em;
+                        border-radius: 5px;
+                        object-fit: contain;
+                        background: $color-bgLight;
+                    }
+
+                    .productDetails {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+
+                        .productName {
+                            font-size: clamp(1.4rem, 1.1rem + 0.6vw, 1.8rem);
+                            margin-bottom: 0.5em;
+                        }
+
+                        .pricingContainer {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0.5em;
+
+                            .offerPrice {
+                                color: $color-detailsLight;
+                                text-decoration: line-through;
+                                font-size: clamp(1.4rem, 1rem + 0.4vw, 1.6rem);
+                                opacity: 1;
+                                visibility: visible;
+                                line-height: 2;
+                                transition: 0.2s ease-in-out;
+                            }
+
+                            .productPrice {
+                                font-size: clamp(1.2rem, 1rem + 0.3vw, 1.4rem);
+                                font-weight: 500;
+                                line-height: 1.2;
+
+                                span {
+                                    font-weight: 700;
+                                    color: $color-primaryLight;
+                                    font-size: clamp(
+                                        1.8rem,
+                                        1.4rem + 0.8vw,
+                                        2.2rem
+                                    );
+                                }
+                            }
+                        }
+                    }
 
                     .containerInfosFav {
                         .iconFav {
                             cursor: pointer;
                             position: absolute;
-                            top: 5px;
-                            right: 5px;
+                            top: 10px;
+                            right: 10px;
                             color: $color-primaryLight;
-                            float: right;
-                            width: 42px;
-                            height: 42px;
-                        }
-                    }
-
-                    .offerDescont {
-                        background-color: $color-detailsLight;
-                        padding: 15px 5px;
-                        text-align: center;
-                        z-index: 10;
-                        color: $color-fontDark;
-                        border-radius: 5px;
-
-                        position: absolute;
-                        top: 4px;
-                        left: 4px;
-                    }
-
-                    .productImage {
-                        width: 30%;
-                        height: 12.5em;
-                        border-radius: 5px;
-                        object-fit: contain;
-                        margin-right: 16px;
-                        background: $color-bgLight;
-                    }
-
-                    .productDetails {
-                        gap: 2.5em;
-                        width: 65%;
-
-                        .productName {
-                            font-size: 2.4rem;
-                            margin-bottom: 0.5em;
-                        }
-
-                        .offerPrice {
-                            color: $color-detailsLight;
-                            text-decoration: line-through;
-                            font-size: 1.8rem;
-                            opacity: 1;
-                            visibility: visible;
-                            line-height: 2;
-                            transition: 0.2s ease-in-out;
-                        }
-
-                        .productPrice {
-                            font-size: 1.4rem;
-                            font-weight: 500;
-                            line-height: 1.2;
-
-                            span {
-                                font-weight: 700;
-                                color: $color-primaryLight;
-                                font-size: 3.4rem;
-                            }
+                            width: clamp(28px, 2vw, 36px);
+                            height: clamp(28px, 2vw, 36px);
                         }
                     }
 
@@ -227,7 +255,7 @@ $font-items: 'Poppins', Helvetica;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    gap: 0.5em;
+                    gap: 0.75em;
                     position: absolute;
                     bottom: 0;
                     left: 0;
@@ -238,14 +266,14 @@ $font-items: 'Poppins', Helvetica;
                     box-shadow: 0 0 10px $color-primaryDark;
                     border: none;
                     width: 100%;
-                    font-size: 2rem;
+                    font-size: 1.6rem;
                     padding: 0.8em 0;
                     transition: 0.5s ease-out;
                     cursor: pointer;
 
                     &:hover {
-                        filter: brightness(1.1);
-                        box-shadow: 0 0 40px $color-primaryLight;
+                        filter: brightness(0.95);
+                        box-shadow: 0 0 24px $color-primaryLight;
                     }
 
                     .iconAdd {
@@ -254,64 +282,12 @@ $font-items: 'Poppins', Helvetica;
                     }
                 }
             }
-
-            .productFav {
-                background: $color-secundaryLight;
-                width: 100%;
-                height: 10em;
-                max-height: 12em;
-                padding: 1em;
-                border-radius: 10px;
-                display: flex;
-                gap: 1em;
-                position: relative;
-
-                img {
-                    width: 10vw;
-                    border-radius: 15px;
-                }
-
-                .containerInfosFav {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    font-family: $font-items;
-                    color: $color-fontDark;
-                    width: 50%;
-                    height: 100%;
-                    font-size: clamp(1.6rem, 0.2rem + 1vw, 2rem);
-
-                    .iconFav {
-                        cursor: pointer;
-                        position: absolute;
-                        right: 1em;
-                        color: $color-primaryLight;
-                        float: right;
-                        width: 42px;
-                        height: 42px;
-                    }
-
-                    p {
-                        text-shadow: 2px 2px 2px $color-shadow;
-                        color: $color-primaryLight;
-                        font-size: clamp(2.4rem, 0.2rem + 2vw, 3rem);
-                        font-weight: bold;
-                    }
-                }
-            }
         }
     }
 }
 
-@keyframes menuFav {
-    to {
-        transform: translateX(-28em);
-        opacity: 1;
-    }
-}
-
 .dark {
-    .modal {
+    .modalFav {
         .menuFavorite {
             background-color: $color-bgDark;
 
@@ -358,7 +334,7 @@ $font-items: 'Poppins', Helvetica;
 
                         &:hover {
                             filter: brightness(1.1);
-                            box-shadow: 0 0 40px $color-primaryDark;
+                            box-shadow: 0 0 24px $color-primaryDark;
                         }
                     }
                 }
@@ -368,62 +344,20 @@ $font-items: 'Poppins', Helvetica;
 }
 
 @media only screen and (max-width: 1300px) {
-    .modal {
+    .modalFav {
         .menuFavorite {
-            width: 55%;
-        }
-    }
-}
-
-@media only screen and (max-width: 1024px) {
-    .modal {
-        .menuFavorite {
-            width: 75%;
+            width: 60%;
         }
     }
 }
 
 @media only screen and (max-width: 768px) {
-    .modal {
+    .modalFav {
         .menuFavorite {
             width: 100%;
 
             .iconClose {
                 display: block;
-                width: 42px;
-                height: 42px;
-                cursor: pointer;
-            }
-
-            .title {
-                margin-top: 1.5em;
-            }
-
-            .listaFavoritos {
-                .productFav {
-                    .containerInfosFav {
-                        width: 55%;
-                    }
-                }
-            }
-        }
-    }
-}
-
-@media only screen and (max-width: 420px) {
-    .modal {
-        .menuFavorite {
-            width: 100%;
-
-            .listaFavoritos {
-                padding-right: 2.5em;
-
-                .productFav {
-                    .containerInfosFav {
-                        width: 50%;
-                        font-size: clamp(1.4rem, 0.2rem + 1vw, 2rem);
-                    }
-                }
             }
         }
     }

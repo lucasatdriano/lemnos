@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #0d977e;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgDark: #2d2d2d;
 $color-bgLight: #f9fbfb;
@@ -25,6 +25,9 @@ $font-items: 'Poppins', Helvetica;
     width: 100%;
     text-align: center;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     &.ordersEmpty {
         display: flex;
@@ -52,6 +55,7 @@ $font-items: 'Poppins', Helvetica;
     }
 
     .listItens {
+        width: 100%;
         display: flex;
         text-align: left;
         flex-direction: column;
@@ -80,6 +84,7 @@ $font-items: 'Poppins', Helvetica;
             .orderDetails {
                 display: flex;
                 justify-content: space-between;
+                gap: 0.5em;
                 padding-inline: 1.5em;
                 text-align: center;
 
@@ -99,14 +104,6 @@ $font-items: 'Poppins', Helvetica;
                 color: #eb6a00;
             }
         }
-    }
-
-    .mostMoreButton {
-        font-weight: bold;
-        color: $color-primaryLight;
-        cursor: pointer;
-        text-decoration: underline;
-        font-size: 1.8rem;
     }
 }
 
@@ -131,6 +128,18 @@ $font-items: 'Poppins', Helvetica;
 
         .mostMoreButton {
             color: $color-primaryDark;
+        }
+    }
+}
+
+@media only screen and (max-width: 525px) {
+    .orderHistoryContainer {
+        .listItens {
+            .orderCard {
+                .orderDetails {
+                    flex-direction: column;
+                }
+            }
         }
     }
 }

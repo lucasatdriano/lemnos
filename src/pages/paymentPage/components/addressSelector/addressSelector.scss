@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -22,14 +22,14 @@ $font-items: 'Poppins', Helvetica;
 
 .containerAddress {
     flex: 1;
+    height: fit-content;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: start;
-    background: $color-bgLight;
     border-radius: 15px;
     box-shadow: 0 0 10px $color-shadow;
-    padding-block: 1em;
+    padding-bottom: 1em;
     gap: 1em;
 
     .noAddressContainer {
@@ -39,6 +39,7 @@ $font-items: 'Poppins', Helvetica;
         align-items: center;
         text-align: center;
         gap: 1em;
+        padding-top: 1em;
 
         .addAddressButton {
             display: flex;
@@ -65,14 +66,26 @@ $font-items: 'Poppins', Helvetica;
         }
     }
 
-    .textAddress {
-        padding: 0 1em 0.5em;
-        font-size: clamp(1.6rem, 1vw, 2rem);
-        font-weight: 500;
+    .titleContainers {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
         width: 100%;
-        font-family: $font-items;
-        color: $color-fontLight;
+        padding: 0.5em 1em;
         border-bottom: 2px solid $color-primaryLight;
+
+        .iconAddress {
+            width: clamp(28px, 4vw, 36px);
+            height: clamp(28px, 4vw, 36px);
+        }
+
+        .textAddress {
+            font-size: clamp(1.4rem, 1vw, 1.8rem);
+            font-weight: 500;
+            width: 100%;
+            font-family: $font-items;
+            color: $color-fontLight;
+        }
     }
 
     .addressOptionsContainer {
@@ -169,6 +182,69 @@ $font-items: 'Poppins', Helvetica;
                         margin-top: 0.25em;
                         padding-top: 0.25em;
                         border-top: 1px dashed #808080;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dark {
+    .containerAddress {
+        .noAddressContainer {
+            .addAddressButton {
+                color: $color-fontDark;
+                background: $color-primaryDark;
+
+                &:hover {
+                    box-shadow: 0 0 10px $color-primaryDark;
+                }
+            }
+        }
+
+        .textAddress {
+            color: $color-fontDark;
+            border-bottom: 2px solid $color-primaryDark;
+        }
+
+        .addressOptionsContainer {
+            .addressCard {
+                input[type='radio'] {
+                    &:checked ~ .addressLabel {
+                        box-shadow: 0 0 10px $color-primaryDark;
+                        border: 1px solid $color-primaryDark;
+                        background-color: rgba(54, 206, 196, 0.05);
+                    }
+                }
+
+                .addressLabel {
+                    background: $color-bgLight;
+                    border: 1px solid #e0e0e0;
+
+                    &:hover {
+                        border-color: $color-primaryDark;
+                    }
+
+                    .addressInfo {
+                        .addressMainInfo {
+                            .addressCep {
+                                color: $color-primaryDark;
+                                background: rgba(54, 206, 196, 0.237);
+                            }
+
+                            .addressStreet {
+                                color: $color-fontDark;
+                            }
+                        }
+
+                        .addressSecondaryInfo {
+                            color: #ccc;
+                        }
+
+                        .addressComplement {
+                            color: #ccc;
+                            border-top: 1px dashed #808080;
+                        }
                     }
                 }
             }

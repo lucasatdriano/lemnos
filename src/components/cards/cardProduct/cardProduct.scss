@@ -64,6 +64,7 @@ $font-items: 'Poppins', Helvetica;
             justify-content: space-between;
             position: relative;
             z-index: 1;
+            padding-block: 0.25em;
 
             .productName {
                 font-size: 1.5rem;
@@ -204,12 +205,18 @@ $font-items: 'Poppins', Helvetica;
         background-color: #72757478;
         box-shadow: 0 0 15px #141414a8;
 
-        .productDetails {
-            color: $color-fontDark;
+        .productLink {
+            .iconFav {
+                color: $color-primaryDark;
+            }
 
-            .productPrice {
-                span {
-                    color: $color-primaryDark;
+            .productDetails {
+                color: $color-fontDark;
+
+                .productPrice {
+                    span {
+                        color: $color-primaryDark;
+                    }
                 }
             }
         }

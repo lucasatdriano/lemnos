@@ -6,7 +6,7 @@ $color-detailsLight: #850e5d;
 $color-primaryDark: #10a88d;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgLight: #f9fbfb;
 $color-bgDark: #2d2d2d;
@@ -29,8 +29,8 @@ main {
         border-bottom: 2px solid $color-primaryLight;
 
         .iconOrder {
-            width: clamp(32px, 4vw, 36px);
-            height: clamp(32px, 4vw, 36px);
+            width: clamp(28px, 4vw, 36px);
+            height: clamp(28px, 4vw, 36px);
         }
 
         h3 {
@@ -74,8 +74,8 @@ main {
 
 .dark {
     main {
-        .hrTitle {
-            border: 2px solid $color-primaryDark;
+        .titleContainers {
+            border-bottom: 2px solid $color-primaryDark;
         }
 
         .loadingOrder {
@@ -102,121 +102,12 @@ main {
     }
 }
 
-// @media only screen and (max-width: 1600px) {
-//     main {
-//         .shippingCartWrapper {
-//             align-items: center;
-//             flex-direction: column;
-
-//             .orderContent {
-//                 width: 100%;
-//                 flex-direction: column;
-//                 gap: 1em;
-//             }
-
-//             .orderSummary {
-//                 width: 50vw;
-//                 min-width: 30em;
-//                 height: 30em;
-//             }
-//         }
-//     }
-// }
-
-// @media only screen and (max-width: 800px) {
-//     main {
-//         .shippingCartWrapper {
-//             .orderContent {
-//                 .personalData {
-//                     .dataContainer {
-//                         grid-template-columns: 1fr;
-//                         grid-template-rows: 1fr auto 1fr;
-
-//                         .hrData {
-//                             width: 100%;
-//                             height: 0;
-//                         }
-//                     }
-//                 }
-
-//                 .shippingCart {
-//                     .cart {
-//                         .dataProduct {
-//                             thead {
-//                                 display: none;
-//                             }
-
-//                             tr {
-//                                 display: flex;
-//                                 flex-direction: column;
-//                                 align-items: center;
-//                                 gap: 1em;
-//                                 padding: 1em 0;
-
-//                                 td {
-//                                     font-size: 2rem;
-
-//                                     p {
-//                                         text-align: center;
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-
-//             .orderSummary {
-//                 h2 {
-//                     top: 65%;
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// @media only screen and (max-width: 550px) {
-//     main {
-//         .shippingCartWrapper {
-//             .orderContent {
-//                 .personalData {
-//                     .dataContainer {
-//                         .enderecoContainer {
-//                             margin-top: -40px;
-
-//                             .dataEnd {
-//                                 grid-template-columns: 1fr;
-//                                 grid-template-rows: 1fr;
-//                             }
-//                         }
-//                         .hrData {
-//                             margin-top: -55px;
-//                         }
-//                     }
-//                 }
-
-//                 .shippingCart {
-//                     .delivery {
-//                         .dataDelivery {
-//                             flex-direction: column;
-//                             gap: 2em;
-
-//                             .term {
-//                                 text-indent: 0;
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-
-//             .orderSummary {
-//                 width: 90vw;
-//                 min-width: 0;
-
-//                 h2 {
-//                     top: 65%;
-//                 }
-//             }
-//         }
-//     }
-// }
+@media only screen and (max-width: 764px) {
+    main {
+        .orderSection {
+            .shippingCartWrapper {
+                display: grid;
+            }
+        }
+    }
+}

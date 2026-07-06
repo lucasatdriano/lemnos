@@ -36,7 +36,7 @@ $font-items: 'Poppins', Helvetica;
         }
     }
 
-    .modal {
+    .modalDep {
         position: fixed;
         top: 0;
         left: 0;
@@ -100,7 +100,6 @@ $font-items: 'Poppins', Helvetica;
             width: 100%;
             text-align: center;
             box-shadow: 0 1px 10px $color-shadow;
-            animation: modal 0.8s ease-in;
         }
 
         .categorias {

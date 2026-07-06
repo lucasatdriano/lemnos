@@ -7,7 +7,7 @@ $color-primaryDark: #10a88d;
 $color-secundaryDarkAlt: #415352;
 $color-secundaryDark: #2d3a3a;
 $color-terciaryDark: #f6fefdcc;
-$color-detailsDark: #c75ea3;
+$color-detailsDark: #db3ca6;
 
 $color-bgDark: #2d2d2d;
 $color-bgLight: #f9fbfb;
@@ -66,8 +66,6 @@ $font-items: 'Poppins', Helvetica;
 .dark {
     .doubleRangeInput {
         .rangeSlider {
-            background: $color-secundaryDark;
-
             .inputBox {
                 .minBox,
                 .maxBox {
