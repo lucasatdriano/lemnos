@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 export const FILTER_BRANDS = [
     'Acer',
     'AMD',

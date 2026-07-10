@@ -18,6 +18,7 @@ const UnifiedModals = ({
     externalSelectedItem,
     onSelectFromList,
     externalInicialCep,
+    onSuccess,
 }) => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [currentMode, setCurrentMode] = useState(modalMode);
@@ -63,6 +64,7 @@ const UnifiedModals = ({
     const renderFormModal = () => {
         const commonProps = {
             onClose: onClose,
+            onSuccess: onSuccess,
         };
 
         switch (currentType) {
@@ -176,6 +178,7 @@ UnifiedModals.propTypes = {
     externalSelectedItem: PropTypes.object,
     onSelectFromList: PropTypes.func,
     externalInicialCep: PropTypes.string,
+    onSuccess: PropTypes.func,
 };
 
 export default UnifiedModals;

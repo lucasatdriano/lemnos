@@ -1,97 +1,120 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import './cardProduct.scss';
 import './cardProductOffer.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import iconAddCart from '../../../assets/icons/iconAddCart.svg';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
-import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import AuthService from '../../../services/AuthService';
 import {
     adicionarFavorito,
-    adicionarProdutoCarrinho,
     desfavoritarProduto,
-    listarProdutosFavoritos,
+    adicionarProdutoCarrinho,
 } from '../../../services/UsuarioProdutoService';
-import { formatPreco } from '../../../utils/formatters';
+import { useAuth } from '../../../hooks/useAuth';
+import {
+    addFavorite,
+    removeFavorite,
+} from '../../../store/slices/favoriteSlice';
+import { formatCurrency } from '../../../utils/formatters';
+import { addCarrinho } from '../../../store/slices/cartSlice';
+import { BiCheck } from 'react-icons/bi';
 
 export default function CardProduct({ produto }) {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+    const dispatch = useDispatch();
 
-    const [isFavorite, setIsFavorite] = useState(false);
+    const cartItems = useSelector((state) => state.cart.items);
 
-    useEffect(() => {
-        const setInfo = async () => {
-            if (AuthService.isLoggedIn() && AuthService.isClienteRole()) {
-                try {
-                    const favorites = await listarProdutosFavoritos();
-                    const isFavorited = favorites.some(
-                        (fav) => fav.id === produto.id
-                    );
-                    if (!favorites) {
-                        navigate('/auth');
-                    }
-                    setIsFavorite(isFavorited);
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-        };
+    const isInCart = cartItems.some((item) => item.id === produto.id);
 
-        setInfo();
-    }, [produto.id]);
+    const favorites = useSelector((state) => state.favorite.items);
+
+    const isFavorite = favorites.some((favorite) => favorite.id === produto.id);
 
     async function handleAddToCart() {
-        if (AuthService.isLoggedIn()) {
-            try {
-                await adicionarProdutoCarrinho(produto, 1);
-                toast.success('Produto adicionado ao carrinho!');
-            } catch (error) {
-                console.error('Erro ao adicionar produto ao carrinho:', error);
-                toast.error('Erro ao adicionar produto ao carrinho.');
-            }
-        } else {
+        if (!isAuthenticated) {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos ao carrinho.'
             );
             navigate('/auth');
+
+            return;
+        }
+
+        try {
+            await adicionarProdutoCarrinho(produto, 1);
+
+            dispatch(
+                addCarrinho({
+                    ...produto,
+                    preco:
+                        produto.desconto > 0
+                            ? produto.valorComDesconto
+                            : produto.valorTotal,
+                    quantidade: 1,
+                })
+            );
+
+            toast.success('Produto adicionado ao carrinho!');
+        } catch (error) {
+            console.error('Erro ao adicionar produto ao carrinho:', error);
+            toast.error('Erro ao adicionar produto ao carrinho.');
         }
     }
 
     const handleAddToFavorites = async (produto, e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (AuthService.isLoggedIn()) {
-            if (AuthService.isClienteRole()) {
-                try {
-                    await adicionarFavorito(produto);
-                    setIsFavorite(true);
-                    toast.success('Produto adicionado aos favoritos!');
-                } catch (error) {
-                    console.error('Erro ao adicionar produto aos favoritos.');
-                }
-            } else {
-                toast.warning(
-                    'Usuário não permitido adicionar produtos aos favoritos.'
-                );
-            }
-        } else {
+
+        if (!isAuthenticated) {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos aos favoritos.'
             );
             navigate('/auth');
+
+            return;
+        }
+
+        if (AuthService.isClienteRole()) {
+            try {
+                await adicionarFavorito(produto);
+
+                dispatch(addFavorite(produto));
+
+                toast.success('Produto adicionado aos favoritos!');
+            } catch (error) {
+                console.error('Erro ao adicionar produto aos favoritos.');
+            }
+        } else {
+            toast.warning(
+                'Você precisa ser um cliente para adicionar produtos aos favoritos.'
+            );
         }
     };
 
     const handleRemoveFavorite = async (produto, e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (AuthService.isLoggedIn() && AuthService.isClienteRole()) {
+
+        if (!isAuthenticated) {
+            toast.warning(
+                'Você precisa estar logado para adicionar produtos aos favoritos.'
+            );
+            navigate('/auth');
+
+            return;
+        }
+
+        if (AuthService.isClienteRole()) {
             try {
                 const success = await desfavoritarProduto(produto);
+
                 if (success) {
-                    setIsFavorite(false);
+                    dispatch(removeFavorite(produto.id));
+
                     toast.success('Produto removido dos favoritos!');
                 }
             } catch (error) {
@@ -99,9 +122,8 @@ export default function CardProduct({ produto }) {
             }
         } else {
             toast.warning(
-                'Você precisa estar logado para adicionar produtos aos favoritos.'
+                'Você precisa ser um cliente para adicionar produtos aos favoritos.'
             );
-            navigate('/auth');
         }
     };
 
@@ -140,17 +162,19 @@ export default function CardProduct({ produto }) {
                             <>
                                 {hasDiscount && (
                                     <p className="offerPrice">
-                                        {formatPreco(produto.valorTotal)}
+                                        {formatCurrency(produto.valorTotal)}
                                     </p>
                                 )}
                                 <p className="productPrice">
                                     À vista <br />
                                     <span>
                                         {hasDiscount
-                                            ? formatPreco(
+                                            ? formatCurrency(
                                                   produto.valorComDesconto
                                               )
-                                            : formatPreco(produto.valorTotal)}
+                                            : formatCurrency(
+                                                  produto.valorTotal
+                                              )}
                                     </span>
                                     <br />
                                     no PIX com 15% de desconto
@@ -160,18 +184,41 @@ export default function CardProduct({ produto }) {
                     </Link>
                     <button
                         type="button"
-                        className="btnAdd"
-                        onClick={handleAddToCart}
+                        className={`btnAdd ${isInCart ? 'added' : ''}`}
+                        onClick={
+                            isInCart ? () => navigate('/cart') : handleAddToCart
+                        }
                     >
-                        <img
-                            src={iconAddCart}
-                            alt="icone adicionar carrinho"
-                            className="iconAdd"
-                        />
-                        Adicionar ao Carrinho
+                        {isInCart ? (
+                            <>
+                                <BiCheck className="iconAdd" />
+                                Ver Carrinho
+                            </>
+                        ) : (
+                            <>
+                                <img
+                                    src={iconAddCart}
+                                    alt="icone adicionar carrinho"
+                                    className="iconAdd"
+                                />
+                                Adicionar ao Carrinho
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
         </>
     );
 }
+
+CardProduct.propTypes = {
+    produto: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+            .isRequired,
+        desconto: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        imagemPrincipal: PropTypes.string,
+        nome: PropTypes.string,
+        valorTotal: PropTypes.number,
+        valorComDesconto: PropTypes.number,
+    }).isRequired,
+};

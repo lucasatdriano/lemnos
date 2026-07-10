@@ -2,43 +2,43 @@ $color-fontLight: #121717;
 $color-shadow: #12171740;
 
 .scrollBtn {
-    width: 18%;
-    margin-left: auto;
-    padding-right: 5%;
-    margin-top: 10%;
     cursor: pointer;
-    position: absolute;
 
     .progressBar {
         position: fixed;
+        right: 16px;
+        bottom: 16px;
         z-index: 999;
-        bottom: 20px;
-        right: 10px;
-        height: 3.5em;
-        width: 3.5em;
-        display: none;
+        display: grid;
         place-items: center;
+        width: clamp(48px, 5vw, 56px);
+        height: clamp(48px, 5vw, 56px);
         border-radius: 50%;
         box-shadow: 0 0 10px $color-shadow;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+
+        transition:
+            opacity 0.3s,
+            visibility 0.3s;
 
         &.visible {
-            animation-name: is-bouncing, appearScrollButton;
-            animation-duration: 1s, 0.3s;
-            animation-timing-function: ease-in-out, cubic-bezier(0, 0.3, 0.8, 1);
-            animation-direction: alternate, forwards;
-            animation-iteration-count: infinite, 1;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
 
-            animation-direction: alternate, normal;
+            animation:
+                appearScrollButton 0.6s ease-in-out,
+                isBouncing 1.2s ease-in-out 0.6s infinite alternate;
         }
 
         .arrowUp {
-            display: block;
-            height: calc(100% - 10px);
-            width: calc(100% - 10px);
-            border-radius: 50%;
             display: grid;
             place-items: center;
-            font-size: 3rem;
+            width: calc(100% - 8px);
+            height: calc(100% - 8px);
+            border-radius: 50%;
             color: $color-fontLight;
         }
     }
@@ -49,8 +49,8 @@ $color-shadow: #12171740;
         opacity: 0;
         transform: translateY(-100vh);
     }
-    95% {
-        transform: translateY(22px);
+    90% {
+        transform: translateY(25px);
     }
     100% {
         opacity: 1;
@@ -58,7 +58,7 @@ $color-shadow: #12171740;
     }
 }
 
-@keyframes is-bouncing {
+@keyframes isBouncing {
     to {
         transform: translateY(10px);
     }

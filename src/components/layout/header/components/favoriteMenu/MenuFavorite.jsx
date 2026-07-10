@@ -1,10 +1,11 @@
 import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { IoClose } from 'react-icons/io5';
 import { MdFavorite } from 'react-icons/md';
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../../../hooks/useAuth';
 import { getProdutoById } from '../../../../../services/ProdutoService';
 import {
     listarProdutosFavoritos,
@@ -13,24 +14,25 @@ import {
 } from '../../../../../services/UsuarioProdutoService';
 import iconAddCart from '../../../../../assets/icons/iconAddCart.svg';
 import Loading from '../../../loading/Loading';
+import { formatCurrency } from '../../../../../utils/formatters';
 import AuthService from '../../../../../services/AuthService';
-import { formatPreco } from '../../../../../utils/formatters';
 import './menuFavorite.scss';
+import { addCarrinho } from '../../../../../store/slices/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { BiCheck } from 'react-icons/bi';
 
 export default function MenuFavorite({ onClose, isOpen }) {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+    const dispatch = useDispatch();
+
+    const cartItems = useSelector((state) => state.cart.items);
+
     const [favorites, setFavorites] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        if (!isOpen) return;
-
-        setIsLoading(true);
-        fetchFavorites();
-    }, [isOpen]);
-
-    const fetchFavorites = async () => {
-        if (!AuthService.isLoggedIn() || !AuthService.isClienteRole()) {
+    const fetchFavorites = useCallback(async () => {
+        if (!isAuthenticated || !AuthService.isClienteRole()) {
             setFavorites([]);
             setIsLoading(false);
             return;
@@ -45,9 +47,6 @@ export default function MenuFavorite({ onClose, isOpen }) {
                 })
             );
 
-            if (!response) {
-                navigate('/auth');
-            }
             setFavorites(
                 Array.isArray(favoritoDetalhado) ? favoritoDetalhado : []
             );
@@ -56,7 +55,14 @@ export default function MenuFavorite({ onClose, isOpen }) {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        setIsLoading(true);
+        fetchFavorites();
+    }, [isOpen, fetchFavorites]);
 
     const handleRemoveFavorite = async (produto, e) => {
         e.preventDefault();
@@ -76,18 +82,32 @@ export default function MenuFavorite({ onClose, isOpen }) {
     };
 
     const handleAddToCart = async (favorite) => {
-        if (AuthService.isLoggedIn()) {
-            try {
-                await adicionarProdutoCarrinho(favorite, 1);
-                toast.success('Produto adicionado ao carrinho!');
-            } catch (error) {
-                toast.error('Erro ao adicionar produto ao carrinho.');
-            }
-        } else {
+        if (!isAuthenticated) {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos ao carrinho.'
             );
             navigate('/auth');
+
+            return;
+        }
+
+        try {
+            await adicionarProdutoCarrinho(favorite, 1);
+
+            dispatch(
+                addCarrinho({
+                    ...favorite,
+                    preco:
+                        favorite.desconto > 0
+                            ? favorite.valorComDesconto
+                            : favorite.valorTotal,
+                    quantidade: 1,
+                })
+            );
+
+            toast.success('Produto adicionado ao carrinho!');
+        } catch (error) {
+            toast.error('Erro ao adicionar produto ao carrinho.');
         }
     };
 
@@ -127,6 +147,10 @@ export default function MenuFavorite({ onClose, isOpen }) {
                     <ul className="listaFavoritos">
                         {favorites.map((favorite) => {
                             const hasDiscount = favorite.desconto > 0;
+                            const isInCart = cartItems.some(
+                                (item) => item.id === favorite.id
+                            );
+
                             return (
                                 <li key={favorite.id} className="itemFav">
                                     <Link
@@ -162,7 +186,7 @@ export default function MenuFavorite({ onClose, isOpen }) {
                                             <div className="pricingContainer">
                                                 {hasDiscount && (
                                                     <p className="offerPrice">
-                                                        {formatPreco(
+                                                        {formatCurrency(
                                                             favorite.valorTotal
                                                         )}
                                                     </p>
@@ -170,7 +194,7 @@ export default function MenuFavorite({ onClose, isOpen }) {
                                                 <p className="productPrice">
                                                     À vista <br />
                                                     <span>
-                                                        {formatPreco(
+                                                        {formatCurrency(
                                                             favorite.valorComDesconto
                                                         )}
                                                     </span>{' '}
@@ -182,17 +206,29 @@ export default function MenuFavorite({ onClose, isOpen }) {
                                     </Link>
                                     <button
                                         type="button"
-                                        className="btnAdd"
-                                        onClick={() =>
-                                            handleAddToCart(favorite)
+                                        className={`btnAdd ${isInCart ? 'added' : ''}`}
+                                        onClick={
+                                            isInCart
+                                                ? () => navigate('/cart')
+                                                : () =>
+                                                      handleAddToCart(favorite)
                                         }
                                     >
-                                        <img
-                                            src={iconAddCart}
-                                            alt="icon add Cart"
-                                            className="iconAdd"
-                                        />
-                                        Adicionar ao Carrinho
+                                        {isInCart ? (
+                                            <>
+                                                <BiCheck className="iconAdd" />{' '}
+                                                Ver Carrinho
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img
+                                                    src={iconAddCart}
+                                                    alt="icon add Cart"
+                                                    className="iconAdd"
+                                                />
+                                                Adicionar ao Carrinho
+                                            </>
+                                        )}
                                     </button>
                                 </li>
                             );

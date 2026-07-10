@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import './toolTip.scss';
 
 export default function ToolTip({ message, children }) {
@@ -25,3 +25,8 @@ export default function ToolTip({ message, children }) {
         </div>
     );
 }
+
+ToolTip.propTypes = {
+    message: PropTypes.string.isRequired,
+    children: PropTypes.node,
+};

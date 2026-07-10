@@ -1,7 +1,7 @@
-/* eslint-disable react/prop-types */
 import './orderModal.scss';
 import { IoClose } from 'react-icons/io5';
-import { formatDateToBr, formatPreco } from '../../../utils/formatters';
+import PropTypes from 'prop-types';
+import { formatBrazilianDate, formatCurrency } from '../../../utils/formatters';
 
 export default function OrderModal({ pedido, onClose }) {
     if (!pedido) {
@@ -31,16 +31,16 @@ export default function OrderModal({ pedido, onClose }) {
                             <p>{pedido.qtdProdutos}</p>
 
                             <p className="labelDetails">Data do Pedido</p>
-                            <p>{formatDateToBr(pedido.dataPedido)}</p>
+                            <p>{formatBrazilianDate(pedido.dataPedido)}</p>
 
                             <p className="labelDetails">Valor Pedido</p>
-                            <p>{formatPreco(pedido.valorPedido)}</p>
+                            <p>{formatCurrency(pedido.valorPedido)}</p>
 
                             <p className="labelDetails">Valor Frete</p>
-                            <p>{formatPreco(pedido.valorFrete)}</p>
+                            <p>{formatCurrency(pedido.valorFrete)}</p>
 
                             <p className="labelDetails">Valor Total</p>
-                            <p>{formatPreco(pedido.valorPagamento)}</p>
+                            <p>{formatCurrency(pedido.valorPagamento)}</p>
                         </div>
                     </div>
 
@@ -85,7 +85,9 @@ export default function OrderModal({ pedido, onClose }) {
                                     </div>
                                     <h4 className="priceProduct">
                                         Preço:{' '}
-                                        {formatPreco(produto.valorComDesconto)}
+                                        {formatCurrency(
+                                            produto.valorComDesconto
+                                        )}
                                     </h4>
                                 </li>
                             ))}
@@ -96,3 +98,8 @@ export default function OrderModal({ pedido, onClose }) {
         </div>
     );
 }
+
+OrderModal.propTypes = {
+    pedido: PropTypes.object,
+    onClose: PropTypes.func.isRequired,
+};

@@ -1,16 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
 import { TbTruckDelivery } from 'react-icons/tb';
-
 import { verificarCep } from '../../../../services/EnderecoService';
-
-import { setFreteInfo } from '../../../../store/actions/freteActions';
-
-import { formatPreco } from '../../../../utils/formatters';
-
+import { setFreteInfo } from '../../../../store/slices/freteSlice';
 import './deliveryCalculator.scss';
+import { formatCurrency } from '../../../../utils/formatters';
 
 export default function DeliveryCalculator() {
     const dispatch = useDispatch();
@@ -170,7 +165,7 @@ export default function DeliveryCalculator() {
                             </label>
                         </div>
 
-                        <strong>{formatPreco(26.99)}</strong>
+                        <strong>{formatCurrency(26.99)}</strong>
                     </div>
 
                     <div className="deliveryOption">
@@ -192,7 +187,7 @@ export default function DeliveryCalculator() {
                             </label>
                         </div>
 
-                        <strong>{formatPreco(32.99)}</strong>
+                        <strong>{formatCurrency(32.99)}</strong>
                     </div>
 
                     <div className="deliveryOption">
@@ -214,7 +209,7 @@ export default function DeliveryCalculator() {
                             </label>
                         </div>
 
-                        <strong>{formatPreco(45.99)}</strong>
+                        <strong>{formatCurrency(45.99)}</strong>
                     </div>
                 </>
             )}

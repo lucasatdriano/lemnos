@@ -57,17 +57,6 @@ export const validateFuncionario = (form, isEditing = false) => {
         }
     }
 
-    // const cepCleanEnd = String(form.endereco?.cep || '').replace(/\D/g, '');
-    // if (!cepCleanEnd) {
-    //     errors.cep = 'CEP é obrigatório';
-    // } else if (cepCleanEnd.length !== 8) {
-    //     errors.cep = 'CEP deve ter 8 dígitos';
-    // }
-
-    // if (!form.endereco?.numLogradouro) {
-    //     errors.numLogradouro = 'Número do logradouro é obrigatório';
-    // }
-
     if (!isEditing) {
         if (!form.password) {
             errors.password = 'Senha é obrigatória';

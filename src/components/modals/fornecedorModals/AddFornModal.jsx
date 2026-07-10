@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import CustomInput from '../../inputs/customInput/Inputs';
 import { toast } from 'react-toastify';
 import { IoClose } from 'react-icons/io5';
@@ -13,11 +13,7 @@ import {
     updateFornecedor,
 } from '../../../services/FornecedorService';
 import InputError from '../../inputs/inputError/InputError';
-import {
-    formatCep,
-    formatCnpj,
-    formatTelefone,
-} from '../../../utils/formatters';
+import { formatCep, formatCnpj, formatPhone } from '../../../utils/formatters';
 import { validateFornecedor } from '../../../validations/fornecedorValidator';
 
 export default function FornecedorModal({
@@ -25,30 +21,39 @@ export default function FornecedorModal({
     tipoEntidade,
     selectedFornecedor,
 }) {
-    const initialFormState = {
-        nome: '',
-        email: '',
-        telefone: '',
-        cnpj: '',
-        endereco: {
-            cep: '',
-            numeroLogradouro: '',
-            complemento: '',
-        },
-    };
+    const initialFormState = useMemo(
+        () => ({
+            nome: '',
+            email: '',
+            telefone: '',
+            cnpj: '',
+            endereco: {
+                cep: '',
+                numeroLogradouro: '',
+                complemento: '',
+            },
+        }),
+        []
+    );
 
     const [form, setForm] = useState(initialFormState);
     const [errors, setErrors] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
 
-    useEffect(() => {
+    const resetForm = useCallback(() => {
+        setForm(initialFormState);
+        setErrors({});
+        setIsEditMode(false);
+    }, [initialFormState]);
+
+    const loadFornecedorData = useCallback(() => {
         if (selectedFornecedor && selectedFornecedor.email) {
             setForm({
                 nome: selectedFornecedor.nome || '',
                 cnpj:
                     formatCnpj(selectedFornecedor.cnpj?.toString() || '') || '',
                 telefone:
-                    formatTelefone(
+                    formatPhone(
                         selectedFornecedor.telefone?.toString() || ''
                     ) || '',
                 email: selectedFornecedor.email || '',
@@ -66,14 +71,17 @@ export default function FornecedorModal({
                         : '',
                 },
             });
-
             setIsEditMode(true);
             setErrors({});
         } else {
             setForm(initialFormState);
             setIsEditMode(false);
         }
-    }, [selectedFornecedor]);
+    }, [selectedFornecedor, initialFormState]);
+
+    useEffect(() => {
+        loadFornecedorData();
+    }, [loadFornecedorData]);
 
     const handleChange = (name, value) => {
         setForm({ ...form, [name]: value });
@@ -144,9 +152,7 @@ export default function FornecedorModal({
                     tipoEntidade
                 );
                 toast.success('Fornecedor cadastrado com sucesso!');
-                setIsEditMode(false);
-                setForm(initialFormState);
-                setErrors({});
+                resetForm();
                 onClose();
             }
         } catch (error) {
@@ -205,9 +211,7 @@ export default function FornecedorModal({
 
                 if (enderecoAtualizada === true) {
                     toast.success('Fornecedor atualizado com sucesso!');
-                    setIsEditMode(false);
-                    setForm(initialFormState);
-                    setErrors({});
+                    resetForm();
                     onClose();
                     return;
                 }
@@ -367,3 +371,9 @@ export default function FornecedorModal({
         </div>
     );
 }
+
+FornecedorModal.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    tipoEntidade: PropTypes.string.isRequired,
+    selectedFornecedor: PropTypes.object,
+};

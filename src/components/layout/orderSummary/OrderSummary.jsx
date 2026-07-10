@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { PiFileMagnifyingGlass } from 'react-icons/pi';
-import './orderSummary.scss';
-import { formatPreco } from '../../../utils/formatters';
 import { IoArrowBack } from 'react-icons/io5';
+import './orderSummary.scss';
+import { formatCurrency } from '../../../utils/formatters';
 
 export default function OrderSummary({
     valorCompra,
@@ -26,21 +26,21 @@ export default function OrderSummary({
             <div className="dataResume">
                 <div className="lineOrder">
                     <p>Valor do Produto:</p>
-                    <p>{formatPreco(valorCompra)}</p>
+                    <p>{formatCurrency(valorCompra)}</p>
                 </div>
 
                 <div className="lineOrder">
                     <p>Desconto:</p>
                     {desconto > 0 ? (
-                        <p className="discount">-{formatPreco(desconto)}</p>
+                        <p className="discount">-{formatCurrency(desconto)}</p>
                     ) : (
-                        <p className="discount">{formatPreco(0)}</p>
+                        <p className="discount">{formatCurrency(0)}</p>
                     )}
                 </div>
 
                 <div className="lineOrder">
                     <p>Frete:</p>
-                    <p>{frete > 0 ? formatPreco(frete) : 'A calcular'}</p>
+                    <p>{frete > 0 ? formatCurrency(frete) : 'A calcular'}</p>
                 </div>
 
                 <div className="lineOrder">
@@ -53,7 +53,7 @@ export default function OrderSummary({
                 </div>
 
                 <div className="total">
-                    <h2>{formatPreco(total)}</h2>
+                    <h2>{formatCurrency(total)}</h2>
                 </div>
 
                 <div className="buttonsContainer">
@@ -75,7 +75,7 @@ export default function OrderSummary({
 
 OrderSummary.propTypes = {
     valorCompra: PropTypes.number.isRequired,
-    desconto: PropTypes.number,
+    desconto: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     frete: PropTypes.number.isRequired,
     paymentMethodName: PropTypes.string,
     onConfirm: PropTypes.func,

@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AuthService from '../../services/AuthService';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
     atualizarStatus,
     novoPedido,
@@ -18,9 +16,10 @@ import OrderItems from './components/orderItems/OrderItems';
 import CustomerData from './components/customerData/CustomerData';
 import OrderTracking from './components/orderTracking/OrderTracking';
 import './buy.scss';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function BuyPage() {
-    const dispatch = useDispatch();
+    const { isAuthenticated } = useAuth();
     const carrinho = useSelector((state) => state.cart.items);
     const valorCompra = useSelector((state) => state.cart.totalAmount);
 
@@ -39,21 +38,22 @@ export default function BuyPage() {
     );
     const desconto = useSelector((state) => state.payment.desconto);
 
-    useEffect(() => {
-        async function fetchCliente() {
-            try {
-                if (AuthService.isLoggedIn()) {
-                    const clienteResponse = await getCliente();
-                    setCliente(clienteResponse || {});
-                }
-            } catch (error) {
-                console.error('Erro ao obter dados do cliente:', error);
+    const fetchCliente = useCallback(async () => {
+        try {
+            if (isAuthenticated) {
+                const clienteResponse = await getCliente();
+                setCliente(clienteResponse || {});
             }
+        } catch (error) {
+            console.error('Erro ao obter dados do cliente:', error);
         }
-        fetchCliente();
-    }, [dispatch]);
+    }, [isAuthenticated]);
 
-    const fetchPedidoStatus = async (pedidoId) => {
+    useEffect(() => {
+        fetchCliente();
+    }, [fetchCliente]);
+
+    const fetchPedidoStatus = useCallback(async (pedidoId) => {
         try {
             await atualizarStatus(pedidoId);
 
@@ -66,7 +66,7 @@ export default function BuyPage() {
         } catch (error) {
             console.error('Erro ao atualizar status do pedido:', error);
         }
-    };
+    }, []);
 
     useEffect(() => {
         if (pedidoId) {
@@ -76,7 +76,7 @@ export default function BuyPage() {
 
             return () => clearInterval(interval);
         }
-    }, [pedidoId]);
+    }, [pedidoId, fetchPedidoStatus]);
 
     useEffect(() => {
         if (statusUpdates >= 5) {

@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Loading from '../../components/layout/loading/Loading';
 import AuthService from '../../services/AuthService';
@@ -28,26 +27,30 @@ export default function ProductFilter() {
         brand: localStorage.getItem('brand') || '',
         minPrice: parseInt(localStorage.getItem('minPrice')) || 0,
         maxPrice: parseInt(localStorage.getItem('maxPrice')) || 50000,
-        evaluation: localStorage.getItem('evaluation') || '',
+        evaluation: parseInt(localStorage.getItem('evaluation')) || null,
     });
 
     const [calculatedMaxPrice, setCalculatedMaxPrice] = useState(
         filters.maxPrice
     );
 
-    const saveFiltersToLocalStorage = () => {
-        Object.entries(filters).forEach(([key, value]) =>
-            localStorage.setItem(key, value.toString())
-        );
-    };
+    const saveFiltersToLocalStorage = useCallback(() => {
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value === null || value === '') {
+                localStorage.removeItem(key);
+            } else {
+                localStorage.setItem(key, value.toString());
+            }
+        });
+    }, [filters]);
 
-    const clearFiltersFromLocalStorage = () => {
+    const clearFiltersFromLocalStorage = useCallback(() => {
         Object.entries(filters).forEach(([key]) =>
             localStorage.removeItem(key)
         );
-    };
+    }, [filters]);
 
-    const calculateMaxPrice = async () => {
+    const calculateMaxPrice = useCallback(async () => {
         try {
             const filtro = {
                 nome: filters.searchTerm ?? null,
@@ -86,64 +89,59 @@ export default function ProductFilter() {
         } catch (error) {
             console.error('Erro ao calcular o maior preço:', error);
         }
-    };
+    }, [
+        filters.brand,
+        filters.category,
+        filters.subCategory,
+        filters.searchTerm,
+        filters.evaluation,
+    ]);
 
-    const applyFilters = async (pageToLoad = 0) => {
-        setLoading(true);
-        saveFiltersToLocalStorage();
-        try {
-            const filtro = {
-                nome: filters.searchTerm ?? null,
-                categoria: filters.category ?? null,
-                subCategoria: filters.subCategory ?? null,
-                marca: filters.brand ?? null,
-                menorPreco: filters.minPrice ?? 0,
-                maiorPreco: filters.maxPrice ?? 50000,
-                avaliacao: filters.evaluation
-                    ? parseInt(filters.evaluation, 10)
-                    : null,
-            };
+    const applyFilters = useCallback(
+        async (pageToLoad = 0) => {
+            setLoading(true);
+            saveFiltersToLocalStorage();
+            try {
+                const filtro = {
+                    nome: filters.searchTerm ?? null,
+                    categoria: filters.category ?? null,
+                    subCategoria: filters.subCategory ?? null,
+                    marca: filters.brand ?? null,
+                    menorPreco: filters.minPrice ?? 0,
+                    maiorPreco: filters.maxPrice ?? 50000,
+                    avaliacao: filters.evaluation
+                        ? parseInt(filters.evaluation, 10)
+                        : null,
+                };
 
-            const produtosFiltrados = await listarProdutosFiltrados(
-                filtro,
-                pageToLoad,
-                24
-            );
+                const produtosFiltrados = await listarProdutosFiltrados(
+                    filtro,
+                    pageToLoad,
+                    24
+                );
 
-            setFilteredData((prevData) =>
-                pageToLoad === 0
-                    ? produtosFiltrados
-                    : [...prevData, ...produtosFiltrados]
-            );
-            setHasMore(produtosFiltrados.length === 24);
-        } catch (error) {
-            console.error('Erro ao aplicar filtros:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+                setFilteredData((prevData) =>
+                    pageToLoad === 0
+                        ? produtosFiltrados
+                        : [...prevData, ...produtosFiltrados]
+                );
+                setHasMore(produtosFiltrados.length === 24);
+            } catch (error) {
+                console.error('Erro ao aplicar filtros:', error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [filters, saveFiltersToLocalStorage]
+    );
 
     useEffect(() => {
         calculateMaxPrice();
-    }, [
-        filters.brand,
-        filters.category,
-        filters.subCategory,
-        filters.searchTerm,
-        filters.evaluation,
-    ]);
+    }, [calculateMaxPrice]);
 
     useEffect(() => {
         applyFilters(0);
-    }, [
-        filters.brand,
-        filters.category,
-        filters.subCategory,
-        filters.minPrice,
-        filters.maxPrice,
-        filters.searchTerm,
-        filters.evaluation,
-    ]);
+    }, [applyFilters]);
 
     useEffect(() => {
         const handleObserver = (entries) => {
@@ -153,14 +151,16 @@ export default function ProductFilter() {
             }
         };
 
-        if (endOfPageRef.current) {
+        const currentElement = endOfPageRef.current;
+
+        if (currentElement) {
             observer.current = new IntersectionObserver(handleObserver);
-            observer.current.observe(endOfPageRef.current);
+            observer.current.observe(currentElement);
         }
 
         return () => {
-            if (observer.current && endOfPageRef.current) {
-                observer.current.unobserve(endOfPageRef.current);
+            if (observer.current && currentElement) {
+                observer.current.unobserve(currentElement);
             }
         };
     }, [hasMore, loading]);
@@ -169,16 +169,16 @@ export default function ProductFilter() {
         if (page > 0) {
             applyFilters(page);
         }
-    }, [page]);
+    }, [page, applyFilters]);
 
-    const handleClearFilters = () => {
+    const handleClearFilters = useCallback(() => {
         setFilters((prev) => ({
             ...prev,
             brand: '',
             subCategory: '',
             minPrice: 0,
-            maxPrice: 50000,
-            evaluation: 0,
+            maxPrice: calculatedMaxPrice,
+            evaluation: null,
             searchTerm: '',
             category: '',
         }));
@@ -186,42 +186,48 @@ export default function ProductFilter() {
         setHasMore(true);
         clearFiltersFromLocalStorage();
         navigate(`/productFilter`);
-    };
+    }, [calculatedMaxPrice, clearFiltersFromLocalStorage, navigate]);
 
-    const handleCategoryChange = (e) => {
-        const newCategory = e.target.value;
+    const handleCategoryChange = useCallback(
+        (e) => {
+            const newCategory = e.target.value;
+            setFilters((prev) => ({
+                ...prev,
+                category: newCategory,
+                subCategory: '',
+            }));
+            setPage(0);
+
+            localStorage.removeItem('subCategory');
+
+            const searchTerm =
+                new URLSearchParams(location.search).get('search') || '';
+
+            setTimeout(() => {
+                navigate(
+                    `/productFilter/${newCategory}${searchTerm ? `?search=${searchTerm}` : ''}`
+                );
+            }, 0);
+        },
+        [location.search, navigate]
+    );
+
+    const handleProductRating = useCallback((rating) => {
         setFilters((prev) => ({
             ...prev,
-            category: newCategory,
-            subCategory: '',
+            evaluation: prev.evaluation === rating ? null : rating,
         }));
         setPage(0);
+    }, []);
 
-        localStorage.removeItem('subCategory');
-
-        const searchTerm =
-            new URLSearchParams(location.search).get('search') || '';
-
-        setTimeout(() => {
-            navigate(
-                `/productFilter/${newCategory}${searchTerm ? `?search=${searchTerm}` : ''}`
-            );
-        }, 0);
-    };
-
-    const handleProductRating = (rating) => {
-        setFilters((prev) => ({
-            ...prev,
-            evaluation: rating === prev.evaluation ? '' : rating,
-        }));
-        setPage(0);
-    };
-
-    const handleAlterCardsView = (bool) => {
-        setCardList(bool);
-        AuthService.setCard(bool);
-        applyFilters();
-    };
+    const handleAlterCardsView = useCallback(
+        (bool) => {
+            setCardList(bool);
+            AuthService.setCard(bool);
+            applyFilters(0);
+        },
+        [applyFilters]
+    );
 
     return (
         <section className="mainFilters">

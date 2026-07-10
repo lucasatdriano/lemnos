@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
 import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 import './completedModal.scss';
 
 export default function CompletedModal({ onClose }) {
@@ -24,3 +24,7 @@ export default function CompletedModal({ onClose }) {
         </div>
     );
 }
+
+CompletedModal.propTypes = {
+    onClose: PropTypes.func.isRequired,
+};

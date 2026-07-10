@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { BsTruck } from 'react-icons/bs';
-import { formatPreco } from '../../../../utils/formatters';
 import './shippingInfo.scss';
+import { formatCurrency } from '../../../../utils/formatters';
 
 export default function ShippingInfo({ frete }) {
     return (
@@ -23,7 +23,7 @@ export default function ShippingInfo({ frete }) {
                     </p>
                 </div>
 
-                <p className="shippingValue">{formatPreco(frete.custo)}</p>
+                <p className="shippingValue">{formatCurrency(frete.custo)}</p>
             </div>
         </div>
     );

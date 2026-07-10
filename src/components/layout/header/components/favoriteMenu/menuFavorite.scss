@@ -271,6 +271,17 @@ $font-items: 'Poppins', Helvetica;
                     transition: 0.5s ease-out;
                     cursor: pointer;
 
+                    &.added {
+                        background: #2e7d32;
+                        box-shadow: 0 0 8px #2e7d32;
+
+                        &:hover {
+                            background: #2e7d32;
+                            box-shadow: 0 0 12px #2e7d32;
+                            transform: none;
+                        }
+                    }
+
                     &:hover {
                         filter: brightness(0.95);
                         box-shadow: 0 0 24px $color-primaryLight;

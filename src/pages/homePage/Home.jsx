@@ -32,6 +32,16 @@ export default function Home() {
         fetchProdutos();
     }, []);
 
+    const handleDepartmentClick = (category) => {
+        localStorage.setItem('category', category);
+        localStorage.removeItem('subCategory');
+        localStorage.removeItem('searchTerm');
+        localStorage.removeItem('brand');
+        localStorage.removeItem('evaluation');
+        localStorage.removeItem('minPrice');
+        localStorage.removeItem('maxPrice');
+    };
+
     return (
         <>
             <main>
@@ -49,6 +59,9 @@ export default function Home() {
                         <Link
                             to="/productFilter/Computadores"
                             className="gridItem item1"
+                            onClick={() =>
+                                handleDepartmentClick('Computadores')
+                            }
                         >
                             <img
                                 src={computador}
@@ -60,6 +73,9 @@ export default function Home() {
                         <Link
                             to="/productFilter/Notebooks e Portáteis"
                             className="gridItem item2"
+                            onClick={() =>
+                                handleDepartmentClick('Notebooks e Portáteis')
+                            }
                         >
                             <img
                                 src={portatil}
@@ -71,6 +87,7 @@ export default function Home() {
                         <Link
                             to="/productFilter/Kits"
                             className="gridItem item3"
+                            onClick={() => handleDepartmentClick('Kits')}
                         >
                             <img src={kits} alt="imagem filtro kits" />
                             <h3>Kits</h3>
@@ -79,6 +96,7 @@ export default function Home() {
                         <Link
                             to="/productFilter/Periféricos"
                             className="gridItem item4"
+                            onClick={() => handleDepartmentClick('Periféricos')}
                         >
                             <img
                                 src={perifericos}
@@ -90,6 +108,7 @@ export default function Home() {
                         <Link
                             to="/productFilter/Monitores"
                             className="gridItem item5"
+                            onClick={() => handleDepartmentClick('Monitores')}
                         >
                             <img src={monitor} alt="imagem filtro monitores" />
                             <h3>Monitores</h3>
@@ -98,6 +117,7 @@ export default function Home() {
                         <Link
                             to="/productFilter/Video Games"
                             className="gridItem item6"
+                            onClick={() => handleDepartmentClick('Video Games')}
                         >
                             <img
                                 src={videoGame}

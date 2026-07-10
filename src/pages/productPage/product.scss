@@ -228,10 +228,9 @@ $font-items: 'Poppins', Helvetica;
 
                     .iconFav {
                         color: $color-primaryLight;
-                        width: clamp(28px, 2vw, 36px);
-                        height: clamp(28px, 2vw, 36px);
+                        width: clamp(32px, 2vw, 42px);
+                        height: clamp(32px, 2vw, 42px);
                         font-size: clamp(2rem, 3vw, 8rem);
-                        border: 1px solid red;
                         cursor: pointer;
                         transition: all 0.3s;
 
@@ -277,7 +276,7 @@ $font-items: 'Poppins', Helvetica;
                     }
                 }
 
-                .addCart {
+                .btnAdd {
                     font-family: $font-items;
                     display: flex;
                     align-items: center;
@@ -293,6 +292,17 @@ $font-items: 'Poppins', Helvetica;
                     box-shadow: 2px 2px 10px $color-shadow;
                     transition: 0.3s ease;
                     width: 100%;
+
+                    &.added {
+                        background: #2e7d32;
+                        box-shadow: 0 0 8px #2e7d32;
+
+                        &:hover {
+                            background: #2e7d32;
+                            box-shadow: 0 0 12px #2e7d32;
+                            transform: none;
+                        }
+                    }
 
                     .iconAdd {
                         height: 24px;
@@ -445,7 +455,7 @@ $font-items: 'Poppins', Helvetica;
                         }
                     }
 
-                    .addCart {
+                    .btnAdd {
                         background: $color-primaryDark;
 
                         &:hover {

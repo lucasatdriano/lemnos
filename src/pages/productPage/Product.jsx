@@ -1,15 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadFavorites } from '../../store/thunks/favoriteThunk';
 import AuthService from '../../services/AuthService';
 import { getProdutoById } from '../../services/ProdutoService';
 import {
     adicionarFavorito,
+    desfavoritarProduto,
     adicionarProdutoCarrinho,
     avaliarProduto,
-    desfavoritarProduto,
-    listarProdutosFavoritos,
 } from '../../services/UsuarioProdutoService';
 import Loading from '../../components/layout/loading/Loading';
 import OfferList from '../../components/layout/lists/OfferList';
@@ -18,91 +18,104 @@ import ProductImages from './components/ProductImages';
 import ProductBreadcrumb from './components/ProductBreadcrumb';
 import ProductDetails from './components/ProductDetails';
 import './product.scss';
+import { useAuth } from '../../hooks/useAuth';
+import { addFavorite, removeFavorite } from '../../store/slices/favoriteSlice';
+import { addCarrinho } from '../../store/slices/cartSlice';
 
 export default function Product() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(false);
     const [mainImage, setMainImage] = useState('');
-    const [isFavorite, setIsFavorite] = useState(false);
     const [productRating, setProductRating] = useState(0);
 
-    useEffect(() => {
-        fetchData();
-    }, [id, navigate]);
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (product) {
-            setInfo();
-        }
-    }, [product]);
+    const favorites = useSelector((state) => state.favorite.items);
+    const isFavorite = favorites.some((fav) => fav.id === product.id);
 
-    const fetchData = async () => {
+    const cartItems = useSelector((state) => state.cart.items);
+    const isInCart = cartItems.some((item) => item.id === product.id);
+
+    const fetchData = useCallback(async () => {
         setLoading(true);
+
         try {
             const data = await getProdutoById(id);
+
             setProduct(data);
+            setMainImage(data.imagemPrincipal);
+            setProductRating(Math.ceil(data.avaliacao || 0));
         } catch (error) {
-            console.error('Error fetching product:', error);
+            console.error(error);
             navigate('/Error404');
         } finally {
             setLoading(false);
         }
-    };
+    }, [id, navigate]);
 
-    const setInfo = async () => {
-        setLoading(true);
-        try {
-            setMainImage(product.imagemPrincipal);
-            setProductRating(Math.ceil(product.avaliacao));
-            if (
-                AuthService.isLoggedIn() &&
-                AuthService.getRole() == 'CLIENTE'
-            ) {
-                const favorites = await listarProdutosFavoritos();
-                const isFavorited = favorites.some(
-                    (fav) => fav.id === product.id
-                );
+    useEffect(() => {
+        fetchData();
 
-                if (!favorites) {
-                    navigate('/auth');
-                }
-                setIsFavorite(isFavorited);
-            }
-        } catch (error) {
-            toast.error('Erro ao setar as informações do produto');
-        } finally {
-            setLoading(false);
+        if (isAuthenticated && AuthService.isClienteRole()) {
+            dispatch(loadFavorites());
         }
-    };
+    }, [id, fetchData, isAuthenticated, dispatch]);
 
     const handleImageClick = (image) => {
         setMainImage(image);
     };
 
     const handleAddToCart = async () => {
-        if (AuthService.isLoggedIn()) {
-            try {
-                await adicionarProdutoCarrinho(product, 1);
-                toast.success('Produto adicionado ao carrinho!');
-            } catch (error) {
-                console.error('Erro ao adicionar produto ao carrinho:', error);
-            }
-        } else {
+        if (!isAuthenticated) {
             toast.warning(
                 'Você precisa estar logado para adicionar produtos ao carrinho.'
             );
             navigate('/auth');
+
+            return;
+        }
+
+        try {
+            await adicionarProdutoCarrinho(product, 1);
+
+            dispatch(
+                addCarrinho({
+                    ...product,
+                    preco:
+                        product.desconto > 0
+                            ? product.valorComDesconto
+                            : product.valorTotal,
+                    quantidade: 1,
+                })
+            );
+
+            toast.success('Produto adicionado ao carrinho!');
+        } catch (error) {
+            console.error('Erro ao adicionar produto ao carrinho:', error);
+            toast.error('Erro ao adicionar produto ao carrinho.');
         }
     };
 
     const handleAddToFavorites = async () => {
-        if (AuthService.isLoggedIn()) {
+        if (!isAuthenticated) {
+            toast.warning(
+                'Você precisa estar logado para adicionar produtos aos favoritos.'
+            );
+            navigate('/auth');
+
+            return;
+        }
+
+        if (AuthService.isClienteRole()) {
             try {
                 await adicionarFavorito(product);
+
+                dispatch(addFavorite(product));
+
                 toast.success('Produto adicionado aos favoritos!');
-                setIsFavorite(true);
             } catch (error) {
                 console.error(
                     'Erro ao adicionar produto aos favoritos:',
@@ -111,42 +124,53 @@ export default function Product() {
             }
         } else {
             toast.warning(
-                'Você precisa estar logado para adicionar produtos aos favoritos.'
+                'Você precisa ser um cliente para adicionar produtos aos favoritos.'
             );
-            navigate('/auth');
         }
     };
 
     const handleRemoveToFavorites = async () => {
-        if (AuthService.isLoggedIn() && AuthService.isClienteRole()) {
+        if (!isAuthenticated) {
+            toast.warning(
+                'Você precisa estar logado para remover produtos dos favoritos.'
+            );
+            navigate('/auth');
+
+            return;
+        }
+
+        if (AuthService.isClienteRole()) {
             try {
                 await desfavoritarProduto(product);
+
+                dispatch(removeFavorite(product.id));
+
                 toast.success('Produto removido dos favoritos');
-                setIsFavorite(false);
             } catch (error) {
                 console.error('Erro ao remover produto dos favoritos:', error);
             }
         } else {
             toast.warning(
-                'Você precisa estar logado para remover produtos dos favoritos.'
+                'Você precisa ser um cliente para remover produtos dos favoritos.'
             );
-            navigate('/auth');
         }
     };
 
     const handleProductRating = async (rating) => {
-        if (AuthService.isLoggedIn()) {
-            try {
-                await avaliarProduto(product, rating);
-                toast.success('Produto avaliado!');
-                setProductRating(rating);
-            } catch (error) {
-                console.error('Erro ao avaliar o produto:', error);
-                toast.error('Erro ao avaliar o produto');
-            }
-        } else {
+        if (!isAuthenticated) {
             toast.warning('Você precisa estar logado para avaliar produtos.');
             navigate('/auth');
+
+            return;
+        }
+
+        try {
+            await avaliarProduto(product, rating);
+            toast.success('Produto avaliado!');
+            setProductRating(rating);
+        } catch (error) {
+            console.error('Erro ao avaliar o produto:', error);
+            toast.error('Erro ao avaliar o produto');
         }
     };
 
@@ -177,6 +201,7 @@ export default function Product() {
                             productRating={productRating}
                             handleProductRating={handleProductRating}
                             isFavorite={isFavorite}
+                            isInCart={isInCart}
                             handleAddToFavorites={handleAddToFavorites}
                             handleRemoveToFavorites={handleRemoveToFavorites}
                             handleAddToCart={handleAddToCart}

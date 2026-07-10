@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useLocation, Routes, Route, Navigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Home from './pages/homePage/Home';
@@ -10,13 +9,13 @@ import Cart from './pages/cartPage/Cart';
 import BuyPage from './pages/buyPage/Buy';
 import PaymentPage from './pages/paymentPage/Payment';
 import NotFound from './pages/notFoundPage/NotFound';
-import { useAuth } from './AuthProvider';
-import { useNavigation } from './NavigationProvider';
+import { useAuth } from './hooks/useAuth';
+import { useNavigation } from './hooks/useNavigation';
 
 export default function AnimatedRoutes() {
     const location = useLocation();
     const { isAuthenticated } = useAuth();
-    const { isNavigatingToPayment, setIsNavigatingToPayment } = useNavigation();
+    const { isNavigatingToPayment } = useNavigation();
 
     return (
         <TransitionGroup>

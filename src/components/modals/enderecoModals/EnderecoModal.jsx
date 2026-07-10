@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import CustomInput from '../../inputs/customInput/Inputs';
 import { IoClose } from 'react-icons/io5';
-import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
 import {
     cadastrarEndereco,
     getEnderecoFromCep,
@@ -11,7 +10,7 @@ import {
 import AuthService from '../../../services/AuthService';
 import InputError from '../../inputs/inputError/InputError';
 
-export default function EnderecoModal({ onClose, initialCep }) {
+export default function EnderecoModal({ onClose, initialCep, onSuccess }) {
     const [form, setForm] = useState({
         cep: initialCep || '',
         logradouro: '',
@@ -23,26 +22,63 @@ export default function EnderecoModal({ onClose, initialCep }) {
     });
     const [errors, setErrors] = useState({});
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        if (form.cep.length == 9) {
-            fetchEndereco();
+    const fetchEndereco = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const endereco = await getEnderecoFromCep(form.cep);
+
+            if (!endereco || !endereco.logradouro) {
+                throw new Error('CEP não encontrado');
+            }
+
+            setForm((prevForm) => ({
+                ...prevForm,
+                logradouro: endereco.logradouro || '',
+                bairro: endereco.bairro || '',
+                cidade: endereco.cidade || '',
+                estado: endereco.uf || '',
+            }));
+            toast.success('CEP encontrado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao buscar endereço:', error);
+            toast.error('CEP não encontrado. Verifique o número digitado.');
+            setForm((prevForm) => ({
+                ...prevForm,
+                logradouro: '',
+                bairro: '',
+                cidade: '',
+                estado: '',
+            }));
+        } finally {
+            setIsLoading(false);
         }
     }, [form.cep]);
 
-    const fetchEndereco = async () => {
-        const endereco = await getEnderecoFromCep(form.cep);
-        setForm({
-            ...form,
-            logradouro: endereco.logradouro,
-            bairro: endereco.bairro,
-            cidade: endereco.cidade,
-            estado: endereco.uf,
-        });
-    };
+    useEffect(() => {
+        if (form.cep.length === 9 && /^\d{5}-\d{3}$/.test(form.cep)) {
+            fetchEndereco();
+        }
+    }, [form.cep, fetchEndereco]);
 
     const handleChange = (name, value) => {
         setForm({ ...form, [name]: value });
+    };
+
+    const handleCepChange = (e) => {
+        const value = e.target.value;
+        setForm((prevForm) => ({
+            ...prevForm,
+            cep: value,
+            logradouro: value.length < 9 ? '' : prevForm.logradouro,
+            bairro: value.length < 9 ? '' : prevForm.bairro,
+            cidade: value.length < 9 ? '' : prevForm.cidade,
+            estado: value.length < 9 ? '' : prevForm.estado,
+        }));
+        if (errors.cep) {
+            setErrors((prev) => ({ ...prev, cep: '' }));
+        }
     };
 
     const handleDropdownToggle = () => {
@@ -77,14 +113,28 @@ export default function EnderecoModal({ onClose, initialCep }) {
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            const tokenList = AuthService.getToken().split('.');
-            const json = JSON.parse(atob(tokenList[1]));
-            const response = await cadastrarEndereco(
-                json.sub,
-                form,
-                json.role.toLowerCase()
-            );
-            if (response) onClose();
+            try {
+                const tokenList = AuthService.getToken().split('.');
+                const json = JSON.parse(atob(tokenList[1]));
+                const response = await cadastrarEndereco(
+                    json.sub,
+                    form,
+                    json.role.toLowerCase()
+                );
+
+                if (response) {
+                    toast.success('Endereço adicionado com sucesso!');
+
+                    if (onSuccess) {
+                        await onSuccess();
+                    }
+
+                    onClose();
+                }
+            } catch (error) {
+                console.error('Erro ao salvar endereço:', error);
+                toast.error('Erro ao salvar endereço. Tente novamente.');
+            }
         }
     };
 
@@ -99,6 +149,12 @@ export default function EnderecoModal({ onClose, initialCep }) {
                     <h2>Adicionar Endereço</h2>
                 </div>
                 <div className="modalEndereco">
+                    {isLoading && (
+                        <div className="loadingMessage">
+                            Buscando endereço...
+                        </div>
+                    )}
+
                     <div className="inputCep enderecoFormField">
                         <CustomInput
                             type="text"
@@ -108,9 +164,7 @@ export default function EnderecoModal({ onClose, initialCep }) {
                             mask="CEP"
                             maxLength={9}
                             value={form.cep}
-                            onChange={(e) =>
-                                setForm({ ...form, cep: e.target.value })
-                            }
+                            onChange={handleCepChange}
                         />
                         <InputError error={errors.cep} />
                     </div>
@@ -126,29 +180,6 @@ export default function EnderecoModal({ onClose, initialCep }) {
                             onFocus={handleDropdownToggle}
                             disabled="disabled"
                         />
-                        {isDropdownOpen ? (
-                            <RiArrowDropUpLine
-                                className="iconDrop"
-                                onClick={handleDropdownToggle}
-                            />
-                        ) : (
-                            <RiArrowDropDownLine
-                                className="iconDrop"
-                                onClick={handleDropdownToggle}
-                            />
-                        )}
-                        {/* <Dropdown
-                            isOpen={isDropdownOpen}
-                            options={estados}
-                            onSelect={() => {
-                                setIsDropdownOpen(false);
-                            }}
-                            filterFunction={(option) =>
-                                option
-                                .toLowerCase()
-                                .includes(searchTerm.toLowerCase())
-                            }
-                        /> */}
                         <InputError error={errors.estado} />
                     </div>
 
@@ -234,8 +265,9 @@ export default function EnderecoModal({ onClose, initialCep }) {
                     type="button"
                     className="addEnderecoButton"
                     onClick={handleSave}
+                    disabled={isLoading}
                 >
-                    Salvar
+                    {isLoading ? 'Carregando...' : 'Salvar'}
                 </button>
             </div>
         </div>
@@ -245,4 +277,5 @@ export default function EnderecoModal({ onClose, initialCep }) {
 EnderecoModal.propTypes = {
     onClose: PropTypes.func.isRequired,
     initialCep: PropTypes.string,
+    onSuccess: PropTypes.func,
 };

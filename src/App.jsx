@@ -7,8 +7,8 @@ import Header from './components/layout/header/Header';
 import BackToTopButton from './components/layout/backToTop/BackToTop';
 import Footer from './components/layout/footer/Footer';
 import AnimatedRoutes from './AnimatedRoutes';
-import { AuthProvider } from './AuthProvider';
-import { NavigationProvider } from './NavigationProvider';
+import { AuthProvider } from './providers/AuthProvider';
+import { NavigationProvider } from './providers/NavigationProvider';
 import AuthService from './services/AuthService';
 
 export default function App() {

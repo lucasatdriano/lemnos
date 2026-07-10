@@ -1,9 +1,9 @@
-/* eslint-disable react/prop-types */
 import './loginForm.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import CustomInput from '../../../../components/inputs/customInput/Inputs';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { FcGoogle } from 'react-icons/fc';
 import { signInWithPopup } from 'firebase/auth';
 import {
@@ -12,13 +12,14 @@ import {
 } from '../../../../services/configurations/FirebaseConfig';
 import { login, loginFirebase } from '../../../../services/LoginService';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../../../../services/AuthService';
 import PasswordToggle from '../../../../components/inputs/passwordToggle/PasswordToggle';
 import InputError from '../../../../components/inputs/inputError/InputError';
 import { validateLogin } from '../../../../validations/loginValidator';
+import { useAuth } from '../../../../hooks/useAuth';
 
 export default function LoginForm({ onLogin, onCadastroClick }) {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
     const [form, setForm] = useState({ email: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
@@ -67,7 +68,7 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
 
             const loginSuccess = await loginFirebase(googleToken);
 
-            if (AuthService.isLoggedIn() && loginSuccess) {
+            if (isAuthenticated && loginSuccess) {
                 onLogin();
                 toast.success('Usuário logado');
             }
@@ -150,3 +151,8 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
         </section>
     );
 }
+
+LoginForm.propTypes = {
+    onLogin: PropTypes.func.isRequired,
+    onCadastroClick: PropTypes.func.isRequired,
+};

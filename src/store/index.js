@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import rootReducer from './reducers';
+
+import rootReducer from './rootReducer';
 
 const persistConfig = {
     key: 'root',
@@ -10,7 +11,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = configureStore({
+export const store = configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
@@ -18,7 +19,6 @@ const store = configureStore({
         }),
 });
 
-export default store;
-const persistor = persistStore(store);
+export const persistor = persistStore(store);
 
-export { store, persistor };
+export default store;

@@ -1,19 +1,17 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegCreditCard, FaBarcode } from 'react-icons/fa6';
 import { BsQrCodeScan } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { listarCarrinho } from '../../services/UsuarioProdutoService';
 import { getCliente, updateCliente } from '../../services/ClienteService';
-import AuthService from '../../services/AuthService';
-import { useNavigation } from '../../NavigationProvider';
+import { useNavigation } from '../../hooks/useNavigation';
 import {
     setSelectedAddress,
     setDesconto,
     setSelectedPaymentMethod,
-} from '../../store/actions/paymentActions';
-import { setFreteInfo } from '../../store/actions/freteActions';
+} from '../../store/slices/paymentSlice';
+import { setFreteInfo } from '../../store/slices/freteSlice';
 import './payment.scss';
 import Loading from '../../components/layout/loading/Loading';
 import { useNavigate } from 'react-router-dom';
@@ -22,12 +20,14 @@ import OrderSummary from '../../components/layout/orderSummary/OrderSummary';
 import AddressSelector from './components/addressSelector/AddressSelector';
 import PaymentMethodCard from './components/paymentMethodCard/PaymentMethodCard';
 import UnifiedModals from '../../components/modals/UnifiedModals';
-import { formatPreco } from '../../utils/formatters';
+import { useAuth } from '../../hooks/useAuth';
+import { formatCurrency } from '../../utils/formatters';
 
 export default function PaymentPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { setIsNavigatingToBuy } = useNavigation();
+    const { isAuthenticated } = useAuth();
     const [cpf, setCpf] = useState('');
     const [isCpfRegistered, setIsCpfRegistered] = useState(false);
     const [paymentMethodName, setPaymentMethodName] = useState('');
@@ -86,77 +86,79 @@ export default function PaymentPage() {
 
             setPaymentMethodName(methodName);
         }
-    }, [selectedPaymentMethod, selectedAddress, valorCompra, paymentDesconto]);
+    }, [
+        selectedPaymentMethod,
+        selectedAddress,
+        valorCompra,
+        paymentDesconto,
+        dispatch,
+    ]);
+
+    const reloadEnderecos = useCallback(async () => {
+        try {
+            const clienteResponse = await getCliente();
+            setClienteEndereco(clienteResponse.enderecos);
+
+            if (clienteResponse.enderecos.length > 0 && !selectedAddress?.cep) {
+                dispatch(setSelectedAddress(clienteResponse.enderecos[0]));
+                dispatch(
+                    setFreteInfo({
+                        ...frete,
+                        cep: clienteResponse.enderecos[0].cep,
+                    })
+                );
+            }
+        } catch (error) {
+            console.error('Erro ao recarregar endereços:', error);
+        }
+    }, [selectedAddress?.cep, dispatch, frete]);
 
     useEffect(() => {
         if (!modalState.type && modalState.type === null) {
-            const reloadEnderecos = async () => {
-                try {
-                    const clienteResponse = await getCliente();
-                    setClienteEndereco(clienteResponse.enderecos);
-
-                    if (
-                        clienteResponse.enderecos.length > 0 &&
-                        !selectedAddress?.cep
-                    ) {
-                        dispatch(
-                            setSelectedAddress(clienteResponse.enderecos[0])
-                        );
-                        dispatch(
-                            setFreteInfo({
-                                ...frete,
-                                cep: clienteResponse.enderecos[0].cep,
-                            })
-                        );
-                    }
-                } catch (error) {
-                    console.error('Erro ao recarregar endereços:', error);
-                }
-            };
-
             reloadEnderecos();
         }
-    }, [modalState.type]);
+    }, [modalState.type, reloadEnderecos]);
 
-    async function fetchPagamento() {
+    const fetchPagamento = useCallback(async () => {
         setLoading(true);
+
+        if (!isAuthenticated) {
+            setLoading(false);
+            return;
+        }
+
         try {
-            if (AuthService.isLoggedIn()) {
-                const response = await listarCarrinho();
-                const clienteResponse = await getCliente();
+            const response = await listarCarrinho();
+            const clienteResponse = await getCliente();
 
-                setCliente(clienteResponse);
-                setValorCompra(response.valorTotal);
+            setCliente(clienteResponse);
+            setValorCompra(response.valorTotal);
 
-                if (clienteResponse.cpf && clienteResponse.cpf !== '') {
-                    setIsCpfRegistered(true);
-                }
+            if (clienteResponse.cpf && clienteResponse.cpf !== '') {
+                setIsCpfRegistered(true);
+            }
 
-                setClienteEndereco(clienteResponse.enderecos);
+            setClienteEndereco(clienteResponse.enderecos);
 
-                if (
-                    clienteResponse.enderecos.length > 0 &&
-                    !selectedAddress?.cep
-                ) {
-                    dispatch(setSelectedAddress(clienteResponse.enderecos[0]));
-                    dispatch(
-                        setFreteInfo({
-                            ...frete,
-                            cep: clienteResponse.enderecos[0].cep,
-                        })
-                    );
-                }
+            if (clienteResponse.enderecos.length > 0 && !selectedAddress?.cep) {
+                dispatch(setSelectedAddress(clienteResponse.enderecos[0]));
+                dispatch(
+                    setFreteInfo({
+                        ...frete,
+                        cep: clienteResponse.enderecos[0].cep,
+                    })
+                );
             }
         } catch (error) {
             console.error('Erro ao obter itens do carrinho:', error);
         } finally {
             setLoading(false);
         }
-    }
+    }, [isAuthenticated, selectedAddress?.cep, dispatch, frete]);
 
     useEffect(() => {
         fetchPagamento();
-    }, [AuthService.isLoggedIn()]);
+    }, [fetchPagamento]);
 
     const handleCpfChange = (event) => {
         let formattedCpf = event.target.value.replace(/\D/g, '');
@@ -336,7 +338,7 @@ export default function PaymentPage() {
                                     total={totalCredito}
                                     productValue={valorCompra}
                                     freight={Custofrete}
-                                    installment={`12x de ${formatPreco(totalCredito / 12)} sem juros`}
+                                    installment={`12x de ${formatCurrency(totalCredito / 12)} sem juros`}
                                     onChange={handlePaymentSelection}
                                     checked={
                                         selectedPaymentMethod === 'Crédito'

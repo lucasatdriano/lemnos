@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
-
 import './paymentMethodCard.scss';
-import { formatPreco } from '../../../../utils/formatters';
+import { formatCurrency } from '../../../../utils/formatters';
 
 export default function PaymentMethodCard({
     id,
@@ -40,17 +39,17 @@ export default function PaymentMethodCard({
                                     badge ? 'discountValue' : 'normalValue'
                                 }
                             >
-                                {formatPreco(productValue)}
+                                {formatCurrency(productValue)}
                             </span>
 
                             <span className="freteInfo">
-                                + {formatPreco(freight)} de frete
+                                + {formatCurrency(freight)} de frete
                             </span>
                         </div>
 
                         <div className="subValue">
                             <div className="totalValue">
-                                Total: {formatPreco(total)}
+                                Total: {formatCurrency(total)}
                             </div>
 
                             {badge && (

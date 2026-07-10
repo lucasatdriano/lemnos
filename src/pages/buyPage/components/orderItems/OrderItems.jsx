@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { RiShoppingCartLine } from 'react-icons/ri';
-import { formatPreco } from '../../../../utils/formatters';
+import { formatCurrency } from '../../../../utils/formatters';
 import './orderItems.scss';
 
 export default function OrderItems({ carrinho }) {
@@ -37,7 +37,7 @@ export default function OrderItems({ carrinho }) {
                             <td>{produto.qntdProduto}</td>
 
                             <td>
-                                {formatPreco(
+                                {formatCurrency(
                                     produto.valorComDesconto *
                                         produto.qntdProduto
                                 )}

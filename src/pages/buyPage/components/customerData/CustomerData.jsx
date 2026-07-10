@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { MdInfoOutline } from 'react-icons/md';
-import { formatCep, formatCpf } from '../../../../utils/formatters';
 import './customerData.scss';
+import { formatCep, formatCpf } from '../../../../utils/formatters';
 
 export default function CustomerData({ cliente, selectedAddress }) {
     return (

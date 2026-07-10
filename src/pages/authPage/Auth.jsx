@@ -4,36 +4,47 @@ import AuthService from '../../services/AuthService';
 import { cadastrarUsuario } from '../../services/ClienteService';
 
 import { toast } from 'react-toastify';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 import RegistrationForm from './components/registration/RegistrationForm';
 import LoginForm from './components/login/LoginForm';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function Auth() {
-    const [loggedIn, setLoggedIn] = useState(false);
+    const { isAuthenticated, login, logout } = useAuth();
     const [showLogin, setShowLogin] = useState(true);
-
     const [clearUserImgFlag, setClearUserImgFlag] = useState(false);
+    const [isActive, setIsActive] = useState(true);
 
     const logoutTimerRef = useRef(null);
+    const inactivityIntervalRef = useRef(null);
 
-    useEffect(() => {
-        if (AuthService.isLoggedIn()) {
-            setLoggedIn(true);
+    const handleLogout = useCallback(() => {
+        AuthService.logout();
+
+        setClearUserImgFlag((prev) => !prev);
+
+        if (logoutTimerRef.current) {
+            clearTimeout(logoutTimerRef.current);
+            logoutTimerRef.current = null;
+        }
+
+        if (inactivityIntervalRef.current) {
+            clearInterval(inactivityIntervalRef.current);
+            inactivityIntervalRef.current = null;
+        }
+
+        logout();
+    }, [logout]);
+
+    const clearLogoutTimer = useCallback(() => {
+        if (logoutTimerRef.current) {
+            clearTimeout(logoutTimerRef.current);
+            logoutTimerRef.current = null;
         }
     }, []);
 
-    useEffect(() => {
-        if (loggedIn) {
-            startLogoutTimer();
-        } else {
-            clearLogoutTimer();
-        }
-
-        return () => clearLogoutTimer();
-    }, [loggedIn]);
-
-    const startLogoutTimer = () => {
+    const startLogoutTimer = useCallback(() => {
         clearLogoutTimer();
 
         const token = AuthService.getToken();
@@ -55,40 +66,80 @@ export default function Auth() {
 
             logoutTimerRef.current = setTimeout(() => {
                 handleLogout();
-
                 toast.warning('Sessão expirada. Faça login novamente.');
             }, timeUntilExpiry);
         } catch (error) {
-            console.error(error);
+            console.error('Erro ao processar token:', error);
             handleLogout();
         }
-    };
+    }, [clearLogoutTimer, handleLogout]);
 
-    const clearLogoutTimer = () => {
-        if (logoutTimerRef.current) {
-            clearTimeout(logoutTimerRef.current);
-            logoutTimerRef.current = null;
+    useEffect(() => {
+        if (!isAuthenticated) return;
+
+        const handleActivity = () => {
+            setIsActive(true);
+        };
+
+        window.addEventListener('mousemove', handleActivity);
+        window.addEventListener('keydown', handleActivity);
+        window.addEventListener('click', handleActivity);
+        window.addEventListener('scroll', handleActivity);
+
+        inactivityIntervalRef.current = setInterval(() => {
+            if (!isActive) {
+                handleLogout();
+                toast.warning('Sessão encerrada por inatividade.');
+            }
+            setIsActive(false);
+        }, 60 * 1000); // 60s
+
+        return () => {
+            window.removeEventListener('mousemove', handleActivity);
+            window.removeEventListener('keydown', handleActivity);
+            window.removeEventListener('click', handleActivity);
+            window.removeEventListener('scroll', handleActivity);
+            if (inactivityIntervalRef.current) {
+                clearInterval(inactivityIntervalRef.current);
+                inactivityIntervalRef.current = null;
+            }
+        };
+    }, [isAuthenticated, isActive, handleLogout]);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            startLogoutTimer();
+            setIsActive(true);
+        } else {
+            clearLogoutTimer();
+            if (inactivityIntervalRef.current) {
+                clearInterval(inactivityIntervalRef.current);
+                inactivityIntervalRef.current = null;
+            }
         }
-    };
+
+        return () => {
+            clearLogoutTimer();
+            if (inactivityIntervalRef.current) {
+                clearInterval(inactivityIntervalRef.current);
+                inactivityIntervalRef.current = null;
+            }
+        };
+    }, [isAuthenticated, startLogoutTimer, clearLogoutTimer]);
 
     const handleLogin = () => {
         if (!AuthService.isLoggedIn()) return;
 
         const token = AuthService.getToken();
 
-        const payload = JSON.parse(atob(token.split('.')[1]));
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            AuthService.setRole(payload.role);
+        } catch (error) {
+            console.error('Erro ao processar token no login:', error);
+        }
 
-        AuthService.setRole(payload.role);
-
-        setLoggedIn(true);
-    };
-
-    const handleLogout = () => {
-        AuthService.logout();
-
-        setLoggedIn(false);
-
-        setClearUserImgFlag((prev) => !prev);
+        login();
     };
 
     const handleRegister = async (form) => {
@@ -112,7 +163,7 @@ export default function Auth() {
 
     return (
         <main className="authPage">
-            {loggedIn ? (
+            {isAuthenticated ? (
                 <User onLogout={handleLogout} clearUserImg={clearUserImgFlag} />
             ) : (
                 <section className="authContainer">

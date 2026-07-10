@@ -1,10 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './menuSearch.scss';
 import { RiSearch2Line } from 'react-icons/ri';
 import { listarProdutosFiltrados } from '../../../../../services/UsuarioProdutoService';
-import { formatPreco } from '../../../../../utils/formatters';
+import { formatCurrency } from '../../../../../utils/formatters';
 
 export default function MenuSearch() {
     const navigate = useNavigate();
@@ -15,37 +14,47 @@ export default function MenuSearch() {
     const inputRef = useRef(null);
     const searchProducts = useRef(null);
 
-    async function fetchProdutos() {
-        const filtro = {
-            nome: searchTerm ?? null,
-            categoria: null,
-            subCategoria: null,
-            marca: null,
-            menorPreco: 0,
-            maiorPreco: 50000,
-            avaliacao: null,
-        };
+    const fetchProdutos = useCallback(async () => {
+        try {
+            const filtro = {
+                nome: searchTerm ?? null,
+                categoria: null,
+                subCategoria: null,
+                marca: null,
+                menorPreco: 0,
+                maiorPreco: 50000,
+                avaliacao: null,
+            };
 
-        const data = await listarProdutosFiltrados(filtro, 0, 6);
-
-        setProdutos(data);
-    }
+            const data = await listarProdutosFiltrados(filtro, 0, 6);
+            setProdutos(data);
+        } catch (error) {
+            console.error('Erro ao buscar produtos:', error);
+            setProdutos([]);
+        }
+    }, [searchTerm]);
 
     useEffect(() => {
-        if (searchTerm.trim() !== '') {
-            fetchProdutos();
-            setShowResults(true);
+        if (searchTerm.trim().length >= 2) {
+            const delayDebounceFn = setTimeout(() => {
+                fetchProdutos();
+                setShowResults(true);
+            }, 300);
+
+            return () => clearTimeout(delayDebounceFn);
         } else {
             setProdutos([]);
             setShowResults(false);
         }
+    }, [searchTerm, fetchProdutos]);
 
+    useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [searchTerm]);
+    }, []);
 
     const handleClickOutside = (event) => {
         if (
@@ -66,6 +75,15 @@ export default function MenuSearch() {
     const handleSearch = (e) => {
         e.preventDefault();
         navigate(`/productFilter?search=${searchTerm}`);
+
+        localStorage.removeItem('category');
+        localStorage.removeItem('subCategory');
+        localStorage.removeItem('searchTerm');
+        localStorage.removeItem('brand');
+        localStorage.removeItem('evaluation');
+        localStorage.removeItem('minPrice');
+        localStorage.removeItem('maxPrice');
+
         setProdutos([]);
         setShowResults(false);
     };
@@ -110,7 +128,7 @@ export default function MenuSearch() {
                                 />
                                 <h4>{product.nome}</h4>
                             </div>
-                            <p>{formatPreco(product.valorComDesconto)}</p>
+                            <p>{formatCurrency(product.valorComDesconto)}</p>
                         </Link>
                     ))}
                 </ul>

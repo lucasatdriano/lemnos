@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { FaMinus, FaPlus } from 'react-icons/fa';
-import { formatPreco } from '../../../../utils/formatters';
-import './cartCard.scss';
+import { formatCurrency } from '../../../../utils/formatters';
 import {
     adicionarProdutoCarrinho,
     removerProdutoCarrinho,
 } from '../../../../services/UsuarioProdutoService';
-import { useNavigate } from 'react-router-dom';
+import './cartCard.scss';
 
 export default function CartCard({ produto }) {
     const navigate = useNavigate();
@@ -86,7 +86,7 @@ export default function CartCard({ produto }) {
                 </p>
 
                 <h4 className="priceProduct">
-                    {formatPreco(
+                    {formatCurrency(
                         produto.qntdProduto * produto.valorComDesconto
                     )}
                 </h4>

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import './addressSelector.scss';
 import { formatCep } from '../../../../utils/formatters';
 import { BsTruck } from 'react-icons/bs';
+import './addressSelector.scss';
 
 export default function AddressSelector({
     addresses,

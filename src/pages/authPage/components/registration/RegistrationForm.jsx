@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import CustomInput from '../../../../components/inputs/customInput/Inputs';
 import './registrationForm.scss';
 import { FcGoogle } from 'react-icons/fc';
@@ -218,3 +218,9 @@ export default function RegistrationForm({
         </section>
     );
 }
+
+RegistrationForm.propTypes = {
+    onLogin: PropTypes.func.isRequired,
+    onRegisterSuccess: PropTypes.func.isRequired,
+    handleBackToLogin: PropTypes.func.isRequired,
+};

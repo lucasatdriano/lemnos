@@ -1,19 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { IoClose } from 'react-icons/io5';
 import { RiSearch2Line } from 'react-icons/ri';
 import { listarProdutosFiltrados } from '../../../services/UsuarioProdutoService';
 import Loading from '../../layout/loading/Loading';
 import CustomInput from '../../inputs/customInput/Inputs';
-import { formatPreco } from '../../../utils/formatters';
+import { formatCurrency } from '../../../utils/formatters';
 
 export default function ListProductModal({ onSelect, onClose }) {
     const [produtos, setProdutos] = useState([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const applyFilters = async () => {
+    const applyFilters = useCallback(async () => {
         try {
             setLoading(true);
             const filtro = {
@@ -33,14 +32,15 @@ export default function ListProductModal({ onSelect, onClose }) {
             setProdutos(produtosFiltrados);
         } catch (error) {
             console.error('Erro ao aplicar filtros:', error);
+            setProdutos([]);
         } finally {
             setLoading(false);
         }
-    };
+    }, [search]);
 
     useEffect(() => {
         applyFilters();
-    }, [search]);
+    }, [applyFilters]);
 
     const handleChange = (e) => {
         setSearch(e.target.value);
@@ -85,7 +85,7 @@ export default function ListProductModal({ onSelect, onClose }) {
 
                 {loading ? (
                     <Loading />
-                ) : produtos.length == 0 ? (
+                ) : produtos.length === 0 ? (
                     <div className="emptyMessage">
                         <h2 className="textEmpty">
                             Produto não encontrado. Revise e tente novamente.
@@ -103,7 +103,7 @@ export default function ListProductModal({ onSelect, onClose }) {
                         {produtos.map((produto, index) => (
                             <li
                                 className="itemUpdate"
-                                key={index}
+                                key={produto.id || index}
                                 onClick={() => onSelect(produto)}
                             >
                                 <img
@@ -116,7 +116,7 @@ export default function ListProductModal({ onSelect, onClose }) {
                                     </p>
                                     <p>
                                         <strong>Preço Total:</strong>{' '}
-                                        {formatPreco(produto.valorTotal)}
+                                        {formatCurrency(produto.valorTotal)}
                                     </p>
                                     <p>
                                         <strong>Desconto:</strong>{' '}
@@ -125,7 +125,7 @@ export default function ListProductModal({ onSelect, onClose }) {
                                     {produto.desconto !== '0' && (
                                         <p>
                                             <strong>Preço c/ Desconto:</strong>{' '}
-                                            {formatPreco(
+                                            {formatCurrency(
                                                 produto.valorComDesconto
                                             )}
                                         </p>
@@ -151,3 +151,8 @@ export default function ListProductModal({ onSelect, onClose }) {
         </div>
     );
 }
+
+ListProductModal.propTypes = {
+    onSelect: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+};

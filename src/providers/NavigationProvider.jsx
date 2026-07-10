@@ -1,8 +1,6 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState } from 'react';
-
-const NavigationContext = createContext();
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { NavigationContext } from '../contexts/NavigationContext';
 
 export const NavigationProvider = ({ children }) => {
     const [isNavigatingToPayment, setIsNavigatingToPayment] = useState(false);
@@ -22,4 +20,6 @@ export const NavigationProvider = ({ children }) => {
     );
 };
 
-export const useNavigation = () => useContext(NavigationContext);
+NavigationProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+};

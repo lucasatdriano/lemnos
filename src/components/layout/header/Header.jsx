@@ -9,13 +9,12 @@ import MenuFavorite from './components/favoriteMenu/MenuFavorite';
 import AuthService from '../../../services/AuthService';
 import './header.scss';
 import cartEventEmitter from '../../../services/configurations/events';
+import { useAuth } from '../../../hooks/useAuth';
 
 export default function Header({ toggleTheme }) {
+    const { isAuthenticated } = useAuth();
     const [shrinkHeader, setShrinkHeader] = useState(false);
     const [showFavoriteMenu, setShowFavoriteMenu] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(
-        AuthService.isLoggedIn() || AuthService.isLoggedInWithGoogle()
-    );
 
     const cart = useSelector((state) => state.cart.items);
 
@@ -71,18 +70,6 @@ export default function Header({ toggleTheme }) {
         };
     }, []);
 
-    useEffect(() => {
-        const handleAuthChange = (loggedIn) => {
-            setIsLoggedIn(loggedIn);
-        };
-
-        AuthService.subscribe(handleAuthChange);
-
-        return () => {
-            AuthService.unsubscribe(handleAuthChange);
-        };
-    }, []);
-
     return (
         <>
             <header className={`header ${shrinkHeader ? 'shrink' : ''}`}>
@@ -111,7 +98,7 @@ export default function Header({ toggleTheme }) {
                         <RiHeartLine className="favIcon" />
                     </a>
                     <Link to="/auth" className="linkIcons">
-                        {userImg && isLoggedIn ? (
+                        {userImg && isAuthenticated ? (
                             <img src={userImg} alt="User" className="userImg" />
                         ) : (
                             <RiUser3Line className="userIcon" />

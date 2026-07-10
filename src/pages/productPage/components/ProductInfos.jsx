@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
-
 import iconAddCart from '../../../assets/icons/iconAddCart.svg';
-import { formatPreco } from '../../../utils/formatters';
+import { formatCurrency } from '../../../utils/formatters';
+import { BiCheck } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductInfos({
     id,
@@ -12,11 +12,14 @@ export default function ProductInfos({
     productRating,
     handleProductRating,
     isFavorite,
+    isInCart,
     handleAddToFavorites,
     handleRemoveToFavorites,
     handleAddToCart,
     hasDiscount,
 }) {
+    const navigate = useNavigate();
+
     return (
         <div className="containerInfos">
             <div className="sectionIcons">
@@ -70,30 +73,44 @@ export default function ProductInfos({
 
             {hasDiscount && (
                 <p className="priceOrigin">
-                    De <span>{formatPreco(product.valorTotal)}</span> por:
+                    De <span>{formatCurrency(product.valorTotal)}</span> por:
                 </p>
             )}
 
             <p className="productPrice">
                 À vista <br />
-                <span>{formatPreco(product.valorComDesconto)}</span>
+                <span>{formatCurrency(product.valorComDesconto)}</span>
                 <br />E no PIX com 15% de desconto
             </p>
 
             <p className="priceFees">
                 Ou no Cartão <br />
                 Em até 12x de{' '}
-                <span>{formatPreco(product.valorComDesconto / 12)}</span> sem
+                <span>{formatCurrency(product.valorComDesconto / 12)}</span> sem
                 juros
             </p>
 
-            <button className="addCart" onClick={handleAddToCart}>
-                <img
-                    src={iconAddCart}
-                    alt="icon add Cart"
-                    className="iconAdd"
-                />
-                Adicionar ao Carrinho
+            <button
+                type="button"
+                className={`btnAdd ${isInCart ? 'added' : ''}`}
+                onClick={
+                    isInCart ? () => navigate('/cart') : () => handleAddToCart
+                }
+            >
+                {isInCart ? (
+                    <>
+                        <BiCheck className="iconAdd" /> Ver Carrinho
+                    </>
+                ) : (
+                    <>
+                        <img
+                            src={iconAddCart}
+                            alt="icon de adicionar ao Carrinho"
+                            className="iconAdd"
+                        />
+                        Adicionar ao Carrinho
+                    </>
+                )}
             </button>
         </div>
     );
@@ -105,6 +122,7 @@ ProductInfos.propTypes = {
     productRating: PropTypes.number.isRequired,
     handleProductRating: PropTypes.func.isRequired,
     isFavorite: PropTypes.bool.isRequired,
+    isInCart: PropTypes.bool.isRequired,
     handleAddToFavorites: PropTypes.func.isRequired,
     handleRemoveToFavorites: PropTypes.func.isRequired,
     handleAddToCart: PropTypes.func.isRequired,

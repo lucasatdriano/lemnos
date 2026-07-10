@@ -1,19 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
 import { IoClose } from 'react-icons/io5';
 import { RiSearch2Line } from 'react-icons/ri';
+import PropTypes from 'prop-types';
 import CustomInput from '../../inputs/customInput/Inputs';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { getFuncionarioByNome } from '../../../services/FuncionarioService';
 import Loading from '../../layout/loading/Loading';
-import { formatTelefone } from '../../../utils/formatters';
+import { formatPhone } from '../../../utils/formatters';
 
 export default function ListFuncModal({ onSelect, onClose }) {
     const [funcionarios, setFuncionarios] = useState([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const applyFilters = async () => {
+    const applyFilters = useCallback(async () => {
         try {
             setLoading(true);
             const funcionariosFiltrados = await getFuncionarioByNome(search);
@@ -23,11 +22,11 @@ export default function ListFuncModal({ onSelect, onClose }) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [search]);
 
     useEffect(() => {
         applyFilters();
-    }, [search]);
+    }, [applyFilters]);
 
     const handleChange = (e) => {
         setSearch(e.target.value);
@@ -110,7 +109,7 @@ export default function ListFuncModal({ onSelect, onClose }) {
                                     <p>
                                         <strong>Telefone:</strong>{' '}
                                         <span className="spanNome">
-                                            {formatTelefone(
+                                            {formatPhone(
                                                 funcionario.telefone.toString()
                                             )}
                                         </span>
@@ -130,3 +129,8 @@ export default function ListFuncModal({ onSelect, onClose }) {
         </div>
     );
 }
+
+ListFuncModal.propTypes = {
+    onSelect: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+};

@@ -1,7 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-refresh/only-export-components */
-
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -16,24 +13,18 @@ import {
     getFuncionarioByToken,
     updateFuncionario,
 } from '../../services/FuncionarioService';
-
 import { excluirEndereco } from '../../services/EnderecoService';
-
-import { setUserImg } from '../../store/actions/userActions';
-
+import { setUserImg } from '../../store/slices/userSlice';
 import { formatCpf } from '../../utils/formatters';
-
 import UserImg from '../../assets/imgLemnos/imgUser.svg';
-
 import OrderHistoryList from './components/orderHistory/OrderHistoryList';
 import UnifiedModals from '../../components/modals/UnifiedModals';
-
-import './user.scss';
 import UserProfileHeader from './components/profile/UserProfileHeader';
 import UserProfileForm from './components/profile/UserProfileForm';
 import UserNavigation from './components/navigation/UserNavigation';
 import AdminSection from './components/admin/AdminSection';
 import AddressList from './components/address/AddressList';
+import './user.scss';
 
 const User = ({ onLogout, userImg, setUserImg }) => {
     const navigate = useNavigate();
@@ -61,33 +52,7 @@ const User = ({ onLogout, userImg, setUserImg }) => {
         enderecos: [],
     });
 
-    useEffect(() => {
-        fetchUsuario();
-
-        const storedPhotoURL = localStorage.getItem('userImg');
-
-        setUserImg(storedPhotoURL || UserImg);
-
-        const handleKeyDown = (event) => {
-            if (event.key === 'Escape') {
-                closeAllModals();
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
-
-    useEffect(() => {
-        document
-            .querySelector('html')
-            ?.classList.toggle('modalOpen', !!modalState.type);
-    }, [modalState.type]);
-
-    async function fetchUsuario() {
+    const fetchUsuario = useCallback(async () => {
         try {
             const usuario = isCliente
                 ? await getCliente()
@@ -135,7 +100,33 @@ const User = ({ onLogout, userImg, setUserImg }) => {
 
             navigate('/auth');
         }
-    }
+    }, [isCliente, navigate, setUserImg]);
+
+    useEffect(() => {
+        fetchUsuario();
+
+        const storedPhotoURL = localStorage.getItem('userImg');
+
+        setUserImg(storedPhotoURL || UserImg);
+
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                closeAllModals();
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [fetchUsuario, setUserImg]);
+
+    useEffect(() => {
+        document
+            .querySelector('html')
+            ?.classList.toggle('modalOpen', !!modalState.type);
+    }, [modalState.type]);
 
     function handleChange({ target }) {
         const { name, value } = target;
@@ -171,12 +162,12 @@ const User = ({ onLogout, userImg, setUserImg }) => {
         }
     }
 
-    const openModal = (type, mode, item = null) => {
-        setModalState({ type, mode, item });
+    const openModal = (type, mode, item = null, onSuccess = null) => {
+        setModalState({ type, mode, item, onSuccess });
     };
 
     const closeAllModals = () => {
-        setModalState({ type: null, mode: null, item: null });
+        setModalState({ type: null, mode: null, item: null, onSuccess: null });
     };
 
     const handleSelectFromList = (type, item) => {
@@ -295,6 +286,7 @@ const User = ({ onLogout, userImg, setUserImg }) => {
                     onClose={closeAllModals}
                     externalSelectedItem={modalState.item}
                     onSelectFromList={handleSelectFromList}
+                    onSuccess={modalState.onSuccess || fetchUsuario}
                 />
             )}
         </section>
@@ -311,6 +303,8 @@ const mapStateToProps = (state) => ({
     userImg: state.user.userImg,
 });
 
-export default connect(mapStateToProps, {
+const ConnectedUser = connect(mapStateToProps, {
     setUserImg,
 })(User);
+
+export default ConnectedUser;

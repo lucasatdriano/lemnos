@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
-
-import { formatDateToBr, formatPreco } from '../../../../utils/formatters';
+import {
+    formatBrazilianDate,
+    formatCurrency,
+} from '../../../../utils/formatters';
 
 export default function OrderHistoryCard({ pedido, onClick }) {
     return (
         <li onClick={onClick} className="orderCard">
             <p className="orderDate">
-                <strong>Data:</strong> {formatDateToBr(pedido.dataPedido)}
+                <strong>Data:</strong> {formatBrazilianDate(pedido.dataPedido)}
             </p>
 
             <div className="orderDetails">
@@ -32,7 +34,7 @@ export default function OrderHistoryCard({ pedido, onClick }) {
 
                 <p>
                     <strong>Valor: </strong>
-                    {formatPreco(pedido.valorPagamento)}
+                    {formatCurrency(pedido.valorPagamento)}
                 </p>
             </div>
         </li>

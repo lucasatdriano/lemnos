@@ -1,15 +1,14 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import Select from 'react-select';
 import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 import {
     cadastrarProduto,
     updateProduto,
 } from '../../../services/ProdutoService';
-import { formatPrecoReal } from '../../../utils/formatters';
+import { formatDecimal } from '../../../utils/formatters';
 import { validateProduto } from '../../../validations/produtoValidator';
 import { getFornecedoresByNome } from '../../../services/FornecedorService';
 import InputError from '../../inputs/inputError/InputError';
@@ -40,38 +39,52 @@ const Dropdown = ({ isOpen, options, onSelect, filterFunction }) => {
     );
 };
 
-export default function ProdutoModal({ onClose, selectedProduct }) {
-    const initialFormState = {
-        nome: '',
-        preco: '',
-        descricao: '',
-        desconto: '0',
-        cor: '',
-        modelo: '',
-        peso: '',
-        altura: '',
-        comprimento: '',
-        largura: '',
-        fabricante: '',
-        fornecedor: '',
-        categoria: '',
-        subCategoria: '',
-        imagemPrincipal: '',
-        imagens: ['', '', ''],
-    };
+Dropdown.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onSelect: PropTypes.func.isRequired,
+    filterFunction: PropTypes.func,
+};
 
-    const [form, setForm] = useState(initialFormState);
+const INITIAL_FORM_STATE = {
+    nome: '',
+    preco: '',
+    descricao: '',
+    desconto: '0',
+    cor: '',
+    modelo: '',
+    peso: '',
+    altura: '',
+    comprimento: '',
+    largura: '',
+    fabricante: '',
+    fornecedor: '',
+    categoria: '',
+    subCategoria: '',
+    imagemPrincipal: '',
+    imagens: ['', '', ''],
+};
+
+export default function ProdutoModal({ onClose, selectedProduct }) {
+    const [form, setForm] = useState(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState({});
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isSubDropdownOpen, setIsSubDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [subcategorias, setSubcategorias] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState('');
+    const [, setSelectedCategory] = useState('');
     const [fornecedores, setFornecedores] = useState([]);
     const [selectedFornecedor, setSelectedFornecedor] = useState(null);
     const [isEditMode, setIsEditMode] = useState(false);
 
-    useEffect(() => {
+    const resetForm = useCallback(() => {
+        setForm(INITIAL_FORM_STATE);
+        setErrors({});
+        setIsEditMode(false);
+        setSelectedFornecedor(null);
+    }, []);
+
+    const loadProductData = useCallback(() => {
         if (selectedProduct && selectedProduct.id) {
             setForm({
                 nome: selectedProduct.nome || '',
@@ -80,7 +93,7 @@ export default function ProdutoModal({ onClose, selectedProduct }) {
                 imagens: selectedProduct.imagens || ['', '', ''],
                 desconto: selectedProduct.desconto?.toString() || '0',
                 cor: selectedProduct.cor || '',
-                preco: formatPrecoReal(selectedProduct.valorTotal) || '',
+                preco: formatDecimal(selectedProduct.valorTotal) || '',
                 modelo: selectedProduct.modelo || '',
                 peso: selectedProduct.peso?.toString() || '',
                 altura: selectedProduct.altura?.toString() || '',
@@ -100,11 +113,15 @@ export default function ProdutoModal({ onClose, selectedProduct }) {
             setIsEditMode(true);
             setErrors({});
         } else {
-            setForm(initialFormState);
+            setForm(INITIAL_FORM_STATE);
             setIsEditMode(false);
             setSelectedFornecedor(null);
         }
     }, [selectedProduct]);
+
+    useEffect(() => {
+        loadProductData();
+    }, [loadProductData]);
 
     const handleChange = (name, value) => {
         setForm((prevForm) => ({
@@ -179,9 +196,7 @@ export default function ProdutoModal({ onClose, selectedProduct }) {
             await cadastrarProduto(formattedForm);
 
             toast.success('Produto cadastrado com sucesso!');
-            setForm(initialFormState);
-            setErrors({});
-            setIsEditMode(false);
+            resetForm();
             onClose();
         } catch (error) {
             console.error(error);
@@ -236,9 +251,7 @@ export default function ProdutoModal({ onClose, selectedProduct }) {
 
             if (entidadeAtualizada === true) {
                 toast.success('Produto atualizado com sucesso!');
-                setForm(initialFormState);
-                setErrors({});
-                setIsEditMode(false);
+                resetForm();
                 onClose();
                 return;
             }
@@ -280,8 +293,11 @@ export default function ProdutoModal({ onClose, selectedProduct }) {
     };
 
     useEffect(() => {
-        if (searchTerm) fetchFornecedores(searchTerm);
-        else setFornecedores([]);
+        if (searchTerm) {
+            fetchFornecedores(searchTerm);
+        } else {
+            setFornecedores([]);
+        }
     }, [searchTerm]);
 
     const handleFornecedorChange = async (selectedOption) => {
@@ -626,3 +642,26 @@ export default function ProdutoModal({ onClose, selectedProduct }) {
         </div>
     );
 }
+
+ProdutoModal.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    selectedProduct: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        nome: PropTypes.string,
+        descricao: PropTypes.string,
+        imagemPrincipal: PropTypes.string,
+        imagens: PropTypes.arrayOf(PropTypes.string),
+        desconto: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        cor: PropTypes.string,
+        valorTotal: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        modelo: PropTypes.string,
+        peso: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        altura: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        comprimento: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        largura: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        fabricante: PropTypes.string,
+        fornecedor: PropTypes.string,
+        categoria: PropTypes.string,
+        subCategoria: PropTypes.string,
+    }),
+};

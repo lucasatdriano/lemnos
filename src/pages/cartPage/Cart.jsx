@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useRef } from 'react';
-import { setCarrinho } from '../../store/actions/cartActions';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { clearCarrinho, setCarrinho } from '../../store/slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -14,9 +13,7 @@ import {
 
 import { getProdutoById } from '../../services/ProdutoService';
 
-import { useNavigation } from '../../NavigationProvider';
-
-import AuthService from '../../services/AuthService';
+import { useNavigation } from '../../hooks/useNavigation';
 
 import Loading from '../../components/layout/loading/Loading';
 import OfferList from '../../components/layout/lists/OfferList';
@@ -28,13 +25,15 @@ import CartSummary from './components/cartSummary/CartSummary';
 import CartCard from './components/cartCard/CartCard';
 
 import './cart.scss';
-import { resetFrete } from '../../store/actions/freteActions';
+import { resetFrete } from '../../store/slices/freteSlice';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function Cart() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const { setIsNavigatingToPayment } = useNavigation();
+    const { isAuthenticated } = useAuth();
 
     const cartRef = useRef(null);
 
@@ -42,6 +41,46 @@ export default function Cart() {
 
     const cart = useSelector((state) => state.cart.items);
     const frete = useSelector((state) => state.frete);
+
+    const fetchCarrinho = useCallback(async () => {
+        try {
+            if (!isAuthenticated) {
+                return;
+            }
+
+            const response = await listarCarrinho();
+
+            if (!response || response.produtos.length === 0) {
+                dispatch(clearCarrinho());
+                dispatch(resetFrete());
+                return;
+            }
+
+            const carrinhoDetalhado = await Promise.all(
+                response.produtos.map(async (produto) => {
+                    const detalhesProduto = await getProdutoById(produto.id);
+
+                    return {
+                        ...produto,
+                        ...detalhesProduto,
+                    };
+                })
+            );
+
+            carrinhoDetalhado.sort((a, b) => a.nome.localeCompare(b.nome));
+
+            dispatch(
+                setCarrinho({
+                    items: carrinhoDetalhado,
+                    totalAmount: response.valorTotal,
+                })
+            );
+        } catch (error) {
+            console.error('Erro ao obter itens do carrinho:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [isAuthenticated, dispatch]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -53,47 +92,7 @@ export default function Cart() {
         return () => {
             cartEventEmitter.off('produtoAdicionado', fetchCarrinho);
         };
-    }, []);
-
-    async function fetchCarrinho() {
-        try {
-            if (AuthService.isLoggedIn()) {
-                const response = await listarCarrinho();
-
-                if (!response || response.produtos.length === 0) {
-                    dispatch(setCarrinho([]));
-                    dispatch(resetFrete());
-                    return;
-                }
-
-                const carrinhoDetalhado = await Promise.all(
-                    response.produtos.map(async (produto) => {
-                        const detalhesProduto = await getProdutoById(
-                            produto.id
-                        );
-
-                        return {
-                            ...produto,
-                            ...detalhesProduto,
-                        };
-                    })
-                );
-
-                carrinhoDetalhado.sort((a, b) => a.nome.localeCompare(b.nome));
-
-                dispatch(
-                    setCarrinho({
-                        items: carrinhoDetalhado,
-                        totalAmount: response.valorTotal,
-                    })
-                );
-            }
-        } catch (error) {
-            console.error('Erro ao obter itens do carrinho:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+    }, [fetchCarrinho]);
 
     const calcularSubTotal = () => {
         if (!cart?.length) return 0;
@@ -113,7 +112,7 @@ export default function Cart() {
         try {
             await apagarCarrinho();
 
-            dispatch(setCarrinho([]));
+            dispatch(clearCarrinho());
             dispatch(resetFrete());
         } catch (error) {
             console.error('Erro ao apagar carrinho:', error);
@@ -138,11 +137,12 @@ export default function Cart() {
                 return;
             }
 
-            if (!AuthService.isLoggedIn()) {
+            if (!isAuthenticated) {
                 toast.warning(
                     'Por favor, faça login para continuar com o pedido.'
                 );
                 navigate('/auth');
+
                 return;
             }
 

@@ -129,7 +129,8 @@ export default function FiltersProducts({
                             name="star-rating"
                             value={index}
                             checked={index === filters.evaluation}
-                            onChange={() => handleProductRating(index)}
+                            onClick={() => handleProductRating(index)}
+                            readOnly
                         />
 
                         <label htmlFor={`star-${index}`}>

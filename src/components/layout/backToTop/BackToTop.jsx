@@ -1,42 +1,32 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import imgBtnScroll from '../../../assets/icons/btnScrollToTop.svg';
 import AuthService from '../../../services/AuthService';
 
 export default function BackToTopButton() {
+    const [progress, setProgress] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
 
-    const cvlScroll = () => {
-        const progressBar = document.getElementById('progressBar');
-        const position = document.documentElement.scrollTop;
-        const height =
-            document.documentElement.scrollHeight -
-            document.documentElement.clientHeight;
-        const vlScroll = Math.round((position * 100) / height);
-
-        if (position > 100) {
-            progressBar.style.display = 'grid';
-            progressBar.classList.add('visible');
-        } else {
-            progressBar.style.display = 'none';
-            progressBar.classList.remove('visible');
-        }
-
-        if (AuthService.getTheme() === 'light') {
-            progressBar.style.background = `conic-gradient(#36CEC4 ${vlScroll}%, #2D3A3A ${vlScroll}%)`;
-        } else {
-            progressBar.style.background = `conic-gradient(#10a88d ${vlScroll}%, #2D3A3A ${vlScroll}%)`;
-        }
-    };
+    const color = AuthService.getTheme() === 'light' ? '#36CEC4' : '#10A88D';
 
     useEffect(() => {
-        window.addEventListener('scroll', cvlScroll);
-        window.addEventListener('load', cvlScroll);
+        const handleScroll = () => {
+            const position = document.documentElement.scrollTop;
+            const height =
+                document.documentElement.scrollHeight -
+                document.documentElement.clientHeight;
 
-        return () => {
-            window.removeEventListener('scroll', cvlScroll);
-            window.removeEventListener('load', cvlScroll);
+            const percentage =
+                height > 0 ? Math.round((position * 100) / height) : 0;
+
+            setProgress(percentage);
+            setIsVisible(position > 100);
         };
+
+        handleScroll();
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const scrollToTop = () => {
@@ -50,10 +40,16 @@ export default function BackToTopButton() {
         <section className="scrollBtn">
             <div
                 className={`progressBar ${isVisible ? 'visible' : ''}`}
-                id="progressBar"
                 onClick={scrollToTop}
+                style={{
+                    background: `conic-gradient(${color} ${progress}%, #2D3A3A ${progress}%)`,
+                }}
             >
-                <img src={imgBtnScroll} alt="iconArrow" className="arrowUp" />
+                <img
+                    src={imgBtnScroll}
+                    alt="Voltar ao topo"
+                    className="arrowUp"
+                />
             </div>
         </section>
     );

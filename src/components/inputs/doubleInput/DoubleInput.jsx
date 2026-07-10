@@ -1,9 +1,9 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Range, getTrackBackground } from 'react-range';
 import { toast, ToastContainer } from 'react-toastify';
 import './doubleInput.scss';
-import { formatPreco } from '../../../utils/formatters';
+import { formatCurrency } from '../../../utils/formatters';
 
 const STEP = 50;
 const MIN = 0;
@@ -84,7 +84,7 @@ export default function DoubleInputRange({
 
         if (isNaN(maxVal) || maxVal > maxPrice) {
             toast.warning(
-                `O valor máximo não pode ser maior que ${formatPreco(maxPrice)}.`
+                `O valor máximo não pode ser maior que ${formatCurrency(maxPrice)}.`
             );
             maxVal = maxPrice;
         } else if (maxVal < minVal) {
@@ -104,9 +104,9 @@ export default function DoubleInputRange({
             <div className="rangeSlider">
                 <Range
                     values={values}
-                    step={STEP}
-                    min={MIN}
                     max={maxPrice}
+                    min={MIN}
+                    step={STEP}
                     onChange={handleRangeChange}
                     onFinalChange={handleRangeFinalChange}
                     renderTrack={({ props, children }) => (
@@ -148,7 +148,7 @@ export default function DoubleInputRange({
                             <input
                                 type="text"
                                 className="inputField minInput"
-                                value={formatPreco(values[0])}
+                                value={formatCurrency(values[0])}
                                 onChange={handleMinInputChange}
                                 onBlur={handleMinInputBlur}
                                 inputMode="numeric"
@@ -161,7 +161,7 @@ export default function DoubleInputRange({
                             <input
                                 type="text"
                                 className="inputField maxInput"
-                                value={formatPreco(values[1])}
+                                value={formatCurrency(values[1])}
                                 onChange={handleMaxInputChange}
                                 onBlur={handleMaxInputBlur}
                                 inputMode="numeric"
@@ -173,3 +173,12 @@ export default function DoubleInputRange({
         </div>
     );
 }
+
+DoubleInputRange.propTypes = {
+    minValue: PropTypes.number.isRequired,
+    maxValue: PropTypes.number.isRequired,
+    setMinValue: PropTypes.func.isRequired,
+    setMaxValue: PropTypes.func.isRequired,
+    maxPrice: PropTypes.number.isRequired,
+    style: PropTypes.object,
+};

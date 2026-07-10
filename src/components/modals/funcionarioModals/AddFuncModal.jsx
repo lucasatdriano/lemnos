@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import CustomInput from '../../inputs/customInput/Inputs';
 import { toast } from 'react-toastify';
 import { IoClose } from 'react-icons/io5';
@@ -18,34 +18,34 @@ import InputError from '../../inputs/inputError/InputError';
 import {
     formatCep,
     formatCpf,
-    formatDate,
-    formatDateToBr,
-    formatTelefone,
+    convertToIsoDate,
+    formatBrazilianDate,
+    formatPhone,
 } from '../../../utils/formatters';
 import { validateFuncionario } from '../../../validations/funcionarioValidator';
+
+const INITIAL_FORM_STATE = {
+    nome: '',
+    cpf: '',
+    dataNasc: '',
+    dataAdmissao: '',
+    telefone: '',
+    email: '',
+    senha: '',
+    confPassword: '',
+    endereco: {
+        cep: '',
+        numLogradouro: '',
+        complemento: '',
+    },
+};
 
 export default function FuncionarioModal({
     onClose,
     tipoEntidade,
     selectedFuncionario,
 }) {
-    const initialFormState = {
-        nome: '',
-        cpf: '',
-        dataNasc: '',
-        dataAdmissao: '',
-        telefone: '',
-        email: '',
-        senha: '',
-        confPassword: '',
-        endereco: {
-            cep: '',
-            numLogradouro: '',
-            complemento: '',
-        },
-    };
-
-    const [form, setForm] = useState(initialFormState);
+    const [form, setForm] = useState(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const [showConfPassword, setShowConfPassword] = useState(false);
@@ -56,16 +56,24 @@ export default function FuncionarioModal({
         return selectedFunc?.situacao === 'ATIVO';
     };
 
-    useEffect(() => {
+    const resetForm = useCallback(() => {
+        setForm(INITIAL_FORM_STATE);
+        setErrors({});
+        setIsEditMode(false);
+        setSelectedFunc(null);
+    }, []);
+
+    const loadFuncionarioData = useCallback(() => {
         if (selectedFuncionario && selectedFuncionario.email) {
             setForm({
                 nome: selectedFuncionario.nome || '',
                 cpf: formatCpf(selectedFuncionario.cpf?.toString() || '') || '',
-                dataNasc: formatDate(selectedFuncionario.dataNascimento) || '',
+                dataNasc:
+                    convertToIsoDate(selectedFuncionario.dataNascimento) || '',
                 dataAdmissao:
-                    formatDate(selectedFuncionario.dataAdmissao) || '',
+                    convertToIsoDate(selectedFuncionario.dataAdmissao) || '',
                 telefone:
-                    formatTelefone(
+                    formatPhone(
                         selectedFuncionario.telefone?.toString() || ''
                     ) || '',
                 email: selectedFuncionario.email || '',
@@ -88,16 +96,19 @@ export default function FuncionarioModal({
                           }
                         : { cep: '', numLogradouro: '', complemento: '' },
             });
-
             setSelectedFunc(selectedFuncionario);
             setIsEditMode(true);
             setErrors({});
         } else {
-            setForm(initialFormState);
+            setForm(INITIAL_FORM_STATE);
             setIsEditMode(false);
             setSelectedFunc(null);
         }
     }, [selectedFuncionario]);
+
+    useEffect(() => {
+        loadFuncionarioData();
+    }, [loadFuncionarioData]);
 
     const handleChange = (name, value) => {
         if (name.startsWith('endereco.')) {
@@ -123,8 +134,8 @@ export default function FuncionarioModal({
             nome: form.nome,
             cpf: String(form.cpf).replace(/\D/g, ''),
             telefone: String(form.telefone).replace(/\D/g, ''),
-            dataNasc: formatDateToBr(form.dataNasc),
-            dataAdmissao: formatDateToBr(form.dataAdmissao),
+            dataNasc: formatBrazilianDate(form.dataNasc),
+            dataAdmissao: formatBrazilianDate(form.dataAdmissao),
             endereco: {
                 ...form.endereco,
                 numLogradouro: form.endereco.numLogradouro
@@ -181,10 +192,7 @@ export default function FuncionarioModal({
                 );
                 if (enderecoResponse) {
                     toast.success('Funcionário cadastrado com sucesso!');
-                    setForm(initialFormState);
-                    setErrors({});
-                    setIsEditMode(false);
-                    setSelectedFunc(null);
+                    resetForm();
                     onClose();
                 }
             }
@@ -204,10 +212,7 @@ export default function FuncionarioModal({
             if (success) {
                 const acao = isFuncionarioAtivo() ? 'desativado' : 'ativado';
                 toast.success(`Funcionário ${acao} com sucesso!`);
-                setForm(initialFormState);
-                setSelectedFunc(null);
-                setIsEditMode(false);
-                setErrors({});
+                resetForm();
                 onClose();
             }
         } catch (error) {
@@ -261,10 +266,7 @@ export default function FuncionarioModal({
 
                 if (enderecoAtualizada === true) {
                     toast.success('Funcionário atualizado com sucesso!');
-                    setForm(initialFormState);
-                    setSelectedFunc(null);
-                    setIsEditMode(false);
-                    setErrors({});
+                    resetForm();
                     onClose();
                     return;
                 }
@@ -507,3 +509,9 @@ export default function FuncionarioModal({
         </div>
     );
 }
+
+FuncionarioModal.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    tipoEntidade: PropTypes.string.isRequired,
+    selectedFuncionario: PropTypes.object,
+};

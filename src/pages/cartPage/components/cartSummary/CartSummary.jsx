@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
-
 import { FaRegCreditCard, FaBarcode } from 'react-icons/fa';
-
-import { formatPreco } from '../../../../utils/formatters';
-
+import { formatCurrency } from '../../../../utils/formatters';
 import './cartSummary.scss';
 
 export default function CartSummary({
@@ -23,19 +20,19 @@ export default function CartSummary({
             <div className="values">
                 <p>SubTotal:</p>
 
-                <p>{formatPreco(subtotal)}</p>
+                <p>{formatCurrency(subtotal)}</p>
             </div>
 
             <div className="values">
                 <p>Entrega:</p>
 
-                <p>{formatPreco(frete)}</p>
+                <p>{formatCurrency(frete)}</p>
             </div>
 
             <div className="values">
                 <p>Total:</p>
 
-                <strong>{formatPreco(total)}</strong>
+                <strong>{formatCurrency(total)}</strong>
             </div>
 
             <div className="paymentOptions">
@@ -43,9 +40,9 @@ export default function CartSummary({
                     <FaRegCreditCard className="icon" />
 
                     <p>
-                        <strong>{formatPreco(total)}</strong>
+                        <strong>{formatCurrency(total)}</strong>
                         <br />
-                        em 12x de <span>{formatPreco(total / 12)}</span> s/
+                        em 12x de <span>{formatCurrency(total / 12)}</span> s/
                         juros
                     </p>
                 </div>
@@ -54,7 +51,7 @@ export default function CartSummary({
                     <FaBarcode className="icon" />
 
                     <p>
-                        <strong>{formatPreco(totalPix)}</strong>
+                        <strong>{formatCurrency(totalPix)}</strong>
                         <br />
                         com desconto à vista no boleto ou pix
                     </p>

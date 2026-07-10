@@ -28,7 +28,7 @@ $font-items: 'Poppins', Helvetica;
     flex-direction: column;
 
     .productLink {
-        padding: 10px;
+        padding: clamp(8px, 0.5vw + 6px, 10px);
         display: flex;
         flex-direction: column;
         flex: 1;
@@ -40,15 +40,15 @@ $font-items: 'Poppins', Helvetica;
             left: 5px;
             color: $color-primaryLight;
             float: right;
-            width: 26px;
-            height: 26px;
+            width: clamp(22px, 1vw + 18px, 26px);
+            height: clamp(22px, 1vw + 18px, 26px);
             z-index: 1;
         }
 
         .productImage {
             width: 100%;
-            height: 8em;
-            max-height: 165px;
+            height: clamp(8em, 7.2em + 1vw, 10em);
+            max-height: clamp(140px, 18vw, 165px);
             border-radius: 10px;
             object-fit: contain;
             margin-right: 16px;
@@ -60,25 +60,25 @@ $font-items: 'Poppins', Helvetica;
             flex-direction: column;
             flex-grow: 1;
             height: auto;
-            min-height: 10em;
+            min-height: clamp(9em, 8em + 2vw, 10em);
             justify-content: space-between;
             position: relative;
             z-index: 1;
             padding-block: 0.25em;
 
             .productName {
-                font-size: 1.5rem;
+                font-size: clamp(1.3rem, 1.1rem + 0.5vw, 1.5rem);
                 font-weight: 700;
                 overflow: hidden;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
-                line-clamp: 3;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
                 text-overflow: ellipsis;
             }
 
             .productPrice {
-                font-size: 1.2rem;
+                font-size: clamp(1rem, 0.95rem + 0.25vw, 1.2rem);
                 font-weight: 500;
                 line-height: 1.2;
                 transition: transform 0.4s ease-in-out;
@@ -86,7 +86,7 @@ $font-items: 'Poppins', Helvetica;
                 span {
                     font-weight: 700;
                     color: $color-primaryLight;
-                    font-size: 2.4rem;
+                    font-size: clamp(2rem, 1.7rem + 0.8vw, 2.4rem);
                 }
             }
         }
@@ -97,7 +97,7 @@ $font-items: 'Poppins', Helvetica;
         align-items: center;
         justify-content: center;
         white-space: nowrap;
-        gap: 0.5em;
+        gap: clamp(0.3em, 0.2em + 0.3vw, 0.5em);
         position: absolute;
         bottom: -70px;
         left: 0;
@@ -108,11 +108,22 @@ $font-items: 'Poppins', Helvetica;
         box-shadow: 0 0 8px $color-primaryDark;
         border: none;
         width: 100%;
-        font-size: 1.4rem;
-        padding: 0.75em 0;
+        font-size: clamp(1.4rem, 1rem + 0.35vw, 1.6rem);
+        padding: clamp(0.6em, 0.5em + 0.2vw, 0.75em) 0;
         transition: all 0.4s ease-out;
         cursor: pointer;
         z-index: 2;
+
+        &.added {
+            background: #2e7d32;
+            box-shadow: 0 0 8px #2e7d32;
+
+            &:hover {
+                background: #2e7d32;
+                box-shadow: 0 0 12px #2e7d32;
+                transform: none;
+            }
+        }
 
         &:hover {
             filter: brightness(1.1);
@@ -120,8 +131,8 @@ $font-items: 'Poppins', Helvetica;
         }
 
         .iconAdd {
-            width: 16px;
-            height: 16px;
+            width: clamp(16px, 0.8vw + 12px, 24px);
+            height: clamp(16px, 0.8vw + 12px, 24px);
         }
     }
 
@@ -141,7 +152,7 @@ $font-items: 'Poppins', Helvetica;
     .productCard {
         position: relative;
         width: auto;
-        height: 12em;
+        height: clamp(12em, 11em + 2vw, 15em);
         display: flex;
         justify-content: space-between;
         box-shadow: 2px 2px 8px $color-shadow;
@@ -149,14 +160,14 @@ $font-items: 'Poppins', Helvetica;
         .productLink {
             flex-direction: row;
             width: 100%;
-            max-height: 12em;
-            min-height: 12em;
+            max-height: clamp(12em, 11em + 2vw, 15em);
+            min-height: clamp(12em, 11em + 2vw, 15em);
 
             .iconFav {
                 top: 5px;
                 left: 10px;
-                height: 32px;
-                width: 32px;
+                width: clamp(24px, 1.5vw + 20px, 32px);
+                height: clamp(24px, 1.5vw + 20px, 32px);
             }
 
             .productImage {
@@ -170,7 +181,7 @@ $font-items: 'Poppins', Helvetica;
 
             .productDetails {
                 .productName {
-                    font-size: 1.8rem;
+                    font-size: clamp(1.4rem, 1.1rem + 0.6vw, 1.8rem);
                     -webkit-line-clamp: 3;
                     line-clamp: 3;
                 }
@@ -181,12 +192,12 @@ $font-items: 'Poppins', Helvetica;
             bottom: 10px;
             right: 10px;
             left: auto;
-            font-size: 1.6rem;
-            max-width: 35%;
+            font-size: clamp(1.3rem, 1rem + 0.5vw, 1.6rem);
+            max-width: clamp(30%, 32vw, 35%);
 
             .iconAdd {
-                width: 24px;
-                height: 24px;
+                width: clamp(16px, 0.8vw + 12px, 24px);
+                height: clamp(16px, 0.8vw + 12px, 24px);
             }
         }
 
@@ -232,14 +243,27 @@ $font-items: 'Poppins', Helvetica;
     }
 }
 
-@media only screen and (max-width: 500px) {
-    .productCard {
-        .productLink {
-            .productDetails {
-                .productPrice {
-                    span {
-                        font-size: 2.4rem;
-                    }
+@media only screen and (max-width: 700px) {
+    .cardList {
+        .productCard {
+            height: 15em;
+
+            .productLink {
+                .iconFav {
+                    left: 5px;
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            .btnAdd {
+                bottom: 0;
+                right: auto;
+                max-width: 100%;
+
+                .iconAdd {
+                    width: 24px;
+                    height: 24px;
                 }
             }
         }
@@ -258,33 +282,11 @@ $font-items: 'Poppins', Helvetica;
                 width: 35%;
                 height: 100%;
             }
-
-            .productDetails {
-                .productName {
-                    font-size: 1.4rem;
-                    -webkit-line-clamp: 2;
-                    line-clamp: 2;
-                }
-
-                .productPrice {
-                    font-size: 1rem;
-
-                    span {
-                        font-size: 2.2rem;
-                    }
-                }
-            }
         }
 
         .btnAdd {
             bottom: 0;
-            font-size: 1.4rem;
             position: relative;
-
-            .iconAdd {
-                width: 18px;
-                height: 18px;
-            }
         }
 
         &:hover {
@@ -292,31 +294,6 @@ $font-items: 'Poppins', Helvetica;
                 .productPrice {
                     transform: translateY(0);
                 }
-            }
-        }
-    }
-
-    .cardList .productCard {
-        padding-bottom: 5em;
-        height: 15em;
-
-        .productLink {
-            .iconFav {
-                left: 5px;
-                height: 24px;
-                width: 24px;
-            }
-        }
-
-        .btnAdd {
-            font-size: 1.4rem;
-            max-width: 100%;
-            bottom: 0;
-            right: auto;
-
-            .iconAdd {
-                width: 24px;
-                height: 24px;
             }
         }
     }

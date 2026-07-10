@@ -87,7 +87,7 @@ $color-shadow: #12171740;
                         height: 100%;
                         background-color: darken($color-primaryLight, 10%);
                         border-radius: 10px;
-                        animation: preencher 5s linear forwards;
+                        animation: fillProgress 5s linear forwards;
                     }
                 }
             }
@@ -123,7 +123,7 @@ $color-shadow: #12171740;
     }
 }
 
-@keyframes preencher {
+@keyframes fillProgress {
     from {
         width: 0%;
     }
