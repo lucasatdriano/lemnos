@@ -100,4 +100,3 @@ Este projeto foi desenvolvido por mim, Lucas Adriano, como parte do Trabalho de 
 
 -   **Email**: [lucasadriano@gmail.com](mailto:lucasatdriano@gmail.com)
 -   **LinkedIn**: [Lucas Adriano](https://linkedin.com/in/lucasadrianodev)
--   **Instagram**: [@__lgoncalves](https://instagram.com/__lgoncalves/)
