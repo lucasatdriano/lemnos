@@ -5,13 +5,29 @@ const AuthService = {
         return localStorage.getItem('authToken');
     },
 
+    getGoogleToken() {
+        return localStorage.getItem('googleToken');
+    },
+
     setToken(token) {
         localStorage.setItem('authToken', token);
+
+        try {
+            if (token) {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                if (payload.role) {
+                    this.setRole(payload.role);
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao extrair role do token:', error);
+        }
+
         this.notifySubscribers();
     },
 
     setGoogleToken(token) {
-        localStorage.setItem('token', token);
+        localStorage.setItem('googleToken', token);
         this.notifySubscribers();
     },
 
@@ -41,7 +57,7 @@ const AuthService = {
 
     logout() {
         localStorage.removeItem('authToken');
-        localStorage.removeItem('token');
+        localStorage.removeItem('googleToken');
         localStorage.removeItem('role');
         localStorage.removeItem('googleProfilePhoto');
         this.notifySubscribers();
@@ -52,7 +68,7 @@ const AuthService = {
     },
 
     isLoggedInWithGoogle() {
-        return !!localStorage.getItem('token');
+        return !!localStorage.getItem('googleToken');
     },
 
     subscribe(callback) {
@@ -77,15 +93,15 @@ const AuthService = {
     },
 
     isClienteRole() {
-        return this.getRole() === "ROLE_CLIENTE";
+        return this.getRole() === 'ROLE_CLIENTE';
     },
 
     isFuncionarioRole() {
-        return this.getRole() === "ROLE_FUNCIONARIO";
+        return this.getRole() === 'ROLE_FUNCIONARIO';
     },
 
     isAdminRole() {
-        return this.getRole() === "ROLE_ADMIN";
+        return this.getRole() === 'ROLE_ADMIN';
     },
 };
 

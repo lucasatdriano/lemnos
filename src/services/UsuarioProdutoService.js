@@ -1,4 +1,4 @@
-import { baseUri } from './configurations/ServiceConfig';
+import { API_BASE_URL } from './configurations/ServiceConfig';
 import cartEventEmitter from './configurations/events';
 import AuthService from './AuthService';
 import axios from 'axios';
@@ -6,7 +6,7 @@ import axios from 'axios';
 export async function listarProdutosFiltrados(filtro, page, size) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/produto/find',
             data: {
@@ -43,7 +43,7 @@ export async function listarProdutosFiltrados(filtro, page, size) {
 export async function listarProdutosComDesconto() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: '/produto/desconto',
             timeout: 25000,
@@ -69,7 +69,7 @@ export async function listarProdutosComDesconto() {
 export async function listarProdutosFavoritos() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: `/favorito`,
             headers: {
@@ -98,7 +98,7 @@ export async function adicionarFavorito(produto) {
     if (AuthService.isLoggedIn()) {
         try {
             const response = await axios({
-                baseURL: baseUri,
+                baseURL: API_BASE_URL,
                 method: 'POST',
                 url: '/favorito',
                 headers: {
@@ -126,7 +126,7 @@ export async function adicionarFavorito(produto) {
 export async function desfavoritarProduto(produto) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'DELETE',
             url: '/favorito',
             headers: {
@@ -153,7 +153,7 @@ export async function desfavoritarProduto(produto) {
 export async function avaliarProduto(produto, valorAvaliacao) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: `/produto/avaliar/${produto.id}`,
             headers: {
@@ -186,7 +186,7 @@ export async function avaliarProduto(produto, valorAvaliacao) {
 export async function listarCarrinho() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: '/carrinho',
             headers: {
@@ -216,7 +216,7 @@ export async function listarCarrinho() {
 export async function getQuantidadeCarrinho() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: '/carrinho/quantidade',
             headers: {
@@ -244,7 +244,7 @@ export async function getQuantidadeCarrinho() {
 export async function adicionarProdutoCarrinho(produto, qntd) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/carrinho/adicionar',
             headers: {
@@ -279,7 +279,7 @@ export async function adicionarProdutoCarrinho(produto, qntd) {
 export async function removerProdutoCarrinho(produto, qntd) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/carrinho/remover',
             headers: {
@@ -315,7 +315,7 @@ export async function removerProdutoCarrinho(produto, qntd) {
 export async function apagarCarrinho() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'DELETE',
             url: '/carrinho/tudo',
             headers: {
@@ -348,7 +348,7 @@ export async function novoPedido(pedido) {
     console.error('enviou');
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/pedido',
             headers: {
@@ -384,7 +384,7 @@ export async function novoPedido(pedido) {
 export async function listarPedido() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: `/pedido`,
             headers: {
@@ -414,7 +414,7 @@ export async function listarPedido() {
 export async function pedidoPorId(id) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: `/pedido/${id}`,
             headers: {
@@ -444,7 +444,7 @@ export async function pedidoPorId(id) {
 export async function getPedido(pedido) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: `/pedido/${pedido}`,
             headers: {
@@ -474,7 +474,7 @@ export async function getPedido(pedido) {
 export async function atualizarStatus(pedido) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'PUT',
             url: '/pedido',
             headers: {

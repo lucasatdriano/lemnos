@@ -35,6 +35,8 @@ export default function CustomInput({
     };
 
     const handleChange = (e) => {
+        if (!onChange) return;
+
         const formatter = formatters[mask];
 
         const formattedValue = formatter
@@ -95,7 +97,7 @@ CustomInput.propTypes = {
     id: PropTypes.string,
     maxLength: PropTypes.number,
     minLength: PropTypes.number,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
     name: PropTypes.string,
     pattern: PropTypes.string,
     mask: PropTypes.string,
@@ -109,6 +111,7 @@ CustomInput.defaultProps = {
     label: '',
     maxLength: null,
     minLength: null,
+    onChange: () => {},
     pattern: null,
     mask: null,
     disabled: false,

@@ -24,6 +24,7 @@ import UserProfileForm from './components/profile/UserProfileForm';
 import UserNavigation from './components/navigation/UserNavigation';
 import AdminSection from './components/admin/AdminSection';
 import AddressList from './components/address/AddressList';
+import Loading from '../../components/layout/loading/Loading';
 import './user.scss';
 
 const User = ({ onLogout, userImg, setUserImg }) => {
@@ -32,6 +33,8 @@ const User = ({ onLogout, userImg, setUserImg }) => {
     const role = AuthService.getRole();
     const isCliente = role === 'ROLE_CLIENTE';
     const isAdmin = role === 'ROLE_ADMIN';
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const [username, setUsername] = useState('');
 
@@ -53,34 +56,36 @@ const User = ({ onLogout, userImg, setUserImg }) => {
     });
 
     const fetchUsuario = useCallback(async () => {
+        setIsLoading(true);
+
         try {
             const usuario = isCliente
                 ? await getCliente()
                 : await getFuncionarioByToken();
 
             setForm({
-                nome: usuario.nome,
-                email: usuario.email,
-                cpf: formatCpf(String(usuario.cpf)),
+                nome: usuario.nome || '',
+                email: usuario.email || '',
+                cpf: formatCpf(String(usuario.cpf || '')),
                 enderecos:
                     usuario.enderecos?.map((endereco) => ({
-                        cep: endereco.cep,
-                        logradouro: endereco.logradouro,
-                        estado: endereco.uf,
-                        bairro: endereco.bairro,
-                        cidade: endereco.cidade,
-                        numero: endereco.numeroLogradouro,
-                        complemento: endereco.complemento,
+                        cep: endereco.cep || '',
+                        logradouro: endereco.logradouro || '',
+                        estado: endereco.uf || '',
+                        bairro: endereco.bairro || '',
+                        cidade: endereco.cidade || '',
+                        numero: endereco.numeroLogradouro || '',
+                        complemento: endereco.complemento || '',
                     })) || [],
             });
 
-            setUsername(usuario.nome.split(' ')[0]);
+            setUsername(usuario.nome?.split(' ')[0] || 'Usuário');
 
             if (AuthService.isLoggedInWithGoogle()) {
                 const currentUser = auth.currentUser;
 
                 if (
-                    currentUser?.providerData.some(
+                    currentUser?.providerData?.some(
                         (provider) => provider.providerId === 'google.com'
                     )
                 ) {
@@ -94,11 +99,13 @@ const User = ({ onLogout, userImg, setUserImg }) => {
                 setUserImg(AuthService.getGoogleProfilePhoto() || UserImg);
             }
         } catch (error) {
-            console.error(error);
+            toast.error('Erro ao carregar seus dados. Faça login novamente.');
+            console.error('Erro ao buscar dados do usuário:', error);
 
             AuthService.logout();
-
             navigate('/auth');
+        } finally {
+            setIsLoading(false);
         }
     }, [isCliente, navigate, setUserImg]);
 
@@ -158,6 +165,7 @@ const User = ({ onLogout, userImg, setUserImg }) => {
 
             toast.success('Dados atualizados!');
         } catch (error) {
+            console.error('Erro ao salvar:', error);
             toast.error('Erro ao atualizar dados');
         }
     }
@@ -209,6 +217,10 @@ const User = ({ onLogout, userImg, setUserImg }) => {
             console.error(error);
             toast.error('Erro ao apagar o endereço.');
         }
+    }
+
+    if (isLoading) {
+        return <Loading />;
     }
 
     return (

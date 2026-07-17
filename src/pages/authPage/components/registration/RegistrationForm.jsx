@@ -12,12 +12,15 @@ import { loginFirebase } from '../../../../services/LoginService';
 import PasswordToggle from '../../../../components/inputs/passwordToggle/PasswordToggle';
 import InputError from '../../../../components/inputs/inputError/InputError';
 import { validateRegister } from '../../../../validations/registerValidator';
+import { toast } from 'react-toastify';
+import { useAuth } from '../../../../hooks/useAuth';
 
 export default function RegistrationForm({
     onLogin,
     onRegisterSuccess,
     handleBackToLogin,
 }) {
+    const { isAuthenticated } = useAuth();
     const [form, setForm] = useState({
         name: '',
         cpf: '',
@@ -29,6 +32,7 @@ export default function RegistrationForm({
     const [showPassword, setShowPassword] = useState(false);
     const [showConfPassword, setShowConfPassword] = useState(false);
     const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -45,6 +49,8 @@ export default function RegistrationForm({
     const handleRegister = (e) => {
         e.preventDefault();
 
+        if (isLoading) return;
+
         const { isValid, errors: validationErrors } = validateRegister(form);
 
         if (!isValid) {
@@ -52,34 +58,47 @@ export default function RegistrationForm({
             return;
         }
 
-        const formToSubmit = {
-            name: form.name,
-            cpf: form.cpf,
-            email: form.email,
-            password: form.password,
-        };
+        setIsLoading(true);
 
-        onRegisterSuccess(formToSubmit);
+        try {
+            const formToSubmit = {
+                name: form.name,
+                cpf: form.cpf,
+                email: form.email,
+                password: form.password,
+            };
+
+            onRegisterSuccess(formToSubmit);
+        } catch (error) {
+            console.error('Erro no cadastro:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleGoogleLogin = async () => {
+        setIsLoading(true);
+
         try {
             const result = await signInWithPopup(auth, googleProvider);
-            const token = result.user.accessToken;
-            const resultLogin = await loginFirebase(token);
+            const googleToken = await result.user.getIdToken();
+            const loginSuccess = await loginFirebase(googleToken);
 
-            if (resultLogin) {
-                onLogin({
-                    email: result.user.email,
-                    password: result.user.password,
-                });
+            if (loginSuccess) {
+                await new Promise((resolve) => setTimeout(resolve, 200));
+
+                if (isAuthenticated && loginSuccess) {
+                    onLogin();
+                    toast.success('Usuário logado com sucesso!');
+                } else {
+                    toast.error('Erro ao salvar dados de login');
+                }
             }
         } catch (error) {
-            console.error(
-                'Error during Google login:',
-                error.code,
-                error.message
-            );
+            toast.error('Erro ao fazer login com Google: ' + error.message);
+            console.error('Erro ao fazer login com Google: ' + error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -99,6 +118,7 @@ export default function RegistrationForm({
                     <button
                         onClick={handleGoogleLogin}
                         className="loginGoogleButton"
+                        disabled={isLoading}
                     >
                         <FcGoogle className="loginGoogleIcon" />
                         Entrar com Google
@@ -125,6 +145,7 @@ export default function RegistrationForm({
                             minLength={5}
                             value={form.name}
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <InputError error={errors.name} />
                     </div>
@@ -141,6 +162,7 @@ export default function RegistrationForm({
                             mask="CPF"
                             pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <InputError error={errors.cpf} />
                     </div>
@@ -154,6 +176,7 @@ export default function RegistrationForm({
                             maxLength={40}
                             value={form.email}
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <InputError error={errors.email} />
                     </div>
@@ -167,6 +190,7 @@ export default function RegistrationForm({
                             maxLength={40}
                             value={form.confEmail}
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <InputError error={errors.confEmail} />
                     </div>
@@ -181,10 +205,12 @@ export default function RegistrationForm({
                             maxLength={16}
                             value={form.password}
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <PasswordToggle
                             visible={showPassword}
                             onToggle={togglePasswordVisibility}
+                            disabled={isLoading}
                         />
                         <InputError error={errors.password} />
                     </div>
@@ -199,18 +225,26 @@ export default function RegistrationForm({
                             maxLength={16}
                             value={form.confPassword}
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <PasswordToggle
                             visible={showConfPassword}
                             onToggle={toggleConfPasswordVisibility}
+                            disabled={isLoading}
                         />
                         <InputError error={errors.confPassword} />
                     </div>
                 </div>
 
                 <div className="registrationFormActions">
-                    <button type="submit">Cadastrar</button>
-                    <button type="button" onClick={handleBackToLogin}>
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Cadastrando...' : 'Cadastrar'}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleBackToLogin}
+                        disabled={isLoading}
+                    >
                         Voltar para Login
                     </button>
                 </div>

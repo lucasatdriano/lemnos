@@ -2,12 +2,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import AuthService from './AuthService';
 import { toast } from 'react-toastify';
-import { baseUri } from './configurations/ServiceConfig';
+import { API_BASE_URL } from './configurations/ServiceConfig';
 
 export async function cadastrarFornecedor(fornecedor, tipoEntidade) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: `/auth/register/${tipoEntidade}`,
             headers: {
@@ -44,7 +44,7 @@ export async function cadastrarFornecedor(fornecedor, tipoEntidade) {
 export async function getFornecedorByEmail(email) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             url: `/fornecedor/find?email=${email}`,
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
@@ -65,7 +65,7 @@ export async function getFornecedorByEmail(email) {
 export async function getFornecedores() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             url: `/fornecedor`,
             timeout: 10000,
         });
@@ -82,7 +82,7 @@ export async function getFornecedores() {
 export async function getFornecedoresByNome(fornecedor) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/fornecedor/by',
             headers: {
@@ -107,7 +107,7 @@ export async function getFornecedoresByNome(fornecedor) {
 export async function updateFornecedor(fornecedor) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'PUT',
             url: `/fornecedor`,
             headers: {

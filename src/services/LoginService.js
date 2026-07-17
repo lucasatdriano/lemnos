@@ -1,13 +1,12 @@
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import AuthService from './AuthService';
-import { toast } from 'react-toastify';
-import { baseUri } from './configurations/ServiceConfig';
+import { API_BASE_URL } from './configurations/ServiceConfig';
 
 export async function login(usuario, navigate) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/auth/login',
             headers: {
@@ -44,7 +43,7 @@ export async function login(usuario, navigate) {
 export async function loginFirebase(token) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/auth/login-firebase',
             headers: {
@@ -56,14 +55,19 @@ export async function loginFirebase(token) {
             timeout: 10000,
         });
 
-        if (response.status != 200) {
+        if (response.status !== 200) {
             throw new Error('Erro ao fazer login do usuário.');
         }
+
         AuthService.setGoogleToken(token);
         AuthService.setToken(response.data.token);
+
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
         return true;
     } catch (error) {
-        toast.error(error);
+        console.error('Erro ao fazer login com firebase:', error);
+
         return false;
     }
 }

@@ -2,7 +2,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import AuthService from './AuthService';
 import { toast } from 'react-toastify';
-import { baseUri } from './configurations/ServiceConfig';
+import { API_BASE_URL } from './configurations/ServiceConfig';
 
 export async function verificarCep(cep) {
     try {
@@ -22,7 +22,7 @@ export async function verificarCep(cep) {
 export async function getEnderecoFromCep(cep) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: `/endereco`,
             headers: {
@@ -55,7 +55,7 @@ export async function getEnderecoFromCep(cep) {
 export async function cadastrarEndereco(emailEntidade, endereco, tipoEntidade) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: `/endereco`,
             headers: {
@@ -92,7 +92,7 @@ export async function cadastrarEndereco(emailEntidade, endereco, tipoEntidade) {
 export async function updateEndereco(emailEntidade, endereco, TipoEntidade) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'PUT',
             url: '/endereco',
             headers: {
@@ -130,7 +130,7 @@ export async function updateEndereco(emailEntidade, endereco, TipoEntidade) {
 export async function excluirEndereco(email, cep, entidade) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'DELETE',
             url: '/endereco',
             headers: {

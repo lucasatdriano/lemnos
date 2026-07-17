@@ -2,12 +2,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import AuthService from './AuthService';
 import { toast } from 'react-toastify';
-import { baseUri } from './configurations/ServiceConfig';
+import { API_BASE_URL } from './configurations/ServiceConfig';
 
 export async function getFuncionarioByToken() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             url: `/funcionario/me`,
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
@@ -28,7 +28,7 @@ export async function getFuncionarioByToken() {
 export async function getFuncionarioByEmail(email) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             url: `/funcionario/find?email=${email}`,
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
@@ -49,7 +49,7 @@ export async function getFuncionarioByEmail(email) {
 export async function getFuncionarioByNome(nome) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/funcionario/by',
             headers: {
@@ -75,7 +75,7 @@ export async function getFuncionarioByNome(nome) {
 export async function getFuncionarios() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             url: `/funcionario`,
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
@@ -96,7 +96,7 @@ export async function getFuncionarios() {
 export async function cadastrarFuncionario(funcionario, tipoEntidade) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: `/auth/register/${tipoEntidade}`,
             headers: {
@@ -136,7 +136,7 @@ export async function cadastrarFuncionario(funcionario, tipoEntidade) {
 export async function updateFuncionario(funcionario) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'PUT',
             url: `/funcionario`,
             headers: {
@@ -172,7 +172,7 @@ export async function updateFuncionario(funcionario) {
 export async function toggleFuncionarioStatus(email) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'PUT',
             url: `/funcionario/situacao`,
             headers: {
@@ -198,7 +198,7 @@ export async function toggleFuncionarioStatus(email) {
 export async function DisableFuncionario(email) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'DELETE',
             url: `/funcionario`,
             headers: {

@@ -23,6 +23,7 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
     const [form, setForm] = useState({ email: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -46,6 +47,9 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
             return;
         }
 
+        if (isLoading) return;
+        setIsLoading(true);
+
         try {
             const loginSuccess = await login(form, navigate);
 
@@ -58,22 +62,34 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
         } catch (error) {
             console.error('Error during login:', error.code, error.message);
             toast.error('Erro ao fazer login, tente novamente.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleGoogleLogin = async () => {
+        setIsLoading(true);
+
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const googleToken = await result.user.getIdToken();
-
             const loginSuccess = await loginFirebase(googleToken);
 
-            if (isAuthenticated && loginSuccess) {
-                onLogin();
-                toast.success('Usuário logado');
+            if (loginSuccess) {
+                await new Promise((resolve) => setTimeout(resolve, 200));
+
+                if (isAuthenticated && loginSuccess) {
+                    onLogin();
+                    toast.success('Usuário logado com sucesso!');
+                } else {
+                    toast.error('Erro ao salvar dados de login');
+                }
             }
         } catch (error) {
-            console.error(error);
+            toast.error('Erro ao fazer login com Google: ' + error.message);
+            console.error('Erro ao fazer login com Google: ' + error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -93,6 +109,7 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
                     <button
                         onClick={handleGoogleLogin}
                         className="loginGoogleButton"
+                        disabled={isLoading}
                     >
                         <FcGoogle className="loginGoogleIcon" />
                         Entrar com Google
@@ -118,6 +135,7 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
                             maxLength={40}
                             value={form.email}
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <InputError error={errors.email} />
                     </div>
@@ -132,6 +150,7 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
                             maxLength={16}
                             value={form.password}
                             onChange={handleChange}
+                            disabled={isLoading}
                         />
                         <PasswordToggle
                             visible={showPassword}
@@ -142,8 +161,14 @@ export default function LoginForm({ onLogin, onCadastroClick }) {
                 </div>
 
                 <div className="loginFormActions">
-                    <button type="submit">Entrar</button>
-                    <button type="button" onClick={handleCadastroClick}>
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Entrando...' : 'Entrar'}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleCadastroClick}
+                        disabled={isLoading}
+                    >
                         Cadastre-se
                     </button>
                 </div>

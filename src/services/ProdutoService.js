@@ -1,12 +1,12 @@
 import axios from 'axios';
 import AuthService from './AuthService';
-import { baseUri } from './configurations/ServiceConfig';
+import { API_BASE_URL } from './configurations/ServiceConfig';
 import { toast } from 'react-toastify';
 
 export async function listarProdutosFiltrados(filtro, page, size) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/produto/find',
             withCredentials: true,
@@ -44,7 +44,7 @@ export async function listarProdutosFiltrados(filtro, page, size) {
 export async function listarProdutosComDesconto() {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: '/produto/desconto',
             timeout: 10000,
@@ -72,7 +72,7 @@ export async function listarProdutosComDesconto() {
 export async function cadastrarProduto(produto) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: '/produto',
             headers: {
@@ -118,7 +118,7 @@ export async function cadastrarProduto(produto) {
 export async function updateProduto(produto, id) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'PUT',
             url: `/produto/${id}`,
             headers: {
@@ -166,7 +166,7 @@ export async function updateProduto(produto, id) {
 export async function getProdutoById(id) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             url: `/produto/${id}`,
             timeout: 10000,
         });

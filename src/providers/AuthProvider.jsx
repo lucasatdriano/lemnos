@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import AuthService from '../services/AuthService';
@@ -8,25 +8,40 @@ import { AuthContext } from '../contexts/AuthContext';
 
 export const AuthProvider = ({ children }) => {
     const dispatch = useDispatch();
-    const [, forceUpdate] = useState(0);
+    const [isAuthenticated, setIsAuthenticated] = useState(
+        AuthService.isLoggedIn() || AuthService.isLoggedInWithGoogle()
+    );
+
+    useEffect(() => {
+        const handleAuthChange = (loggedIn) => {
+            setIsAuthenticated(loggedIn);
+        };
+
+        AuthService.subscribe(handleAuthChange);
+
+        return () => {
+            AuthService.unsubscribe(handleAuthChange);
+        };
+    }, []);
 
     const login = async () => {
         await dispatch(loadFavorites()).unwrap();
-        forceUpdate((v) => v + 1);
+
+        setIsAuthenticated(
+            AuthService.isLoggedIn() || AuthService.isLoggedInWithGoogle()
+        );
     };
 
     const logout = () => {
         AuthService.logout();
         dispatch(clearFavorites());
-        forceUpdate((v) => v + 1);
+        setIsAuthenticated(false);
     };
 
     return (
         <AuthContext.Provider
             value={{
-                isAuthenticated:
-                    AuthService.isLoggedIn() ||
-                    AuthService.isLoggedInWithGoogle(),
+                isAuthenticated,
                 login,
                 logout,
             }}

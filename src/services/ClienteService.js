@@ -2,32 +2,39 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import AuthService from './AuthService';
 import { toast } from 'react-toastify';
-import { baseUri } from './configurations/ServiceConfig';
+import { API_BASE_URL } from './configurations/ServiceConfig';
 
 export async function getCliente() {
     try {
+        const token = AuthService.getToken();
+
+        if (!token) {
+            throw new Error('Token de autenticação não encontrado');
+        }
+
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'GET',
             url: `/cliente/find`,
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                Authorization: AuthService.getToken(),
+                Authorization: `Bearer ${token}`,
             },
             timeout: 10000,
         });
+
         if (response.status !== 200) {
             throw new Error('Erro ao pegar dados do usuário.');
         }
 
         return response.data;
     } catch (error) {
-        if (
-            error.response &&
-            error.response.data &&
-            error.response.data.error
-        ) {
-            console.error(error.response.data.error);
+        if (error.response) {
+            if (error.response.status === 401) {
+                toast.error('Sessão expirada. Faça login novamente.');
+                AuthService.logout();
+                window.location.href = '/auth';
+            }
         }
         throw error;
     }
@@ -36,7 +43,7 @@ export async function getCliente() {
 export async function cadastrarUsuario(usuario) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'POST',
             url: `/auth/register`,
             headers: {
@@ -70,7 +77,7 @@ export async function cadastrarUsuario(usuario) {
 export async function updateCliente(cliente) {
     try {
         const response = await axios({
-            baseURL: baseUri,
+            baseURL: API_BASE_URL,
             method: 'PUT',
             url: `/cliente`,
             headers: {
