@@ -78,7 +78,9 @@ html {
 
         main {
             margin: auto;
+            padding-inline: 5em;
             padding-block: 6em 5em;
+            font-family: $font-title;
 
             @media only screen and (max-width: 900px) {
                 padding: 6.5em 1em 5em;
@@ -97,6 +99,18 @@ html {
 
         ul {
             list-style: none;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+            white-space: nowrap;
         }
 
         .light {
@@ -227,13 +241,16 @@ html {
     opacity: 0;
     z-index: 1;
 }
+
 .fade-enter-active {
     opacity: 1;
     transition: opacity 0.3s;
 }
+
 .fade-exit {
     opacity: 1;
 }
+
 .fade-exit-active {
     opacity: 0;
     transition: opacity 0.3s;

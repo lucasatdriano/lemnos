@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import '@splidejs/splide/dist/css/themes/splide-default.min.css';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-import './offerList.scss';
+import '@splidejs/splide/dist/css/themes/splide-default.min.css';
 import Loading from '../loading/Loading';
 import {
     listarProdutosComDesconto,
     listarProdutosFiltrados,
 } from '../../../services/UsuarioProdutoService';
 import CardProduct from '../../cards/cardProduct/CardProduct';
+import './offerList.scss';
 
-function OfferList({
+export default function OfferList({
     categoria = null,
     subCategoria = null,
     marca = null,
@@ -92,19 +92,18 @@ function OfferList({
             return;
         }
 
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
+        const currentTimeout = timeoutRef.current;
+        if (currentTimeout) {
+            clearTimeout(currentTimeout);
         }
 
         setLoading(true);
 
-        timeoutRef.current = setTimeout(() => {
-            fetchProdutos();
-        }, 300);
+        fetchProdutos();
 
         return () => {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
+            if (currentTimeout) {
+                clearTimeout(currentTimeout);
             }
         };
     }, [categoria, subCategoria, marca, onlyOnSale, limit]);
@@ -157,5 +156,3 @@ OfferList.propTypes = {
     onlyOnSale: PropTypes.bool,
     limit: PropTypes.number,
 };
-
-export default OfferList;

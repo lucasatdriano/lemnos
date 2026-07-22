@@ -148,6 +148,7 @@ $font-items: 'Poppins', Helvetica;
                         border-radius: 10px;
                         object-fit: contain;
                         cursor: pointer;
+                        border: 1px solid transparent;
                         box-shadow: 0 0 5px $color-shadow;
                         transition: 0.25s ease;
 

@@ -70,33 +70,41 @@ export default function CartCard({ produto }) {
                         type="button"
                         className="buttonQtd"
                         onClick={() => handleDecreaseQuantity(produto.id)}
+                        aria-label={`Diminuir quantidade de ${produto.nome}`}
+                        title={`Diminuir quantidade de ${produto.nome}`}
                     >
-                        <FaMinus />
+                        <FaMinus aria-hidden="true" />
                     </button>
 
-                    <span id="qtdNumber">{produto.qntdProduto}</span>
+                    <span id="qtdNumber" aria-live="polite">
+                        {produto.qntdProduto}
+                    </span>
 
                     <button
                         type="button"
                         className="buttonQtd"
                         onClick={() => handleIncreaseQuantity(produto.id)}
+                        aria-label={`Aumentar quantidade de ${produto.nome}`}
+                        title={`Aumentar quantidade de ${produto.nome}`}
                     >
-                        <FaPlus />
+                        <FaPlus aria-hidden="true" />
                     </button>
                 </p>
 
-                <h4 className="priceProduct">
+                <p className="priceProduct">
                     {formatCurrency(
                         produto.qntdProduto * produto.valorComDesconto
                     )}
-                </h4>
+                </p>
 
                 <p>
                     <button
                         className="btnRemove"
                         onClick={() => handleRemoveItem(produto.id, produto)}
+                        aria-label={`Remover ${produto.nome} do carrinho`}
+                        title={`Remover ${produto.nome} do carrinho`}
                     >
-                        <TiDeleteOutline />
+                        <TiDeleteOutline aria-hidden="true" />
                     </button>
                 </p>
             </div>

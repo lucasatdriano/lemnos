@@ -14,6 +14,8 @@ export default function DoubleInputRange({
     setMinValue,
     setMaxValue,
     maxPrice,
+    minLabel = 'Preço mínimo',
+    maxLabel = 'Preço máximo',
 }) {
     const [values, setValues] = useState([minValue, maxValue]);
 
@@ -99,7 +101,11 @@ export default function DoubleInputRange({
     };
 
     return (
-        <div className="doubleRangeInput">
+        <div
+            className="doubleRangeInput"
+            role="group"
+            aria-label="Filtro de preço"
+        >
             <ToastContainer />
             <div className="rangeSlider">
                 <Range
@@ -139,33 +145,53 @@ export default function DoubleInputRange({
                                 backgroundColor: '#50817e',
                                 border: '1px solid #50817e',
                             }}
+                            aria-label="Controle deslizante de preço"
                         />
                     )}
                 />
                 <div className="inputBox">
                     <div className="minBox">
+                        <label htmlFor="minPriceInput" className="sr-only">
+                            {minLabel}
+                        </label>
                         <div className="inputWrap">
                             <input
                                 type="text"
+                                id="minPriceInput"
                                 className="inputField minInput"
                                 value={formatCurrency(values[0])}
                                 onChange={handleMinInputChange}
                                 onBlur={handleMinInputBlur}
                                 inputMode="numeric"
+                                aria-label={minLabel}
+                                aria-describedby="minPriceDescription"
                             />
+                            <span id="minPriceDescription" className="sr-only">
+                                Valor mínimo em reais
+                            </span>
                         </div>
                     </div>
+
                     <div className="maxBox">
                         <p>ATÉ</p>
+                        <label htmlFor="maxPriceInput" className="sr-only">
+                            {maxLabel}
+                        </label>
                         <div className="inputWrap">
                             <input
                                 type="text"
+                                id="maxPriceInput"
                                 className="inputField maxInput"
                                 value={formatCurrency(values[1])}
                                 onChange={handleMaxInputChange}
                                 onBlur={handleMaxInputBlur}
                                 inputMode="numeric"
+                                aria-label={maxLabel}
+                                aria-describedby="maxPriceDescription"
                             />
+                            <span id="maxPriceDescription" className="sr-only">
+                                Valor máximo em reais
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -181,4 +207,11 @@ DoubleInputRange.propTypes = {
     setMaxValue: PropTypes.func.isRequired,
     maxPrice: PropTypes.number.isRequired,
     style: PropTypes.object,
+    minLabel: PropTypes.string,
+    maxLabel: PropTypes.string,
+};
+
+DoubleInputRange.defaultProps = {
+    minLabel: 'Preço mínimo',
+    maxLabel: 'Preço máximo',
 };

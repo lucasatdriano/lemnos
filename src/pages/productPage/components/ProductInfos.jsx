@@ -23,8 +23,12 @@ export default function ProductInfos({
     return (
         <div className="containerInfos">
             <div className="sectionIcons">
-                <div className="rating">
-                    <p className="productNote">
+                <div
+                    className="rating"
+                    role="group"
+                    aria-label="Avaliação do produto"
+                >
+                    <p className="productNote" aria-hidden="true">
                         ({Math.ceil(product.avaliacao)})
                     </p>
 
@@ -32,14 +36,17 @@ export default function ProductInfos({
                         <React.Fragment key={index}>
                             <input
                                 type="radio"
-                                id={`star-${index}`}
+                                id={`star-${index}-${id}`}
                                 name={`star-rating-${id}`}
                                 value={index}
                                 checked={index === Math.ceil(productRating)}
                                 onChange={() => handleProductRating(index)}
+                                aria-label={`${index} estrelas${index === 1 ? '' : ' ou mais'}`}
                             />
-
-                            <label htmlFor={`star-${index}`}>
+                            <label
+                                htmlFor={`star-${index}-${id}`}
+                                aria-hidden="true"
+                            >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
@@ -48,9 +55,13 @@ export default function ProductInfos({
                                             ? 'filled'
                                             : ''
                                     }
+                                    aria-hidden="true"
                                 >
                                     <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path>
                                 </svg>
+                                <span className="sr-only">
+                                    {index} estrela{index > 1 ? 's' : ''}
+                                </span>
                             </label>
                         </React.Fragment>
                     ))}
@@ -60,11 +71,29 @@ export default function ProductInfos({
                     <MdFavorite
                         className="iconFav"
                         onClick={handleRemoveToFavorites}
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Remover dos favoritos"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                handleRemoveToFavorites();
+                            }
+                        }}
                     />
                 ) : (
                     <MdFavoriteBorder
                         className="iconFav"
                         onClick={handleAddToFavorites}
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Adicionar aos favoritos"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                handleAddToFavorites();
+                            }
+                        }}
                     />
                 )}
             </div>
@@ -96,17 +125,24 @@ export default function ProductInfos({
                 onClick={
                     isInCart ? () => navigate('/cart') : () => handleAddToCart
                 }
+                aria-label={
+                    isInCart
+                        ? `Ver carrinho - ${product.nome} já adicionado`
+                        : `Adicionar ${product.nome} ao carrinho`
+                }
             >
                 {isInCart ? (
                     <>
-                        <BiCheck className="iconAdd" /> Ver Carrinho
+                        <BiCheck className="iconAdd" aria-hidden="true" /> Ver
+                        Carrinho
                     </>
                 ) : (
                     <>
                         <img
                             src={iconAddCart}
-                            alt="icon de adicionar ao Carrinho"
+                            alt=""
                             className="iconAdd"
+                            aria-hidden="true"
                         />
                         Adicionar ao Carrinho
                     </>

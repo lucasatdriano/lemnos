@@ -33,9 +33,13 @@ export default function FiltersProducts({
                         name="view"
                         checked={cardList}
                         onChange={() => handleAlterCardsView(true)}
+                        aria-label="Visualizar em lista"
                     />
-
-                    <label htmlFor="listView" className="labelIcon">
+                    <label
+                        htmlFor="listView"
+                        className="labelIcon"
+                        aria-hidden="true"
+                    >
                         <IoList className="iconAlter" />
                     </label>
                 </p>
@@ -47,59 +51,86 @@ export default function FiltersProducts({
                         name="view"
                         checked={!cardList}
                         onChange={() => handleAlterCardsView(false)}
+                        aria-label="Visualizar em grade"
                     />
-
-                    <label htmlFor="gridView" className="labelIcon">
+                    <label
+                        htmlFor="gridView"
+                        className="labelIcon"
+                        aria-hidden="true"
+                    >
                         <HiSquares2X2 className="iconAlter" />
                     </label>
                 </p>
             </div>
 
-            <select value={filters.category} onChange={handleCategoryChange}>
-                <option value="">Todas as Categorias</option>
+            <div className="filterGroup">
+                <label htmlFor="categorySelect" className="sr-only">
+                    Filtrar por Categoria
+                </label>
+                <select
+                    id="categorySelect"
+                    value={filters.category}
+                    onChange={handleCategoryChange}
+                    aria-label="Selecione uma categoria"
+                >
+                    <option value="">Todas as Categorias</option>
+                    {FILTER_CATEGORIES.map((categoria) => (
+                        <option key={categoria} value={categoria}>
+                            {categoria}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
-                {FILTER_CATEGORIES.map((categoria) => (
-                    <option key={categoria} value={categoria}>
-                        {categoria}
-                    </option>
-                ))}
-            </select>
+            <div className="filterGroup">
+                <label htmlFor="subCategorySelect" className="sr-only">
+                    Filtrar por Subcategoria
+                </label>
+                <select
+                    id="subCategorySelect"
+                    value={filters.subCategory}
+                    onChange={(e) =>
+                        setFilters((prev) => ({
+                            ...prev,
+                            subCategory: e.target.value,
+                        }))
+                    }
+                    aria-label="Selecione uma subcategoria"
+                >
+                    <option value="">Todas as SubCategorias</option>
+                    {FILTER_SUBCATEGORIES[filters.category]?.map(
+                        (subcategoria) => (
+                            <option key={subcategoria} value={subcategoria}>
+                                {subcategoria}
+                            </option>
+                        )
+                    )}
+                </select>
+            </div>
 
-            <select
-                value={filters.subCategory}
-                onChange={(e) =>
-                    setFilters((prev) => ({
-                        ...prev,
-                        subCategory: e.target.value,
-                    }))
-                }
-            >
-                <option value="">Todas as SubCategorias</option>
-
-                {FILTER_SUBCATEGORIES[filters.category]?.map((subcategoria) => (
-                    <option key={subcategoria} value={subcategoria}>
-                        {subcategoria}
-                    </option>
-                ))}
-            </select>
-
-            <select
-                value={filters.brand}
-                onChange={(e) =>
-                    setFilters((prev) => ({
-                        ...prev,
-                        brand: e.target.value,
-                    }))
-                }
-            >
-                <option value="">Todas as Marcas</option>
-
-                {FILTER_BRANDS.map((brand) => (
-                    <option key={brand} value={brand}>
-                        {brand}
-                    </option>
-                ))}
-            </select>
+            <div className="filterGroup">
+                <label htmlFor="brandSelect" className="sr-only">
+                    Filtrar por Marca
+                </label>
+                <select
+                    id="brandSelect"
+                    value={filters.brand}
+                    onChange={(e) =>
+                        setFilters((prev) => ({
+                            ...prev,
+                            brand: e.target.value,
+                        }))
+                    }
+                    aria-label="Selecione uma marca"
+                >
+                    <option value="">Todas as Marcas</option>
+                    {FILTER_BRANDS.map((brand) => (
+                        <option key={brand} value={brand}>
+                            {brand}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             <DoubleInputRange
                 key={filters.maxPrice}
@@ -120,7 +151,12 @@ export default function FiltersProducts({
                 maxPrice={calculatedMaxPrice}
             />
 
-            <div className="ratingFilter">
+            <div
+                className="ratingFilter"
+                role="group"
+                aria-label="Filtrar por avaliação"
+            >
+                <span className="sr-only">Selecione a avaliação mínima</span>
                 {[5, 4, 3, 2, 1].map((index) => (
                     <React.Fragment key={index}>
                         <input
@@ -130,19 +166,23 @@ export default function FiltersProducts({
                             value={index}
                             checked={index === filters.evaluation}
                             onClick={() => handleProductRating(index)}
-                            readOnly
+                            onChange={() => {}}
+                            aria-label={`${index} estrelas${index === 1 ? '' : ' ou mais'}`}
                         />
-
-                        <label htmlFor={`star-${index}`}>
+                        <label htmlFor={`star-${index}`} aria-hidden="true">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
                                 className={
                                     index <= filters.evaluation ? 'filled' : ''
                                 }
+                                aria-hidden="true"
                             >
                                 <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
                             </svg>
+                            <span className="sr-only">
+                                {index} estrela{index > 1 ? 's' : ''}
+                            </span>
                         </label>
                     </React.Fragment>
                 ))}

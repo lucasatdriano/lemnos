@@ -19,9 +19,6 @@ $font-web: 'Roboto Flex', Arial;
 $font-items: 'Poppins', Helvetica;
 
 main {
-    padding-inline: 5em;
-    font-family: $font-title;
-
     .brands {
         margin: 2em auto 0;
         height: auto;
@@ -124,9 +121,11 @@ main {
     }
 
     .mainProds {
+        min-height: 1550px;
         padding-top: 1em;
 
         .productsList {
+            min-height: 1550px;
             display: grid;
             grid-template-columns: repeat(5, minmax(100px, 1fr));
             gap: 1em;

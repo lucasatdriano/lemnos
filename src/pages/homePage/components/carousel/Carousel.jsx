@@ -17,6 +17,7 @@ import imgBannerMob2 from '../../../../assets/banners/bannerMob2.webp';
 import imgBannerMob3 from '../../../../assets/banners/bannerMob3.webp';
 import imgBannerMob4 from '../../../../assets/banners/bannerMob4.webp';
 import imgBannerMob5 from '../../../../assets/banners/bannerMob5.webp';
+import Loading from '../../../../components/layout/loading/Loading';
 
 const bannersConfig = [
     {
@@ -146,7 +147,7 @@ export default function Slide() {
     if (loading) {
         return (
             <section className="carousel">
-                <div className="carousel-loading">Carregando banners...</div>
+                <Loading />
             </section>
         );
     }

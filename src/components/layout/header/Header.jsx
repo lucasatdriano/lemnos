@@ -79,38 +79,79 @@ export default function Header({ toggleTheme }) {
                     className="menuDepartamento"
                 />
 
-                <Link to="/" className="logo">
+                <Link
+                    to="/"
+                    className="logo"
+                    aria-label="Página inicial Lemnos"
+                >
                     Lemnos
                 </Link>
 
-                <nav>
-                    <ul className="navegation">
-                        <Link to="/about" className="link">
-                            Sobre
-                        </Link>
+                <nav aria-label="Navegação principal">
+                    <ul>
+                        <li className="navegation">
+                            <Link
+                                to="/about"
+                                className="link"
+                                aria-label="Sobre a Lemnos"
+                            >
+                                Sobre
+                            </Link>
+                        </li>
                     </ul>
                 </nav>
 
                 <MenuSearch />
 
-                <nav className="menuDesktop">
-                    <a href="#" onClick={handleShowMenuFav}>
-                        <RiHeartLine className="favIcon" />
+                <nav className="menuDesktop" aria-label="Menu do usuário">
+                    <a
+                        href="#"
+                        onClick={handleShowMenuFav}
+                        aria-label="Abrir lista de favoritos"
+                    >
+                        <RiHeartLine className="favIcon" aria-hidden="true" />
                     </a>
-                    <Link to="/auth" className="linkIcons">
+
+                    <Link
+                        to="/auth"
+                        className="linkIcons"
+                        aria-label={
+                            isAuthenticated
+                                ? 'Perfil do usuário'
+                                : 'Fazer login'
+                        }
+                    >
                         {userImg && isAuthenticated ? (
-                            <img src={userImg} alt="User" className="userImg" />
+                            <img
+                                src={userImg}
+                                alt="Foto do perfil do usuário"
+                                className="userImg"
+                            />
                         ) : (
-                            <RiUser3Line className="userIcon" />
+                            <RiUser3Line
+                                className="userIcon"
+                                aria-hidden="true"
+                            />
                         )}
                     </Link>
-                    <Link to="/cart" className="linkIcons">
+
+                    <Link
+                        to="/cart"
+                        className="linkIcons"
+                        aria-label={`Carrinho de compras${quantidadeCarrinho > 0 ? `, ${quantidadeCarrinho} itens` : ''}`}
+                    >
                         {quantidadeCarrinho > 0 && (
-                            <span className="spanCarrinhoLength">
+                            <span
+                                className="spanCarrinhoLength"
+                                aria-hidden="true"
+                            >
                                 {quantidadeCarrinho}
                             </span>
                         )}
-                        <RiShoppingCartLine className="cartIcon" />
+                        <RiShoppingCartLine
+                            className="cartIcon"
+                            aria-hidden="true"
+                        />
                     </Link>
                 </nav>
             </header>

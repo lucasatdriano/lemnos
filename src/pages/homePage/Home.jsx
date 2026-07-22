@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { listarProdutosFiltrados } from '../../services/UsuarioProdutoService';
 import Slide from './components/carousel/Carousel';
 import BrandsList from './components/BrandsList';
 import OfferList from '../../components/layout/lists/OfferList';
-import './home.scss';
 import kits from '../../assets/deps/imgKitUpgrade.svg';
 import videoGame from '../../assets/deps/imgVideoGame.svg';
 import monitor from '../../assets/deps/imgMonitor.svg';
 import computador from '../../assets/deps/imgPcGamer.svg';
 import portatil from '../../assets/deps/imgNotebookPortatil.svg';
 import perifericos from '../../assets/deps/imgPerifericos.svg';
-import { listarProdutosFiltrados } from '../../services/UsuarioProdutoService';
 import CardProduct from '../../components/cards/cardProduct/CardProduct';
+import './home.scss';
 
 export default function Home() {
     const [produtos, setProdutos] = useState([]);
@@ -29,6 +29,7 @@ export default function Home() {
             const data = await listarProdutosFiltrados(filtro, 3, 20);
             setProdutos(data);
         }
+
         fetchProdutos();
     }, []);
 

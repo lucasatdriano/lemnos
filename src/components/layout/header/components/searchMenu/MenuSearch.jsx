@@ -108,7 +108,11 @@ export default function MenuSearch() {
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
-                <button type="submit">
+                <button
+                    type="submit"
+                    aria-label="Buscar"
+                    title="Buscar produtos"
+                >
                     <RiSearch2Line className="searchIcon" />
                 </button>
             </form>
